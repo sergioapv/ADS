@@ -14,9 +14,9 @@ body{
 }
 
 #graphs_content{
-  display: flex;
-  justify-content: flex-end;
-  /* align-items: baseline; */
+  display: grid;
+  justify-content: space-around;
+
 }
 
 #not_clicked{
@@ -54,18 +54,37 @@ body{
   width: 100%;
   font-size: 40px;
   background-color: white;
-  border-radius: 5px;
+  border-radius: 15px;
   color: #e35f21;
   font-family: 'Gilroy';
   cursor:pointer;
 }
 
 #D1_graph,#D2_graph,#D3_graph,#D4_graph{
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   background: white;
   margin:20px;
 
+}
+
+.displayerEditor{
+  display: grid;
+  margin-top: 100px;
+  text-align: center;
+
+}
+
+.Algorithm_selector{
+  font-family: 'Gilroy';
+  font-size: 30px;
+}
+
+#Algorithm_editor{
+  background-color: white;
+  margin-bottom: 20px;
+  text-align: center;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar {
