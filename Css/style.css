@@ -1,0 +1,79 @@
+body{
+  padding:0px;
+  margin: 0px;
+  background-color: #010506;
+
+}
+
+.sidemenu{
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  background: #e35f21;
+
+}
+
+#graphs_content{
+  display: flex;
+  justify-content: flex-end;
+  /* align-items: baseline; */
+}
+
+#not_clicked{
+  left: 0;
+  transition: 0.5s;
+  transition-property: left;
+}
+
+#clicked{
+  left: -250px;
+  transition: 0.5s;
+  transition-property: left;
+}
+
+.sidemenu_minimizer{
+  position: absolute;
+  margin-left: 260px;
+  margin-top:10px;
+  cursor: pointer;
+}
+
+.main_content{
+  margin-top: 20px;
+  position: absolute;
+  width: calc(100% - 300px);
+  height: calc(100% - 20px);
+  left: 300px;
+  background-color: #010506;
+}
+
+.Algorithm_title{
+  position: relative;
+  text-align: center;
+  margin-bottom: 40px;
+  width: 100%;
+  font-size: 40px;
+  background-color: white;
+  border-radius: 5px;
+  color: #e35f21;
+  font-family: 'Gilroy';
+  cursor:pointer;
+}
+
+#D1_graph,#D2_graph,#D3_graph,#D4_graph{
+  width: 400px;
+  height: 400px;
+  background: white;
+  margin:20px;
+
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: white;
+    -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.8);
+}
