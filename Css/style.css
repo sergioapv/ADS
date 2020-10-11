@@ -2,7 +2,6 @@ body{
   padding:0px;
   margin: 0px;
   background-color: #010506;
-
 }
 
 .sidemenu{
@@ -10,6 +9,7 @@ body{
   width: 300px;
   height: 100%;
   background: #e35f21;
+  overflow: auto;
 
 }
 
@@ -47,7 +47,7 @@ body{
   background-color: #010506;
 }
 
-.Algorithm_title{
+.Dimension_title{
   position: relative;
   text-align: center;
   margin-bottom: 40px;
@@ -67,24 +67,48 @@ body{
   margin:20px;
 
 }
+#edit_choice{
+  font-family: 'Gilroy';
+  font-size: 20px;
+  color: white;
+  margin: 10px;
+
+}
+.choice{
+  font-family: 'Gilroy';
+  font-size: 20px;
+  color: white;
+  margin: 10px;
+
+}
+#Algorithm_chooser{
+  display: grid;
+  text-align: right;
+  padding-right: 80px;
+  background: gray;
+  border-radius: 15px;
+}
 
 .displayerEditor{
   display: grid;
   margin-top: 100px;
   text-align: center;
-
+  border-radius: 10px;
+  /* background: gray */
 }
 
-.Algorithm_selector{
+.Dimension_selector{
   font-family: 'Gilroy';
   font-size: 30px;
-}
-
-#Algorithm_editor{
   background-color: white;
-  margin-bottom: 20px;
   text-align: center;
   border-radius: 10px;
+  cursor: pointer;
+}
+
+#Dimension_editor{
+  display: grid;
+  margin-bottom: 20px;
 }
 
 ::-webkit-scrollbar {
