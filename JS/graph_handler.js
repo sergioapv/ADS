@@ -9,13 +9,15 @@ for(i=0;i<24;i++)
   z_data.push(unpack(rows,i));
 }
 
+console.log(z_data);
+
 var data = [{
            z: z_data,
            type: 'surface'
         }];
 
 var layout = {
-  title: 'Title',
+  title: 'Mt Bruno Elevation',
   autosize: false,
   width: 500,
   height: 500,
