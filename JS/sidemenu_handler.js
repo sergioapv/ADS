@@ -15,6 +15,23 @@ plotbtn.addEventListener("click", function() {
   handle_graphs();
 });
 
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 
 function handle_graphs(){
   var dims= getDimensions();
@@ -32,7 +49,7 @@ function handle_graphs(){
     case 4:
 
       break;
-    default: console.log("select some algorithms");
+    default: alert("Select some algorithms");
 
   }
 }
@@ -101,13 +118,14 @@ function plotBoxPlot(dim){
 }
 
 function makeBoxPlot(algs) {
-  const myNode = document.getElementById("boxPlots");
+  const myNode = document.getElementById("graphs_content");
   myNode.innerHTML = '';
   var div = document.createElement("div");
+  div.id = 'D1_graph'
   var para = document.createElement("P");
-  document.getElementById("boxPlots").appendChild(para);
-  document.getElementById("boxPlots").appendChild(div);
-  document.getElementById("boxPlots").appendChild(para);
+  document.getElementById("graphs_content").appendChild(para);
+  document.getElementById("graphs_content").appendChild(div);
+  document.getElementById("graphs_content").appendChild(para);
   var columns = [];
   var colors = [];
   var algNames = [];
@@ -171,22 +189,6 @@ function makeBoxPlot(algs) {
 Plotly.newPlot(div, data);
 }
 
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
 
 
 document.querySelector('.sidemenu_minimizer').addEventListener('click',function(){
@@ -206,6 +208,7 @@ document.querySelector('.sidemenu_minimizer').addEventListener('click',function(
     main_content.style.left = '50px'
     main_content.style.width = 'calc(100% - 50px)'
     main_content.style.marginLeft = '0px'
+    console.log(displayerEditor);
     displayerEditor.style.display = 'none'
   }
 

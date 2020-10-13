@@ -118,9 +118,17 @@ body{
   font-size: 20px;
   color: white;
   margin: 10px;
-
-
 }
+
+.sidemenu button{
+    margin:8px;
+    font-size: 20px;
+    font-family: 'Gilroy';
+    border-radius: 7px;
+    border-color: none;
+    background: white
+}
+
 #Algorithm_chooser{
   display: grid;
   text-align: right;
@@ -173,6 +181,22 @@ body{
   height: 400px;
   background: white;
   border-radius: 13px;
+}
+.modal-content span{
+  font-family: 'Gilroy';
+  font-size: 20px;
+}
+.modal-content input{
+  margin-left: 8px;
+}
+
+.Algorithm_getter{
+  display:flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  margin-right: 85px;
+  margin-top: 40px;
+  right: 50px;
 }
 
 ::-webkit-scrollbar {

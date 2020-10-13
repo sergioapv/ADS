@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="../Css/style.css" />
     <title>Projeto ADS</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script type="text/javascript" src="./JS/graph_handler.js"></script>
   </head>
   <body>
     <div class="main_content">
@@ -24,9 +23,12 @@
       </div>
       <div class="ADAMW" >
         <div class="Dimension_title">
-          <span>BoxPlots</span>
+          <span>Loss</span>
         </div>
-        <div class="ADAMW_content" id = "boxPlots">
+        <div class="ADAMW_content" id = "graphs_content">
+          <div class="RADAM_D1" id="D1_graph">
+
+          </div>
 
         </div>
 
@@ -38,8 +40,6 @@
         <div class="RADAM_content" id="graphs_content">
           <div class="RADAM_D1" id="D1_graph">
 
-
-            </script>
           </div>
 
         </div>
@@ -63,163 +63,184 @@
     <div class="sidemenu">
       <img src="./images/sidemenu_minimizer.png" class="sidemenu_minimizer" id="not_clicked">
       <div class="displayerEditor">
-        <button class = "button" id="settings">Settings</button><br>
+        <button class = "button" id="settings">Settings</button>
         <button class = "button" id="Plots">Plot Graphs</button>
         <div id="myModal" class="modal">
           <!-- Modal content -->
           <div class="modal-content">
             <span class="close">&times;</span>
-              <label>ADAM</label><input type="file" id="adamdir" webkitdirectory directory multiple/>
-                <input type="color" id="adamcolor" name="favcolor" value="#ff0000"><br><p></p>
-              <label>ADAMW</label><input type="file" id="adamwdir" webkitdirectory directory multiple/>
-                <input type="color" id="adamwcolor" name="favcolor" value="#ff0000"><br><p></p>
-              <label>RADAM</label><input type="file" id="radamdir" webkitdirectory directory multiple/>
-                <input type="color" id="radamcolor" name="favcolor" value="#ff0000"><br><p></p>
-              <label>RMSPROP</label><input type="file" id="rmspropdir" webkitdirectory directory multiple/>
-                <input type="color" id="rmspropcolor" name="favcolor" value="#ff0000"><br><p></p>
-              <label>SGD</label><input type="file" id="sgddir" webkitdirectory directory multiple/>
-                <input type="color" id="sgdcolor" name="favcolor" value="#ff0000"><br><p></p>
+            <span>Escolha a Pasta que contém os valores do Algoritmo</span>
+
+            <div class="Algorithm_getter">
+              <span>ADAM</span>
+              <input type="file" id="adamdir" webkitdirectory directory multiple/>
+              <input type="color" id="adamcolor" name="favcolor" value="#ff0000">
             </div>
+
+            <div class="Algorithm_getter">
+              <span>ADAMW</span>
+              <input type="file" id="adamwdir" webkitdirectory directory multiple/>
+              <input type="color" id="adamwcolor" name="favcolor" value="#ff0000">
+            </div>
+
+            <div class="Algorithm_getter">
+              <span>RADAM</span>
+              <input type="file" id="radamdir" webkitdirectory directory multiple/>
+              <input type="color" id="radamcolor" name="favcolor" value="#ff0000">
+            </div>
+
+            <div class="Algorithm_getter">
+              <span>RMSPROP</span>
+              <input type="file" id="rmspropdir" webkitdirectory directory multiple/>
+              <input type="color" id="rmspropcolor" name="favcolor" value="#ff0000">
+            </div>
+            <div class="Algorithm_getter">
+              <span>SGD</span>
+              <input type="file" id="sgddir" webkitdirectory directory multiple/>
+              <input type="color" id="sgdcolor" name="favcolor" value="#ff0000">
+            </div>
+
           </div>
-
-        </div>
-        <br>
-        <div class="Accuracy_editor" id="Dimension_editor">
-          <span class="Dimension_selector">Accuracy</span>
-          <div id = "Algorithm_chooser">
-            <div class="choice">
-              <span id="edit_choice">ADAM</span>
-              <input type="checkbox" name="ADAM_acc">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">ADAMW</span>
-              <input type="checkbox" name="ADAMW_acc">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">RADAM</span>
-              <input type="checkbox" name="RADAM_acc">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">RMSprop</span>
-              <input type="checkbox" name="RMSprop_acc">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">SGD</span>
-              <input type="checkbox" name="SGD_acc" >
-            </div>
-            <div class="choice">
-              <span id="edit_choice">Select All</span>
-              <input type="checkbox" name="Select_all_acc" id="select_all">
-            </div>
-          </div>
-
-        </div>
-        <div class="Loss_editor" id="Dimension_editor">
-          <span class="Dimension_selector">Loss</span>
-          <div id="Algorithm_chooser">
-            <div class="choice">
-              <span id="edit_choice">ADAM</span>
-              <input type="checkbox" name="ADAM_loss">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">ADAMW</span>
-              <input type="checkbox" name="ADAMW_loss">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">RADAM</span>
-              <input type="checkbox" name="RADAM_loss">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">RMSprop</span>
-              <input type="checkbox" name="RMSprop_loss">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">SGD</span>
-              <input type="checkbox" name="SGD_loss" >
-            </div>
-            <div class="choice">
-              <span id="edit_choice">Select All</span>
-              <input type="checkbox" name="Select_all_loss" id="select_all">
-            </div>
-          </div>
-
-
-        </div>
-        <div class="Value_acc_editor" id="Dimension_editor">
-          <span class="Dimension_selector">Value Accuracy</span>
-          <div id="Algorithm_chooser">
-            <div class="choice">
-              <span id="edit_choice">ADAM</span>
-              <input type="checkbox" name="ADAM_val_acc">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">ADAMW</span>
-              <input type="checkbox" name="ADAMW_val_acc">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">RADAM</span>
-              <input type="checkbox" name="RADAM_val_acc">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">RMSprop</span>
-              <input type="checkbox" name="RMSprop_val_acc">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">SGD</span>
-              <input type="checkbox" name="SGD_val_acc" >
-            </div>
-            <div class="choice">
-              <span id="edit_choice">Select All</span>
-              <input type="checkbox" name="Select_all_val_acc" id="select_all">
-            </div>
-          </div>
-
-        </div>
-
-        <div class="Value_Loss_editor" id="Dimension_editor">
-          <span class="Dimension_selector">Value Loss</span>
-          <div id="Algorithm_chooser">
-            <div class="choice">
-              <span id="edit_choice">ADAM</span>
-              <input type="checkbox" name="ADAM_val_loss">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">ADAMW</span>
-              <input type="checkbox" name="ADAMW_val_loss">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">RADAM</span>
-              <input type="checkbox" name="RADAM_val_loss">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">RMSprop</span>
-              <input type="checkbox" name="RMSprop_val_loss">
-            </div>
-            <div class="choice">
-              <span id="edit_choice">SGD</span>
-              <input type="checkbox" name="SGD_val_loss" >
-            </div>
-            <div class="choice">
-              <span id="edit_choice">Select All</span>
-              <input type="checkbox" name="Select_all_val_loss" id="select_all">
-            </div>
-          </div>
-
         </div>
 
       </div>
-      <script type="text/javascript" src="./JS/data_handler.js"></script>
-      <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
+      <div class="Accuracy_editor" id="Dimension_editor">
+        <span class="Dimension_selector">Accuracy</span>
+        <div id = "Algorithm_chooser">
+          <div class="choice">
+            <span id="edit_choice">ADAM</span>
+            <input type="checkbox" name="ADAM_acc">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">ADAMW</span>
+            <input type="checkbox" name="ADAMW_acc">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">RADAM</span>
+            <input type="checkbox" name="RADAM_acc">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">RMSprop</span>
+            <input type="checkbox" name="RMSprop_acc">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">SGD</span>
+            <input type="checkbox" name="SGD_acc" >
+          </div>
+          <div class="choice">
+            <span id="edit_choice">Select All</span>
+            <input type="checkbox" name="Select_all_acc" id="select_all">
+          </div>
+        </div>
 
-    </div>
-
-    <div class="Setting_modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <form class="settings" action="index.html" method="post">
-        </form>
       </div>
+      <div class="Loss_editor" id="Dimension_editor">
+        <span class="Dimension_selector">Loss</span>
+        <div id="Algorithm_chooser">
+          <div class="choice">
+            <span id="edit_choice">ADAM</span>
+            <input type="checkbox" name="ADAM_loss">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">ADAMW</span>
+            <input type="checkbox" name="ADAMW_loss">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">RADAM</span>
+            <input type="checkbox" name="RADAM_loss">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">RMSprop</span>
+            <input type="checkbox" name="RMSprop_loss">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">SGD</span>
+            <input type="checkbox" name="SGD_loss" >
+          </div>
+          <div class="choice">
+            <span id="edit_choice">Select All</span>
+            <input type="checkbox" name="Select_all_loss" id="select_all">
+          </div>
+        </div>
+
+      </div>
+      <div class="Value_acc_editor" id="Dimension_editor">
+        <span class="Dimension_selector">Value Accuracy</span>
+        <div id="Algorithm_chooser">
+          <div class="choice">
+            <span id="edit_choice">ADAM</span>
+            <input type="checkbox" name="ADAM_val_acc">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">ADAMW</span>
+            <input type="checkbox" name="ADAMW_val_acc">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">RADAM</span>
+            <input type="checkbox" name="RADAM_val_acc">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">RMSprop</span>
+            <input type="checkbox" name="RMSprop_val_acc">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">SGD</span>
+            <input type="checkbox" name="SGD_val_acc" >
+          </div>
+          <div class="choice">
+            <span id="edit_choice">Select All</span>
+            <input type="checkbox" name="Select_all_val_acc" id="select_all">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="Value_Loss_editor" id="Dimension_editor">
+        <span class="Dimension_selector">Value Loss</span>
+        <div id="Algorithm_chooser">
+          <div class="choice">
+            <span id="edit_choice">ADAM</span>
+            <input type="checkbox" name="ADAM_val_loss">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">ADAMW</span>
+            <input type="checkbox" name="ADAMW_val_loss">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">RADAM</span>
+            <input type="checkbox" name="RADAM_val_loss">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">RMSprop</span>
+            <input type="checkbox" name="RMSprop_val_loss">
+          </div>
+          <div class="choice">
+            <span id="edit_choice">SGD</span>
+            <input type="checkbox" name="SGD_val_loss" >
+          </div>
+          <div class="choice">
+            <span id="edit_choice">Select All</span>
+            <input type="checkbox" name="Select_all_val_loss" id="select_all">
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
-  </body>
+  </div>
+
+  <div class="Setting_modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <form class="settings" action="index.html" method="post">
+    </form>
+    </div>
+  </div>
+  <script type="text/javascript" src="./JS/data_handler.js"></script>
+  <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
+  <script type="text/javascript" src="./JS/graph_handler.js"></script>
+
+
+</body>
 </html>
