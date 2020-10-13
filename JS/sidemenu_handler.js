@@ -1,5 +1,30 @@
 var algorithms_chosen = [];
 
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("settings");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 document.querySelector('.sidemenu_minimizer').addEventListener('click',function(){
   let sidemenu = document.querySelector('.sidemenu');
   let main_content = document.querySelector('.main_content')
@@ -63,7 +88,7 @@ select_all_list.forEach((div) => {
             all_selectors[i].checked = false
             if (!all_selectors[i].name.includes('Select_all')) {
               algorithms_chosen.pop(all_selectors[i].name);
-              console.log(algorithms_chosen);  
+              console.log(algorithms_chosen);
             }
           }
         }

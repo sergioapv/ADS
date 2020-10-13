@@ -65,7 +65,25 @@
     <div class="sidemenu">
       <img src="./images/sidemenu_minimizer.png" class="sidemenu_minimizer" id="not_clicked">
       <div class="displayerEditor">
-        <span>Settings</span>
+        <button class = "button" id="settings">Settings</button>
+        <div id="myModal" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+              <label>ADAM</label><input type="file" id="adamdir" webkitdirectory directory multiple/>
+                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+              <label>ADAMW</label><input type="file" id="adamwdir" webkitdirectory directory multiple/>
+                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+              <label>RADAM</label><input type="file" id="radamdir" webkitdirectory directory multiple/>
+                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+              <label>RMSPROP</label><input type="file" id="rmspropdir" webkitdirectory directory multiple/>
+                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+              <label>SGD</label><input type="file" id="sgddir" webkitdirectory directory multiple/>
+                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+            </div>
+          </div>
+
+        </div>
         <br>
         <div class="Accuracy_editor" id="Dimension_editor">
           <span class="Dimension_selector">Accuracy</span>
@@ -193,6 +211,7 @@
       </div>
 
       <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
+      <script type="text/javascript" src="./JS/data_handler.js"></script>
     </div>
 
     <div class="Setting_modal">
