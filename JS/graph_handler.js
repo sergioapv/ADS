@@ -11,6 +11,7 @@ for(i=0;i<24;i++)
 
 console.log(z_data);
 
+
 var data = [{
            z: z_data,
            type: 'surface'

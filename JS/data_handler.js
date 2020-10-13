@@ -4,11 +4,11 @@ var RMSPROP = [[],[],[],[]];
 var ADAMW = [[],[],[],[]];
 var SGD = [[],[],[],[]];
 
-var ADAMCOLOR = '';
-var RADAMCOLOR = '';
-var RMSPROPCOLOR = '';
-var ADAMWCOLOR = '';
-var SGDCOLOR = '';
+var ADAMCOLOR = '#ff0000';
+var RADAMCOLOR = '#ff0000';
+var RMSPROPCOLOR = '#ff0000';
+var ADAMWCOLOR = '#ff0000';
+var SGDCOLOR = '#ff0000';
 
 
 
@@ -72,28 +72,50 @@ var algorithm = [[],[],[],[]];
 //     }
 //   });
 //
-// document.getElementById('favcolor').addEventListener("click", function() {
-//   var alg = document.getElementById('algoritmos').value;
-//   color = document.getElementById('favcolor').value;
-//
-//   switch (alg) {
-//     case 'ADAM':
-//       ADAMCOLOR = color;
-//       break;
-//     case 'RADAM':
-//       RADAMCOLOR = color;
-//       break;
-//     case 'RMSprop':
-//       RMSPROPCOLOR = color;
-//       break;
-//     case 'SGD':
-//       SGDCOLOR = color;
-//       break;
-//     case 'ADAMW':
-//       ADAMWCOLOR = color;
-//       break;
-//   }
-//   });
+document.getElementById('adamcolor').addEventListener("input", function() {
+  color = document.getElementById('adamcolor').value;
+  algColor('ADAM', color)
+  });
+
+document.getElementById('adamwcolor').addEventListener("input", function() {
+  color = document.getElementById('adamwcolor').value;
+  algColor('ADAMW', color)
+  });
+
+document.getElementById('radamcolor').addEventListener("input", function() {
+  color = document.getElementById('radamcolor').value;
+  algColor('RADAM', color)
+  });
+
+document.getElementById('rmspropcolor').addEventListener("input", function() {
+  color = document.getElementById('rmspropcolor').value;
+  algColor('RMSprop', color)
+  });
+
+document.getElementById('sgdcolor').addEventListener("input", function() {
+  color = document.getElementById('sgdcolor').value;
+  algColor('SGD', color)
+  });
+
+  function algColor(alg, color){
+    switch (alg) {
+      case 'ADAM':
+        ADAMCOLOR = color;
+        break;
+      case 'RADAM':
+        RADAMCOLOR = color;
+        break;
+      case 'RMSprop':
+        RMSPROPCOLOR = color;
+        break;
+      case 'SGD':
+        SGDCOLOR = color;
+        break;
+      case 'ADAMW':
+        ADAMWCOLOR = color;
+        break;
+    }
+  }
 
 
 document.getElementById('adamdir').addEventListener('change', (event) => {
@@ -175,6 +197,9 @@ function attributeData(alg, ev) {
   }
   console.log(ADAM);
   console.log(ADAMW);
+  console.log(RADAM);
+  console.log(RMSPROP);
+  console.log(SGD);
 }
 // document.getElementById('favcolor').addEventListener("click", function() {
 // var alg = document.getElementById('algoritmos').value;
@@ -200,34 +225,7 @@ function attributeData(alg, ev) {
 // });
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 //
 // document.getElementById('BoxPlotBtn').addEventListener("click", function() {
 //   var checkedValues = [];

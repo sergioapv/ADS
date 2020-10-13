@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../Css/style.css" />
     <title>Projeto ADS</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript" src="./JS/graph_handler.js"></script>
   </head>
   <body>
     <div class="main_content">
@@ -23,12 +24,9 @@
       </div>
       <div class="ADAMW" >
         <div class="Dimension_title">
-          <span>Loss</span>
+          <span>BoxPlots</span>
         </div>
-        <div class="ADAMW_content" id="graphs_content">
-          <div class="ADAMW_D1" id="D1_graph">
-
-          </div>
+        <div class="ADAMW_content" id = "boxPlots">
 
         </div>
 
@@ -39,7 +37,7 @@
         </div>
         <div class="RADAM_content" id="graphs_content">
           <div class="RADAM_D1" id="D1_graph">
-            <script type="text/javascript" src="./JS/graph_handler.js">
+
 
             </script>
           </div>
@@ -65,21 +63,22 @@
     <div class="sidemenu">
       <img src="./images/sidemenu_minimizer.png" class="sidemenu_minimizer" id="not_clicked">
       <div class="displayerEditor">
-        <button class = "button" id="settings">Settings</button>
+        <button class = "button" id="settings">Settings</button><br>
+        <button class = "button" id="Plots">Plot Graphs</button>
         <div id="myModal" class="modal">
           <!-- Modal content -->
           <div class="modal-content">
             <span class="close">&times;</span>
               <label>ADAM</label><input type="file" id="adamdir" webkitdirectory directory multiple/>
-                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+                <input type="color" id="adamcolor" name="favcolor" value="#ff0000"><br><p></p>
               <label>ADAMW</label><input type="file" id="adamwdir" webkitdirectory directory multiple/>
-                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+                <input type="color" id="adamwcolor" name="favcolor" value="#ff0000"><br><p></p>
               <label>RADAM</label><input type="file" id="radamdir" webkitdirectory directory multiple/>
-                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+                <input type="color" id="radamcolor" name="favcolor" value="#ff0000"><br><p></p>
               <label>RMSPROP</label><input type="file" id="rmspropdir" webkitdirectory directory multiple/>
-                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+                <input type="color" id="rmspropcolor" name="favcolor" value="#ff0000"><br><p></p>
               <label>SGD</label><input type="file" id="sgddir" webkitdirectory directory multiple/>
-                <input type="color" id="favcolor" name="favcolor" value="#ff0000"><br><p></p>
+                <input type="color" id="sgdcolor" name="favcolor" value="#ff0000"><br><p></p>
             </div>
           </div>
 
@@ -209,9 +208,9 @@
         </div>
 
       </div>
-
-      <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
       <script type="text/javascript" src="./JS/data_handler.js"></script>
+      <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
+
     </div>
 
     <div class="Setting_modal">
