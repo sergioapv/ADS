@@ -95,7 +95,7 @@ function plotBoxPlot(dim){
 
   }
 
-  var aux = [[], [], [], [], []];
+  let aux = [[], [], [], [], []];
 
   for(var i = 0; i < algorithms_chosen.length; i++){
     if(algorithms_chosen[i].includes('ADAMW')){
@@ -115,6 +115,41 @@ function plotBoxPlot(dim){
     }
   }
   makeBoxPlot(aux);
+}
+
+function create_dimension_div(dimensions){
+  let title = '';
+  dimensions.forEach((dimension, i) => {
+    if (dimension.includes('ADAM')) {
+      title += 'ADAM'
+    }
+    else if (dimension.includes('ADAMW')) {
+      title += 'ADAMW'
+    }
+    else if (dimension.includes('RADAM')) {
+      title += 'RADAM'
+    }
+    else if (dimension.includes('RMSprop')) {
+      title += 'RMSprop'
+    }
+    else if (dimension.includes('SGD')) {
+      title += 'SGD'
+    }
+    if (i != dimensions.length -1) {
+      title += 'vs'
+    }
+  });
+
+  var div = document.createElement('div');
+
+  var title_div = document.createElement('div')
+  title_div.class = 'Dimension_title'
+
+  var title_span = document.createElement('span')
+  title_span.innerHTML = title
+
+  var graphs_content_div = document.createElement('div')
+  graphs_content_div.id = 'graphs_content'
 }
 
 function makeBoxPlot(algs) {
@@ -200,7 +235,12 @@ document.querySelector('.sidemenu_minimizer').addEventListener('click',function(
     sidemenu.id = "not_clicked"
     main_content.style.left = '300px'
     main_content.style.width = 'calc(100% - 300px)'
-    displayerEditor.style.display = 'grid'
+    let childs = sidemenu.childNodes
+    for (var i = 0; i < childs.length; i++) {
+      if (childs[i].tagName === 'DIV') {
+        childs[i].style.display = 'grid'
+      }
+    }
 
   }
   else {
@@ -208,8 +248,12 @@ document.querySelector('.sidemenu_minimizer').addEventListener('click',function(
     main_content.style.left = '50px'
     main_content.style.width = 'calc(100% - 50px)'
     main_content.style.marginLeft = '0px'
-    console.log(displayerEditor);
-    displayerEditor.style.display = 'none'
+    let childs = sidemenu.childNodes
+    for (var i = 0; i < childs.length; i++) {
+      if (childs[i].tagName === 'DIV') {
+        childs[i].style.display = 'none'
+      }
+    }
   }
 
 })

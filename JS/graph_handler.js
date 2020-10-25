@@ -9,7 +9,7 @@ for(i=0;i<24;i++)
   z_data.push(unpack(rows,i));
 }
 
-console.log(z_data);
+// console.log(z_data);
 
 
 var data = [{
