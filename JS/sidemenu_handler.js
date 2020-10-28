@@ -74,7 +74,6 @@ function getDimensions(){
   return dims;
 }
 
-
 function plotBoxPlot(dim){
   console.log(dim);
   var index = 0
