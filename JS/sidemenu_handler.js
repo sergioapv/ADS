@@ -74,7 +74,7 @@ function getDimensions(){
   return dims;
 }
 
-
+//cócó
 function plotBoxPlot(dim){
   console.log(dim);
   var index = 0
