@@ -29,5 +29,5 @@ var layout = {
     t: 90,
   }
 };
-Plotly.newPlot('D1_graph', data, layout);
+Plotly.newPlot('ADAM_D1', data, layout);
 });

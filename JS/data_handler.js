@@ -97,10 +97,10 @@ function attributeData(alg, ev) {
          var rows = csv.split('\n');
          for (j=0; j<rows.length-1; j++){
            if( j!=0 ){
-             accuracy.push(parseFloat(rows[j].split(';')[0]));
-             loss.push(parseFloat(rows[j].split(';')[1]));
+             accuracy.push(parseFloat(    rows[j].split(';')[0]));
+             loss.push(parseFloat(        rows[j].split(';')[1]));
              val_accuracy.push(parseFloat(rows[j].split(';')[2]));
-             val_loss.push(parseFloat(rows[j].split(';')[3]));
+             val_loss.push(parseFloat(    rows[j].split(';')[3]));
            }
          }
          algorithm[0].push(accuracy)

@@ -8,12 +8,12 @@
   </head>
   <body>
     <div class="main_content">
-      <div class="ADAM">
-        <div class="Dimension_title">
+      <div class="Plot_content">
+        <div class="Plot_title">
           <span>Accuracy</span>
         </div>
         <div class="ADAM_content" id="graphs_content">
-          <div class="ADAM_D1" id="D1_graph">
+          <div id="ADAM_D1" class="D1_graph">
 
           </div>
 
@@ -21,36 +21,36 @@
 
 
       </div>
-      <div class="ADAMW" >
-        <div class="Dimension_title">
+      <div class="Plot_content" >
+        <div class="Plot_title">
           <span>Loss</span>
         </div>
         <div class="ADAMW_content" id = "graphs_content">
-          <div class="RADAM_D1" id="D1_graph">
+          <div id="RADAM_D1" class="D1_graph">
 
           </div>
 
         </div>
 
       </div>
-      <div class="RADAM">
-        <div class="Dimension_title">
+      <div class="Plot_content">
+        <div class="Plot_title">
           <span>Value Accuracy</span>
         </div>
         <div class="RADAM_content" id="graphs_content">
-          <div class="RADAM_D1" id="D1_graph">
+          <div id="RADAM_D1" class="D1_graph">
 
           </div>
 
         </div>
 
       </div>
-      <div class="RMSprop">
-        <div class="Dimension_title">
+      <div class="Plot_content">
+        <div class="Plot_title">
           <span>Value Loss</span>
         </div>
         <div class="RMSprop_content" id="graphs_content">
-          <div class="RMSprop_D1" id="D1_graph">
+          <div id="RMSprop_D1" class="D1_graph">
 
           </div>
 
@@ -107,27 +107,27 @@
         <span class="Dimension_selector">Accuracy</span>
         <div id = "Algorithm_chooser">
           <div class="choice">
-            <span id="edit_choice">ADAM</span>
+            <span class="edit_choice">ADAM</span>
             <input type="checkbox" name="ADAM_acc">
           </div>
           <div class="choice">
-            <span id="edit_choice">ADAMW</span>
+            <span class="edit_choice">ADAMW</span>
             <input type="checkbox" name="ADAMW_acc">
           </div>
           <div class="choice">
-            <span id="edit_choice">RADAM</span>
+            <span class="edit_choice">RADAM</span>
             <input type="checkbox" name="RADAM_acc">
           </div>
           <div class="choice">
-            <span id="edit_choice">RMSprop</span>
+            <span class="edit_choice">RMSprop</span>
             <input type="checkbox" name="RMSprop_acc">
           </div>
           <div class="choice">
-            <span id="edit_choice">SGD</span>
+            <span class="edit_choice">SGD</span>
             <input type="checkbox" name="SGD_acc" >
           </div>
           <div class="choice">
-            <span id="edit_choice">Select All</span>
+            <span class="edit_choice">Select All</span>
             <input type="checkbox" name="Select_all_acc" id="select_all">
           </div>
         </div>
@@ -137,27 +137,27 @@
         <span class="Dimension_selector">Loss</span>
         <div id="Algorithm_chooser">
           <div class="choice">
-            <span id="edit_choice">ADAM</span>
+            <span class="edit_choice">ADAM</span>
             <input type="checkbox" name="ADAM_loss">
           </div>
           <div class="choice">
-            <span id="edit_choice">ADAMW</span>
+            <span class="edit_choice">ADAMW</span>
             <input type="checkbox" name="ADAMW_loss">
           </div>
           <div class="choice">
-            <span id="edit_choice">RADAM</span>
+            <span class="edit_choice">RADAM</span>
             <input type="checkbox" name="RADAM_loss">
           </div>
           <div class="choice">
-            <span id="edit_choice">RMSprop</span>
+            <span class="edit_choice">RMSprop</span>
             <input type="checkbox" name="RMSprop_loss">
           </div>
           <div class="choice">
-            <span id="edit_choice">SGD</span>
+            <span class="edit_choice">SGD</span>
             <input type="checkbox" name="SGD_loss" >
           </div>
           <div class="choice">
-            <span id="edit_choice">Select All</span>
+            <span class="edit_choice">Select All</span>
             <input type="checkbox" name="Select_all_loss" id="select_all">
           </div>
         </div>
@@ -167,27 +167,27 @@
         <span class="Dimension_selector">Value Accuracy</span>
         <div id="Algorithm_chooser">
           <div class="choice">
-            <span id="edit_choice">ADAM</span>
+            <span class="edit_choice">ADAM</span>
             <input type="checkbox" name="ADAM_val_acc">
           </div>
           <div class="choice">
-            <span id="edit_choice">ADAMW</span>
+            <span class="edit_choice">ADAMW</span>
             <input type="checkbox" name="ADAMW_val_acc">
           </div>
           <div class="choice">
-            <span id="edit_choice">RADAM</span>
+            <span class="edit_choice">RADAM</span>
             <input type="checkbox" name="RADAM_val_acc">
           </div>
           <div class="choice">
-            <span id="edit_choice">RMSprop</span>
+            <span class="edit_choice">RMSprop</span>
             <input type="checkbox" name="RMSprop_val_acc">
           </div>
           <div class="choice">
-            <span id="edit_choice">SGD</span>
+            <span class="edit_choice">SGD</span>
             <input type="checkbox" name="SGD_val_acc" >
           </div>
           <div class="choice">
-            <span id="edit_choice">Select All</span>
+            <span class="edit_choice">Select All</span>
             <input type="checkbox" name="Select_all_val_acc" id="select_all">
           </div>
         </div>
@@ -198,27 +198,27 @@
         <span class="Dimension_selector">Value Loss</span>
         <div id="Algorithm_chooser">
           <div class="choice">
-            <span id="edit_choice">ADAM</span>
+            <span class="edit_choice">ADAM</span>
             <input type="checkbox" name="ADAM_val_loss">
           </div>
           <div class="choice">
-            <span id="edit_choice">ADAMW</span>
+            <span class="edit_choice">ADAMW</span>
             <input type="checkbox" name="ADAMW_val_loss">
           </div>
           <div class="choice">
-            <span id="edit_choice">RADAM</span>
+            <span class="edit_choice">RADAM</span>
             <input type="checkbox" name="RADAM_val_loss">
           </div>
           <div class="choice">
-            <span id="edit_choice">RMSprop</span>
+            <span class="edit_choice">RMSprop</span>
             <input type="checkbox" name="RMSprop_val_loss">
           </div>
           <div class="choice">
-            <span id="edit_choice">SGD</span>
+            <span class="edit_choice">SGD</span>
             <input type="checkbox" name="SGD_val_loss" >
           </div>
           <div class="choice">
-            <span id="edit_choice">Select All</span>
+            <span class="edit_choice">Select All</span>
             <input type="checkbox" name="Select_all_val_loss" id="select_all">
           </div>
         </div>
@@ -229,13 +229,6 @@
 
   </div>
 
-  <div class="Setting_modal">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-      <form class="settings" action="index.html" method="post">
-    </form>
-    </div>
-  </div>
   <script type="text/javascript" src="./JS/data_handler.js"></script>
   <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
   <script type="text/javascript" src="./JS/graph_handler.js"></script>

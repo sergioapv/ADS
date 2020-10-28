@@ -86,7 +86,7 @@ body{
   background-color: #010506;
 }
 
-.Dimension_title{
+.Plot_title{
   position: relative;
   text-align: center;
   margin-bottom: 40px;
@@ -95,26 +95,26 @@ body{
   background-color: white;
   border-radius: 15px;
   color: #e35f21;
-  font-family: 'Gilroy';
+  font-family: 'Segoe UI';
   cursor:pointer;
 }
 
-#D1_graph,#D2_graph,#D3_graph,#D4_graph{
+.D1_graph,.D2_graph,.D3_graph,.D4_graph{
   width: 500px;
   height: 500px;
   background: white;
   margin:20px;
 
 }
-#edit_choice{
-  font-family: 'Gilroy';
+.edit_choice{
+  font-family: 'Segoe UI';
   font-size: 20px;
   color: white;
   margin: 10px;
 
 }
 .choice{
-  font-family: 'Gilroy';
+  font-family: 'Segoe UI';
   font-size: 20px;
   color: white;
   margin: 10px;
@@ -123,7 +123,7 @@ body{
 .sidemenu button{
     margin:8px;
     font-size: 20px;
-    font-family: 'Gilroy';
+    font-family: 'Segoe UI';
     border-radius: 7px;
     border-color: none;
     background: white
@@ -146,7 +146,7 @@ body{
 }
 
 .Dimension_selector{
-  font-family: 'Gilroy';
+  font-family: 'Segoe UI';
   font-size: 30px;
   background-color: white;
   text-align: center;
@@ -183,7 +183,7 @@ body{
   border-radius: 13px;
 }
 .modal-content span{
-  font-family: 'Gilroy';
+  font-family: 'Segoe UI';
   font-size: 20px;
 }
 .modal-content input{
