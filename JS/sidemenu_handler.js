@@ -1,5 +1,7 @@
 var algorithms_chosen = [];
 
+var plotType1 = 'box'
+
 var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
@@ -11,7 +13,8 @@ var span = document.getElementsByClassName("close")[0];
 var plotbtn = document.getElementById("Plots");
 
 plotbtn.addEventListener("click", function() {
-  handle_graphs();
+  // console.log(getDimensions());
+  handle_graphs(plotType1);
 });
 
 // When the user clicks the button, open the modal
