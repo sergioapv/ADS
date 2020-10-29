@@ -99,11 +99,19 @@ body{
   cursor:pointer;
 }
 
-.Plot_title img{
+.Plot_title .trash_icon{
   position: absolute;
   right: 0;
   margin-top: 11px;
   margin-right: 15px;
+}
+
+.Plot_title .info_icon{
+  position: absolute;
+  left: 0;
+  margin-top: 11px;
+  margin-left: 15px;
+  transform: rotate(90deg);
 }
 
 .D1_graph,.D2_graph,.D3_graph,.D4_graph{
@@ -127,14 +135,23 @@ body{
   margin: 10px;
 }
 
-.sidemenu button{
+.sidemenu .button{
+    display: flex;
     margin:8px;
     font-size: 20px;
     font-family: 'Segoe UI';
     border-radius: 7px;
     border-color: none;
-    background: white
+    background: white;
+    border: 1px solid #ffffff;
+    align-items: center;
+    justify-content: center;
 }
+
+.sidemenu .button img{
+  margin-right: 6px;
+}
+
 
 #Algorithm_chooser{
   display: grid;
@@ -163,6 +180,7 @@ body{
 
 #Dimension_editor{
   display: grid;
+  margin-top: 8px;
   margin-bottom: 20px;
 }
 .Setting_modal{

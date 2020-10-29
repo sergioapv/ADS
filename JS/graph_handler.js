@@ -38,7 +38,7 @@ function handle_graphs(){
   console.log('nr de dimensoes = '+ dims.length);
   switch (dims.length) {
     case 1:
-      plotBoxPlot(dims[0]);
+      oneDim(dims[0], 'BoxPlot');
       break;
     case 2:
 
@@ -74,7 +74,7 @@ function getDimensions(){
   return dims;
 }
 
-function plotBoxPlot(dim){
+function oneDim(dim, plot){
   console.log(dim);
   var index = 0
   switch (dim) {
@@ -113,7 +113,12 @@ function plotBoxPlot(dim){
       aux[4] = ADAM[index];
     }
   }
-  makeBoxPlot(aux);
+
+  if(plot == 'BoxPlot'){
+    makeBoxPlot(aux);
+  }else{
+    makeViolinPlot(aux)
+  }
 }
 
 function create_dimension_div(dimensions){
@@ -221,4 +226,17 @@ function makeBoxPlot(algs) {
   console.log(data);
 
 Plotly.newPlot(div, data);
+}
+
+
+function makeViolinPlot(algs){
+  const myNode = document.getElementById("graphs_content");
+  myNode.innerHTML = '';
+  var div = document.createElement("div");
+  div.id = 'D1_graph'
+  var para = document.createElement("P");
+  document.getElementById("graphs_content").appendChild(para);
+  document.getElementById("graphs_content").appendChild(div);
+  document.getElementById("graphs_content").appendChild(para);
+
 }

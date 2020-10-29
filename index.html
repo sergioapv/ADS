@@ -11,10 +11,11 @@
       <div class="Plot_content">
         <div class="Plot_title">
           <span>Accuracy</span>
-          <img src="./images/trash_icon.png">
+          <img src="./images/trash_icon.png" class="trash_icon">
+          <img src="./images/arrow.png" class="info_icon">
         </div>
         <div class="ADAM_content" id="graphs_content">
-          <div id="ADAM_D1" class="D1_graph">
+          <div class="D1_graph" id="ADAM_D1">
 
           </div>
         </div>
@@ -24,8 +25,17 @@
     <div class="sidemenu">
       <img src="./images/sidemenu_minimizer.png" class="sidemenu_minimizer" id="not_clicked">
       <div class="displayerEditor">
-        <button class = "button" id="settings">Settings</button>
-        <button class = "button" id="Plots">Plot Graphs</button>
+        <div class = "button" id="settings">
+          <img src="./images/settings_icon.png">
+          <span>Settings</span>
+        </div>
+
+        <div class = "button" id="Plots">
+          <img src="./images/plot_icon.png">
+          <span>Plot Graphs</span>
+        </div>
+
+
         <div id="myModal" class="modal">
           <!-- Modal content -->
           <div class="modal-content">
