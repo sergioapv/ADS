@@ -157,8 +157,8 @@ function createDropListner(icon, dropdown){
     console.log(options[i].value)
     options[i].addEventListener('click', function(){
       let dims = getDimensions();
-      let div = dropdown.parentNode.parentNode;
-      oneDim(dims, options[i].value, div);
+      let div = dropdown.parentNode.parentNode.childNodes;
+      oneDim(dims, options[i].value, div[1]);
     });
   }
   icon.addEventListener('click', function(){
@@ -368,9 +368,7 @@ function getInfoAlgs(algs){
 
 
 function makeOneDimPlot(algs, plotType, div){
-  // var div = document.querySelector('.graph')
   let para = document.createElement("P");
-  div.appendChild(para);
 
   let info = getInfoAlgs(algs);
 
@@ -416,5 +414,5 @@ var layout = {
 }
 
 Plotly.newPlot(div, data, layout);
-
+div.appendChild(para);
 }
