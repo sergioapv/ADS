@@ -122,6 +122,10 @@ body{
   transform: rotate(90deg);
 }
 
+.graphOption {
+  display: block;
+}
+
 
 .Plot_title .choose_one_dim{
   position: absolute;
@@ -137,10 +141,10 @@ body{
   border-radius: 15px;
 
   /* display: none; */
-  width: 150px;
+  width: 115px;
   height: 75px;
 
-  overflow: hidden;
+  overflow: auto;
   padding: .5em;
   transition: height 1s, width 1s, padding 1s, visibility 1s;
 }

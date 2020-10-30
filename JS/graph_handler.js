@@ -64,12 +64,13 @@ changeGraph[0].addEventListener('click',function(){
 });
 
 
-function handle_graphs(plotType){
+function handle_graphs(plotType, div){
   var dims= getDimensions();
   //console.log('nr de dimensoes = '+ dims.length);
   switch (dims.length) {
     case 1:
-      oneDim(dims[0], plotType);
+      let div = create_dimension_div(algorithms_chosen);
+      oneDim(dims, plotType, div);
       break;
     case 2:
 
@@ -105,7 +106,7 @@ function getDimensions(){
   return dims;
 }
 
-function oneDim(dim, plotType){
+function oneDim(dim, plotType, div){
   console.log(dim);
   var index = 0
   switch (dim) {
@@ -145,10 +146,67 @@ function oneDim(dim, plotType){
       aux[4] = ADAM[index];
     }
   }
-  let div = create_dimension_div(algorithms_chosen);
   makeOneDimPlot(aux, plotType, div)
 }
 
+//creates listener for each dropdown
+function createDropListner(icon, dropdown){
+  let options = dropdown.childNodes;
+  console.log(options + 'options');
+  for(let i = 0; i<options.length; i++){
+    console.log(options[i].value)
+    options[i].addEventListener('click', function(){
+      let dims = getDimensions();
+      let div = dropdown.parentNode.parentNode;
+      oneDim(dims, options[i].value, div);
+    });
+  }
+  icon.addEventListener('click', function(){
+    if(dropdown.style.visibility == 'hidden'){
+      dropdown.style.visibility = 'visible';
+      dropdown.style.height = '75 px';
+      dropdown.style.width = '150 px';
+      dropdown.style.padding = '.5em';
+    }else{
+      dropdown.style.visibility = 'hidden';
+      dropdown.style.height = '0 px';
+      dropdown.style.width = '0 px';
+      dropdown.style.padding = '0';
+    }
+  });
+}
+
+//Creates dropdown menu to choose graph for one dimension
+function create_oneDim_dropDown(icon, plot_title){
+  let dropdown = document.createElement('div');
+  dropdown.setAttribute('class', 'choose_one_dim');
+  dropdown.setAttribute('style', 'align-items: center');
+
+  let box = document.createElement('span');
+  box.setAttribute('class', 'graphOption')
+  box.setAttribute('id', 'box');
+  box.setAttribute('name', 'oneDim');
+  box.value = 'box';
+  box.setAttribute('width', '100%');
+  box.setAttribute('height', '100%');
+  box.textContent = 'Boxplot'
+  dropdown.appendChild(box)
+
+  let violin = document.createElement('span')
+  violin.setAttribute('class', 'graphOption')
+  violin.setAttribute('id', 'violin');
+  violin.setAttribute('name', 'oneDim');
+  violin.value = 'violin';
+  violin.setAttribute('width', '100%');
+  violin.setAttribute('height', '100%');
+  violin.textContent = 'Violinplot'
+  dropdown.appendChild(violin)
+
+  plot_title.appendChild(dropdown)
+
+  console.log('creating');
+  createDropListner(icon, dropdown)
+}
 function create_dimension_div(dimensions){
   //keps track of which algorithms are being ploted
   let algorithms_title = '';
@@ -250,10 +308,10 @@ function create_dimension_div(dimensions){
   plot_title.appendChild(info_icon);
 
   plot_content.appendChild(plot_title);
+
   plot_content.appendChild(graphs_content);
-
+  create_oneDim_dropDown(info_icon, plot_title);
   document.querySelector('.main_content').appendChild(plot_content);
-
 
   return graph
 }
