@@ -31,6 +31,37 @@
 // };
 // Plotly.newPlot('ADAM_D1', data, layout);
 // });
+//Get the icon that makes appear the types of graphs
+let changeGraph = document.getElementsByClassName("info_icon");
+
+console.log(changeGraph[1]);
+
+changeGraph[0].addEventListener('click',function(){
+  let oneDim = document.getElementsByClassName("choose_one_dim")[0];
+  console.log(oneDim);
+  if(oneDim.style.visibility == 'hidden'){
+    oneDim.style.visibility = 'visible';
+    oneDim.style.height = '75 px';
+    oneDim.style.width = '150 px';
+    oneDim.style.padding = '.5em';
+  }
+  else{
+    oneDim.style.visibility = 'hidden';
+    oneDim.style.height = '0 px';
+    oneDim.style.width = '0 px';
+    oneDim.style.padding = '0';
+  }
+
+  oneDim.addEventListener('click',function(){
+    let childs = document.getElementsByName("oneDim");
+    for (var i = 0; i<childs.length; i++){
+      if(childs[i].checked){
+        plotType1 = childs[i].value
+      }
+    }
+    console.log(plotType1);
+  });
+});
 
 
 function handle_graphs(plotType){

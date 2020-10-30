@@ -125,17 +125,24 @@ body{
 
 .Plot_title .choose_one_dim{
   position: absolute;
+  display: block;
   top: 70px;
   background-color: #822E2E;
-  font-size : 60%;
+  font-size : 25px;
   color : white;
   text-align: left;
   left: 15px;
   margin-top: 11px;
   margin-left: 15px;
   border-radius: 15px;
-  display: none;
 
+  /* display: none; */
+  width: 150px;
+  height: 75px;
+
+  overflow: hidden;
+  padding: .5em;
+  transition: height 1s, width 1s, padding 1s, visibility 1s;
 }
 
 .graph{
