@@ -145,7 +145,8 @@ function oneDim(dim, plotType){
       aux[4] = ADAM[index];
     }
   }
-  makeOneDimPlot(aux, plotType)
+  let div = create_dimension_div(algorithms_chosen);
+  makeOneDimPlot(aux, plotType, div)
 }
 
 function create_dimension_div(dimensions){
@@ -308,8 +309,7 @@ function getInfoAlgs(algs){
 }
 
 
-function makeOneDimPlot(algs, plotType){
-  let div = create_dimension_div(algorithms_chosen);
+function makeOneDimPlot(algs, plotType, div){
   // var div = document.querySelector('.graph')
   let para = document.createElement("P");
   div.appendChild(para);
