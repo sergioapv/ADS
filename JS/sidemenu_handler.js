@@ -17,6 +17,29 @@ plotbtn.addEventListener("click", function() {
   handle_graphs(plotType1);
 });
 
+//Get the icon that makes appear the types of graphs
+let changeGraph = document.getElementsByClassName("info_icon");
+
+console.log(changeGraph[1]);
+
+changeGraph[0].addEventListener('click',function(){
+  let oneDim = document.getElementsByClassName("choose_one_dim");
+  console.log(oneDim);
+  if(oneDim[0].style.display == 'grid'){
+    oneDim[0].style.display = 'none';
+  }else{oneDim[0].style.display = 'grid';}
+
+  oneDim[0].addEventListener('click',function(){
+    let childs = document.getElementsByName("oneDim");
+    for (var i = 0; i<childs.length; i++){
+      if(childs[i].checked){
+        plotType1 = childs[i].value
+      }
+    }
+    console.log(plotType1);
+  });
+});
+
 // When the user clicks the button, open the modal
 btn.onclick = function() {
   modal.style.display = "block";

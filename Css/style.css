@@ -111,6 +111,8 @@ body{
   margin-right: 15px;
 }
 
+
+
 .Plot_title .info_icon{
   position: absolute;
   top: 30px;
@@ -118,6 +120,22 @@ body{
   margin-top: 11px;
   margin-left: 15px;
   transform: rotate(90deg);
+}
+
+
+.Plot_title .choose_one_dim{
+  position: absolute;
+  top: 70px;
+  background-color: #822E2E;
+  font-size : 60%;
+  color : white;
+  text-align: left;
+  left: 15px;
+  margin-top: 11px;
+  margin-left: 15px;
+  border-radius: 15px;
+  display: none;
+
 }
 
 .graph{
