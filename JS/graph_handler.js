@@ -34,21 +34,20 @@
 //Get the icon that makes appear the types of graphs
 let changeGraph = document.getElementsByClassName("info_icon");
 
-console.log(changeGraph[1]);
 
 changeGraph[0].addEventListener('click',function(){
   let oneDim = document.getElementsByClassName("choose_one_dim")[0];
-  console.log(oneDim);
+  // console.log(oneDim);
+
   if(oneDim.style.visibility == 'hidden'){
     oneDim.style.visibility = 'visible';
-    oneDim.style.height = '75 px';
-    oneDim.style.width = '150 px';
+    oneDim.style.height = '75px';
+    oneDim.style.width = '150px';
     oneDim.style.padding = '.5em';
-  }
-  else{
+  }else{
     oneDim.style.visibility = 'hidden';
-    oneDim.style.height = '0 px';
-    oneDim.style.width = '0 px';
+    oneDim.style.height = '0';
+    oneDim.style.width = '0';
     oneDim.style.padding = '0';
   }
 
@@ -157,20 +156,21 @@ function createDropListner(icon, dropdown){
     console.log(options[i].value)
     options[i].addEventListener('click', function(){
       let dims = getDimensions();
-      let div = dropdown.parentNode.parentNode.childNodes;
-      oneDim(dims, options[i].value, div[1]);
+      let div = dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('graph')[0];
+      console.log(div);
+      oneDim(dims, options[i].value, div);
     });
   }
   icon.addEventListener('click', function(){
     if(dropdown.style.visibility == 'hidden'){
       dropdown.style.visibility = 'visible';
-      dropdown.style.height = '75 px';
-      dropdown.style.width = '150 px';
+      dropdown.style.height = '75px';
+      dropdown.style.width = '150px';
       dropdown.style.padding = '.5em';
     }else{
       dropdown.style.visibility = 'hidden';
-      dropdown.style.height = '0 px';
-      dropdown.style.width = '0 px';
+      dropdown.style.height = '0';
+      dropdown.style.width = '0';
       dropdown.style.padding = '0';
     }
   });
@@ -368,8 +368,6 @@ function getInfoAlgs(algs){
 
 
 function makeOneDimPlot(algs, plotType, div){
-  let para = document.createElement("P");
-
   let info = getInfoAlgs(algs);
 
   let columns = info[0];
@@ -383,23 +381,23 @@ function makeOneDimPlot(algs, plotType, div){
   for (var i = 0; i<columns.length; i++){
 
     trace = {
-    type: plotType,
-    y: columns[i],
-    name : algNames[i],
-    points: 'none',
-    box: {
-      visible: true
-    },
-    boxpoints: false,
-    line: {
-      color: colors[i]
-    },
-    fillcolor: 'white',
-    opacity: 0.6,
-    meanline: {
-      visible: true
-    },
-    x0: algNames[i]
+      type: plotType,
+      y: columns[i],
+      name : algNames[i],
+      points: 'none',
+      box: {
+        visible: true
+      },
+      boxpoints: false,
+      line: {
+        color: colors[i]
+      },
+      fillcolor: 'white',
+      opacity: 0.6,
+      meanline: {
+        visible: true
+      },
+      x0: algNames[i]
     }
 
     data.push(trace);
@@ -414,5 +412,4 @@ var layout = {
 }
 
 Plotly.newPlot(div, data, layout);
-div.appendChild(para);
 }

@@ -129,7 +129,7 @@ body{
 
 .Plot_title .choose_one_dim{
   position: absolute;
-  display: block;
+  /* display: block; */
   top: 70px;
   background-color: #822E2E;
   font-size : 25px;
@@ -141,12 +141,12 @@ body{
   border-radius: 15px;
 
   /* display: none; */
-  width: 115px;
-  height: 75px;
-
-  overflow: auto;
+  width: 0px;
+  height: 0px;
+  visibility: hidden;
+  overflow: hidden;
   padding: .5em;
-  transition: height 1s, width 1s, padding 1s, visibility 1s;
+  transition: height .5s, width .5s, padding .5s, visibility .5s ease-out;
 }
 
 .graph{
