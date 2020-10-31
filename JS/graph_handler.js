@@ -180,7 +180,7 @@ function createDropListner(icon, dropdown){
 function create_oneDim_dropDown(icon, plot_title){
   let dropdown = document.createElement('div');
   dropdown.setAttribute('class', 'choose_one_dim');
-  dropdown.setAttribute('style', 'align-items: center');
+  // dropdown.setAttribute('style', 'align-items: center');
 
   let box = document.createElement('span');
   box.setAttribute('class', 'graphOption')
