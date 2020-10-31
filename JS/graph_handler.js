@@ -69,7 +69,7 @@ function handle_graphs(plotType, div){
   switch (dims.length) {
     case 1:
       let div = create_dimension_div(algorithms_chosen);
-      oneDim(dims, plotType, div);
+      oneDim(dims, algorithms_chosen, plotType, div);
       break;
     case 2:
 
@@ -104,8 +104,8 @@ function getDimensions(){
   });
   return dims;
 }
-
-function oneDim(dim, plotType, div){
+// Finds info needed to plot one dimension graphs, calls function to draw the plot
+function oneDim(dim, chosen_algs, plotType, div){
   console.log(dim);
   var index = 0
   switch (dim) {
@@ -128,17 +128,17 @@ function oneDim(dim, plotType, div){
   //lista correspondentes a cada run para dita dimesao
   let aux = [[], [], [], [], []];
 
-  for(var i = 0; i < algorithms_chosen.length; i++){
-    if(algorithms_chosen[i].includes('ADAMW')){
+  for(var i = 0; i < chosen_algs.length; i++){
+    if(chosen_algs[i].includes('ADAMW')){
       aux[0] = ADAMW[index];
     }
-    if(algorithms_chosen[i].includes('RADAM')){
+    if(chosen_algs[i].includes('RADAM')){
       aux[1] = RADAM[index];
     }
-    if(algorithms_chosen[i].includes('RMSprop')){
+    if(chosen_algs[i].includes('RMSprop')){
       aux[2] = RMSPROP[index];
     }
-    if(algorithms_chosen[i].includes('SGD')){
+    if(chosen_algs[i].includes('SGD')){
       aux[3] = SGD[index];
     }
     else{
@@ -155,10 +155,30 @@ function createDropListner(icon, dropdown){
   for(let i = 0; i<options.length; i++){
     console.log(options[i].value)
     options[i].addEventListener('click', function(){
-      let dims = getDimensions();
+      let dim ='';
+      let dimName = dropdown.parentNode.getElementsByClassName('dim_title')[0].textContent;
+      let algs_chosen = dropdown.parentNode.getElementsByClassName('alg_title')[0].textContent.split(' vs ');
+      switch (dimName) {
+        case 'Accuracy':
+          dim = 'acc';
+          break;
+        case 'Loss':
+          dim = 'loss';
+          break;
+        case 'Value Accuracy':
+          dim = 'val_acc';
+          break;
+        case 'Value Loss':
+          dim = 'val_loss';
+          break;
+        default:
+
+      }
       let div = dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('graph')[0];
+
       console.log(div);
-      oneDim(dims, options[i].value, div);
+      oneDim(dim, algs_chosen ,options[i].value, div);
+
     });
   }
   icon.addEventListener('click', function(){
@@ -310,6 +330,7 @@ function create_dimension_div(dimensions){
   plot_content.appendChild(plot_title);
 
   plot_content.appendChild(graphs_content);
+  //Only call function when there is one dimension
   create_oneDim_dropDown(info_icon, plot_title);
   document.querySelector('.main_content').appendChild(plot_content);
 
@@ -323,6 +344,7 @@ function create_delete_listener(trash_button){
   });
 }
 
+//takes info from algorithms vector and puts it in a single column, also stores the color in a vector with accondingly indexes
 function getInfoAlgs(algs){
   var columns = [];
   var colors = [];
@@ -367,6 +389,7 @@ function getInfoAlgs(algs){
 }
 
 
+//Draws plot for 1 dimension, algs(list with the algs to be represented), plotType('box' or 'violin'), div to draw the plot
 function makeOneDimPlot(algs, plotType, div){
   let info = getInfoAlgs(algs);
 
