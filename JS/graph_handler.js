@@ -69,6 +69,9 @@ function handle_graphs(plotType, div){
   switch (dims.length) {
     case 1:
       let div = create_dimension_div(algorithms_chosen);
+      for(var i = 0; i < INDEXRECORDER.length; i++){
+        console.log(INDEXRECORDER[i]);
+      }
       oneDim(dims, algorithms_chosen, plotType, div);
       break;
     case 2:
@@ -427,12 +430,20 @@ function makeOneDimPlot(algs, plotType, div){
 
   }
 
-var layout = {
-  title: "",
-  yaxis: {
-    zeroline: false
-  }
-}
+  var layout = {
+    title: "",
+    yaxis: {
+      zeroline: false
+    },
+    hovermode:'closest',
+                title:'Click on Points'
 
-Plotly.newPlot(div, data, layout);
-}
+  }
+
+  Plotly.newPlot(div, data, layout);
+
+  div.on('plotly_click', (eventData) => {
+    console.log(eventData.points[0].data.name)
+  });
+
+  }

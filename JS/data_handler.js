@@ -10,6 +10,13 @@ var RMSPROPCOLOR = '#ff0000';
 var ADAMWCOLOR = '#ff0000';
 var SGDCOLOR = '#ff0000';
 
+var INDEXRECORDER = [[], [], [], [], []];
+
+var ADAMPATH = '';
+var ADAMWPATH = '';
+var RADAMPATH = '';
+var RMSPROPATH = '';
+var SGDPATH = '';
 
 
 var algorithm = [[],[],[],[]];
@@ -83,7 +90,9 @@ function attributeData(alg, ev) {
   var loss = [];
   var val_accuracy = [];
   var val_loss = []
+
   algorithm = [[],[],[],[]];
+  sizes = [];
 
   for(i = 0; i < fileList.length; i++){
     if(fileList[i].name.includes('.csv')){
@@ -95,7 +104,8 @@ function attributeData(alg, ev) {
          var csv = event.target.result;
          //split and get the rows in an array
          var rows = csv.split('\n');
-         for (j=0; j<rows.length-1; j++){
+         sizes.push(rows.length -1);
+         for (j=0; j<rows.length; j++){
            if( j!=0 ){
              accuracy.push(parseFloat(    rows[j].split(';')[0]));
              loss.push(parseFloat(        rows[j].split(';')[1]));
@@ -111,31 +121,38 @@ function attributeData(alg, ev) {
          loss = [];
          val_accuracy = [];
          val_loss = []
-
        }
      }
   }
+
+  console.log(sizes);
   switch (alg) {
     case 'ADAM':
       ADAM = [[],[],[],[]];
       ADAM = algorithm;
-      break;
-    case 'RADAM':
-      RADAM = [[],[],[],[]];
-      RADAM = algorithm;
-      break;
-    case 'RMSprop':
-      RMSPROP = [[],[],[],[]];
-      RMSPROP = algorithm;
-      break;
-    case 'SGD':
-      SGD =  [[],[],[],[]];
-      SGD = algorithm;
+      INDEXRECORDER[0] = sizes;
       break;
     case 'ADAMW':
       ADAMW = [[],[],[],[]];
       ADAMW = algorithm;
+      INDEXRECORDER[1] = sizes;
       break;
+    case 'RADAM':
+      RADAM = [[],[],[],[]];
+      RADAM = algorithm;
+      INDEXRECORDER[2] = sizes;
+      break;
+    case 'RMSprop':
+      RMSPROP = [[],[],[],[]];
+      RMSPROP = algorithm;
+      INDEXRECORDER[3] = sizes;
+      break;
+    case 'SGD':
+      SGD =  [[],[],[],[]];
+      SGD = algorithm;
+      INDEXRECORDER[4] = sizes;
+      break;
+
   }
   console.log(ADAM);
   console.log(ADAMW);
