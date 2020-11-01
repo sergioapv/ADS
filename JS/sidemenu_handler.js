@@ -131,7 +131,10 @@ select_all_list.forEach((div) => {
               console.log(algorithms_chosen);
           }
           else {
-            algorithms_chosen.pop(this.name);
+            let index = algorithms_chosen.indexOf(this.name);
+            if (index > -1) {
+              algorithms_chosen.splice(index,1);
+            }
             console.log(algorithms_chosen);
           }
         });
