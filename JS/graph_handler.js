@@ -32,6 +32,7 @@
 // Plotly.newPlot('ADAM_D1', data, layout);
 // });
 //Get the icon that makes appear the types of graphs
+
 let changeGraph = document.getElementsByClassName("info_icon");
 
 
@@ -63,19 +64,26 @@ changeGraph[0].addEventListener('click',function(){
 });
 
 
-function handle_graphs(plotType, div){
+function handle_graphs(plotType){
   var dims= getDimensions();
   //console.log('nr de dimensoes = '+ dims.length);
+  let div = create_dimension_div(algorithms_chosen);
   switch (dims.length) {
     case 1:
-      let div = create_dimension_div(algorithms_chosen);
       for(var i = 0; i < INDEXRECORDER.length; i++){
         console.log(INDEXRECORDER[i]);
       }
       oneDim(dims, algorithms_chosen, plotType, div);
       break;
     case 2:
-
+      let algorithms = getAlgorithms();
+      let ratio = algorithms.length;
+      let total_chosen = algorithms_chosen.length;
+      if(ratio * dims.length == total_chosen){
+        twoDimPlot(div, dims, algorithms)
+      }else{
+        alert('You need to select the same algorithms in both dimensions')
+      }
       break;
     case 3:
 
@@ -107,6 +115,22 @@ function getDimensions(){
   });
   return dims;
 }
+
+function getAlgorithms(){
+  var algs = [];
+  for(var i = 0; i < algorithms_chosen.length; i++){
+    element = algorithms_chosen[i].split("_");
+      algs.push(element[0]);
+  }
+  var dims = [];
+  var filteredArray = algs.filter(function(item, pos){
+    if(algs.indexOf(item) == pos){
+      dims.push(item);
+    }
+  });
+  return dims;
+}
+
 // Finds info needed to plot one dimension graphs, calls function to draw the plot
 function oneDim(dim, chosen_algs, plotType, div){
   console.log(dim);
@@ -435,15 +459,122 @@ function makeOneDimPlot(algs, plotType, div){
     yaxis: {
       zeroline: false
     },
-    hovermode:'closest',
-                title:'Click on Points'
-
+    hovermode:'closest'
   }
 
   Plotly.newPlot(div, data, layout);
 
   div.on('plotly_click', (eventData) => {
-    console.log(eventData.points[0].data.name)
-  });
+    // var marginT = div._fullLayout.margin.t;
+    // var y = Y - marginT;
+    // console.log(eventData)
+    console.log(eventData.event.clientY, div.offsetHeight);
 
+  });
+}
+
+function twoDimPlot(div, dims, chosen_algs){
+  var indexes = []
+  var colors = ['','','','',''];
+  var algNames = ['','','','',''];
+  var dimensions = ['',''];
+
+  for(let i = 0; i<2; i++){
+    switch (dims[i]) {
+      case 'acc':
+        indexes.push(0);
+        dimensions[i] = 'Accuracy'
+        break;
+      case 'loss':
+        indexes.push(1);
+        dimensions[i] = 'Loss'
+        break;
+      case 'val_acc':
+        indexes.push(2);
+        dimensions[i] = 'Value Accuracy'
+        break;
+      case 'val_loss':
+        indexes.push(3);
+        dimensions[i] = 'Value Loss'
+        break;
+      default:
+    }
   }
+
+  console.log(chosen_algs + ' indexes');
+  let aux = [[], [], [], [], []];
+
+  for(let j = 0; j<indexes.length; j++){
+    //lista correspondente às dimensoes cada algoritmo
+    for(let i = 0; i<chosen_algs.length; i++){
+      switch (chosen_algs[i]){
+        case 'ADAM':
+          aux[0].push(ADAM[indexes[j]]);
+          colors[0] = ADAMCOLOR
+          algNames[0] = 'ADAM';
+          break;
+        case 'ADAMW':
+          aux[1].push(ADAMW[indexes[j]]);
+          colors[1] = ADAMWCOLOR
+          algNames[1] = 'ADAM';
+          break;
+        case 'RADAM':
+          aux[2].push(RADAM[indexes[j]]);
+          colors[2] = RADAMCOLOR
+          algNames[2] = 'ADAMW';
+          break;
+        case 'RMSprop':
+          aux[3].push(RMSPROP[indexes[j]]);
+          colors[3] = RMSPROPCOLOR
+          algNames[3] = 'RMSprop';
+          break;
+        case 'SGD':
+          aux[4].push(SGD[indexes[j]]);
+          colors[4] = SGDCOLOR
+          algNames[4] = 'SGD';
+          break;
+        default:
+      }
+    }
+  }
+
+  for(let i = 0; i<aux.length; i++){
+    console.log(aux[i]);
+    for(let j = 0; j<aux[i].length; j++){
+     let dimension = [];
+      for(let x = 0; x<aux[i][j].length; x++){
+        for(let c = 0; c<aux[i][j][x].length; c++ ){
+          dimension.push(aux[i][j][x][c]);
+        }
+      }
+    aux[i][j] = dimension;
+   }
+  }
+
+var data =[];
+console.log(colors);
+
+for(let i = 0; i<aux.length; i++){
+  if(aux[i].length > 0){
+    console.log();
+    var trace = {
+    x: aux[i][0],
+    y: aux[i][1],
+    mode: 'markers',
+    type: 'line',
+    line: {
+      color: colors[i]
+    },
+    name: algNames[i],
+    };
+    data.push(trace);
+  }
+}
+layout = {
+       hovermode:'closest',
+       xaxis:{zeroline:false, title: dimensions[0]},
+       yaxis:{zeroline:false, title: dimensions[1]}
+    };
+
+Plotly.newPlot(div, data, layout);
+}

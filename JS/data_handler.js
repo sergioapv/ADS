@@ -105,7 +105,7 @@ function attributeData(alg, ev) {
          //split and get the rows in an array
          var rows = csv.split('\n');
          sizes.push(rows.length -1);
-         for (j=0; j<rows.length; j++){
+         for (j=0; j<rows.length - 1; j++){
            if( j!=0 ){
              accuracy.push(parseFloat(    rows[j].split(';')[0]));
              loss.push(parseFloat(        rows[j].split(';')[1]));
