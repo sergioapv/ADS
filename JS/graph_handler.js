@@ -264,22 +264,49 @@ function create_dimension_div(dimensions){
   dimensions.forEach((dimension,i) => {
 
     if (dimension.includes('ADAM') && !dimension.includes('ADAMW') && !dimension.includes('RADAM')) {
-      algorithms_title += 'ADAM'
+      if ((!algorithms_title.includes('ADAM ')) && (algorithms_title === '')) {
+        algorithms_title += 'ADAM';
+      }
+      else {
+        algorithms_title += ' vs ADAM';
+      }
+        added = true;
     }
+
     else if (dimension.includes('ADAMW')) {
-      algorithms_title += 'ADAMW'
+      if ((!algorithms_title.includes('ADAMW')) && (algorithms_title === '')) {
+        algorithms_title += 'ADAMW';
+      }
+      else {
+        algorithms_title += ' vs ADAMW';
+      }
     }
+
     else if (dimension.includes('RADAM')) {
-      algorithms_title += 'RADAM'
+      if ((!algorithms_title.includes('RADAM')) && (algorithms_title === '')) {
+        algorithms_title += 'RADAM';
+      }
+      else {
+        algorithms_title += ' vs RADAM';
+      }
     }
+
     else if (dimension.includes('RMSprop')) {
-      algorithms_title += 'RMSprop'
+      if ((!algorithms_title.includes('RMSprop')) && (algorithms_title === '')) {
+        algorithms_title += 'RMSprop';
+      }
+      else {
+        algorithms_title += ' vs RMSprop';
+      }
     }
+
     else if (dimension.includes('SGD')) {
-      algorithms_title += 'SGD'
-    }
-    if (i != dimensions.length -1) {
-      algorithms_title += ' vs '
+      if ((!algorithms_title.includes('SGD')) && (algorithms_title === '')) {
+        algorithms_title += 'SGD';
+      }
+      else {
+        algorithms_title += ' vs SGD';
+      }
     }
   });
 
@@ -288,19 +315,27 @@ function create_dimension_div(dimensions){
   dim_selected.forEach((dimension,i) => {
     switch (dimension) {
       case 'acc':{
-        dimensions_title += 'Accuracy'
+        if (!dimensions_title.includes('Accuracy')) {
+          dimensions_title += 'Accuracy'
+        }
         break;
       }
       case 'loss':{
-        dimensions_title += 'Loss'
+        if (!dimensions_title.includes('Loss')) {
+          dimensions_title += 'Loss'
+        }
         break;
       }
       case 'val_acc':{
-        dimensions_title += 'Value Accuracy'
+        if (!dimensions_title.includes( 'Value Accuracy')) {
+          dimensions_title +=  'Value Accuracy'
+        }
         break;
       }
       case 'val_loss':{
-        dimensions_title += 'Value Loss'
+        if (!dimensions_title.includes('Value Loss')) {
+          dimensions_title +=  'Value Loss'
+        }
         break;
       }
       if (i != dim_selected.length -1) {
@@ -312,6 +347,7 @@ function create_dimension_div(dimensions){
 
   console.log(algorithms_title);
   console.log(dim_selected);
+  console.log(dimensions_title);
 
   let plot_content = document.createElement('div');
   plot_content.className = 'Plot_content';
