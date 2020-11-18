@@ -3,11 +3,49 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="./Css/style.css" />
+    <link rel="stylesheet" href="./Css/input_start.css" />
     <title>Projeto ADS</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
   <body>
-    <div class="main_content">
+    <div class="input_file_start"/>
+      <div class='start_content'>
+        <div id="welcome">
+          <span id="welcome_text">Bem-vindo</span>
+        </div>
+        <div id="input_content" style="display:none">
+          <span style="font-size: 50px; padding-bottom:20px">Faça o Input dos Ficheiros de Dados</span>
+
+          <form id="drop-zone__content">
+            <div class="drop-zone">
+              <span class="drop-zone__prompt">Arraste os ficheiros ou clique aqui</span>
+              <input type="file" name="myFile" class="drop-zone__input" webkitdirectory directory multiple>
+            </div>
+          </form>
+
+          <!-- <div class="file_data">
+            <div class="filename_content">
+              <span id="filename">FileName:</span>
+              <input type="text" size="30">
+            </div>
+            <div class="dimensions_content">
+              <span id="filedimensions">Dimensions:</span>
+              <input type="text" size="30">
+              <input type="text" size="30">
+              <input type="text" size="30">
+              <input type="text" size="30">
+
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+      <script type="text/javascript" src="./JS/InputStart/start_handler.js"></script>
+    </div>
+
+
+
+    <div class="main_content" style="display:none">
       <div class="Plot_content">
         <div class="Plot_title">
           <span class="dim_title">Accuracy</span>
@@ -30,7 +68,7 @@
       </div>
     </div>
 
-    <div class="sidemenu">
+    <div class="sidemenu" style="display:none">
       <img src="./images/sidemenu_minimizer.png" class="sidemenu_minimizer" id="not_clicked">
       <div class="displayerEditor">
         <div class = "button" id="settings">
