@@ -18,6 +18,8 @@ var RADAMPATH = '';
 var RMSPROPATH = '';
 var SGDPATH = '';
 
+var dimNames = [];
+var algNames = [];
 
 var algorithm = [[],[],[],[]];
 
@@ -68,23 +70,27 @@ document.getElementById('sgdcolor').addEventListener("input", function() {
 
 
 document.getElementById('adamdir').addEventListener('change', (event) => {
-  attributeData('ADAM',event)
+  attributeData(event)
 });
 document.getElementById('radamdir').addEventListener('change', (event) => {
-  attributeData('RADAM',event)
+  attributeData(event)
 });
 document.getElementById('adamwdir').addEventListener('change', (event) => {
-  attributeData('ADAMW',event)
+  attributeData(event)
 });
 document.getElementById('sgddir').addEventListener('change', (event) => {
-  attributeData('SGD',event)
+  attributeData(event)
 });
 document.getElementById('rmspropdir').addEventListener('change', (event) => {
-  attributeData('RMSprop',event)
+  attributeData(event)
 });
 
-function attributeData(alg, ev) {
+function attributeData(ev) {
   const fileList = ev.target.files;
+  let alg = fileList[0].webkitRelativePath.split('/')[0];
+  alg = alg.split("-")[0];
+  algNames.push(alg);
+  console.log(alg);
   var csv_files = [];
   var accuracy = [];
   var loss = [];
@@ -100,19 +106,26 @@ function attributeData(alg, ev) {
       var reader = new FileReader();
       reader.readAsText(fileList[i]);
       reader.onload = function(event) {
-         //get the file.
-         var csv = event.target.result;
-         //split and get the rows in an array
-         var rows = csv.split('\n');
-         sizes.push(rows.length -1);
-         for (j=0; j<rows.length - 1; j++){
-           if( j!=0 ){
-             accuracy.push(parseFloat(    rows[j].split(';')[0]));
-             loss.push(parseFloat(        rows[j].split(';')[1]));
-             val_accuracy.push(parseFloat(rows[j].split(';')[2]));
-             val_loss.push(parseFloat(    rows[j].split(';')[3]));
-           }
+       //get the file.
+       var csv = event.target.result;
+       //split and get the rows in an array
+       var rows = csv.split('\n');
+       sizes.push(rows.length -1);
+
+       if(dimNames.length === 0){
+         dimNames.push(rows[0].split(';')[0]);
+         dimNames.push(rows[0].split(';')[1]);
+         dimNames.push(rows[0].split(';')[2]);
+         dimNames.push(rows[0].split(';')[3]);
+       }
+       for (j=0; j<rows.length - 1; j++){
+         if( j!=0 ){
+           accuracy.push(parseFloat(    rows[j].split(';')[0]));
+           loss.push(parseFloat(        rows[j].split(';')[1]));
+           val_accuracy.push(parseFloat(rows[j].split(';')[2]));
+           val_loss.push(parseFloat(    rows[j].split(';')[3]));
          }
+       }
          algorithm[0].push(accuracy)
          algorithm[1].push(loss)
          algorithm[2].push(val_accuracy)
@@ -125,7 +138,8 @@ function attributeData(alg, ev) {
      }
   }
 
-  console.log(sizes);
+  console.log(algNames);
+  console.log(dimNames);
   switch (alg) {
     case 'ADAM':
       ADAM = [[],[],[],[]];
