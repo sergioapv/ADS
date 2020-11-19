@@ -19,6 +19,7 @@ document.getElementById('done_button').addEventListener('click', e => {
   document.querySelector('.input_file_start').remove();
   document.querySelector('.main_content').style.display = 'block';
   document.querySelector('.sidemenu').style.display = 'block';
+  create_sidemenu_automatic();
 });
 
 welcome_text.addEventListener('mouseover',function(){

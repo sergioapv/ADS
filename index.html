@@ -29,7 +29,7 @@
             </div>
           </form>
 
-          <div class="file_data">
+          <!-- <div class="file_data">
             <div class="filename_content">
               <span id="filename">FileName:</span>
               <input type="text" size="30">
@@ -45,7 +45,7 @@
             </div>
             <span id="add_button" >Adicionar</span>
 
-          </div>
+          </div> -->
         </div>
         <span id="done_button" style="display:none">Avançar</span>
       </div>
@@ -76,8 +76,7 @@
         </div>
       </div>
     </div>
-
-    <div class="sidemenu" style="display:none">
+    <div class="sidemenu" style="display:none" onload="create_sidemenu_automatic">
       <img src="./images/sidemenu_minimizer.png" class="sidemenu_minimizer" id="not_clicked">
       <div class="displayerEditor">
         <div class = "button" id="settings">
@@ -89,50 +88,10 @@
           <img src="./images/plot_icon.png">
           <span>Plot Graphs</span>
         </div>
-
-
-        <div id="myModal" class="modal">
-          <!-- Modal content -->
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <span>Escolha a Pasta que contém os valores do Algoritmo</span>
-
-            <div class="Algorithm_getter">
-              <span>ADAM</span>
-              <input type="file" id="adamdir" webkitdirectory directory multiple/>
-              <input type="color" id="adamcolor" name="favcolor" value="#ff0000">
-            </div>
-
-            <div class="Algorithm_getter">
-              <span>ADAMW</span>
-              <input type="file" id="adamwdir" webkitdirectory directory multiple/>
-              <input type="color" id="adamwcolor" name="favcolor" value="#ff0000">
-            </div>
-
-            <div class="Algorithm_getter">
-              <span>RADAM</span>
-              <input type="file" id="radamdir" webkitdirectory directory multiple/>
-              <input type="color" id="radamcolor" name="favcolor" value="#ff0000">
-            </div>
-
-            <div class="Algorithm_getter">
-              <span>RMSprop</span>
-              <input type="file" id="rmspropdir" webkitdirectory directory multiple/>
-              <input type="color" id="rmspropcolor" name="favcolor" value="#ff0000">
-            </div>
-            <div class="Algorithm_getter">
-              <span>SGD</span>
-              <input type="file" id="sgddir" webkitdirectory directory multiple/>
-              <input type="color" id="sgdcolor" name="favcolor" value="#ff0000">
-            </div>
-
-          </div>
-        </div>
-
       </div>
-      <div class="Accuracy_editor" id="Dimension_editor">
+      <!-- <div class="Dimension_editor">
         <span class="Dimension_selector">Accuracy</span>
-        <div id = "Algorithm_chooser">
+        <div class = "Algorithm_chooser">
           <div class="choice">
             <span class="edit_choice">ADAM</span>
             <input type="checkbox" name="ADAM_acc">
@@ -160,9 +119,9 @@
         </div>
 
       </div>
-      <div class="Loss_editor" id="Dimension_editor">
+      <div class="Dimension_editor">
         <span class="Dimension_selector">Loss</span>
-        <div id="Algorithm_chooser">
+        <div class = "Algorithm_chooser">
           <div class="choice">
             <span class="edit_choice">ADAM</span>
             <input type="checkbox" name="ADAM_loss">
@@ -190,9 +149,9 @@
         </div>
 
       </div>
-      <div class="Value_acc_editor" id="Dimension_editor">
+      <div class="Dimension_editor">
         <span class="Dimension_selector">Value Accuracy</span>
-        <div id="Algorithm_chooser">
+        <div class = "Algorithm_chooser">
           <div class="choice">
             <span class="edit_choice">ADAM</span>
             <input type="checkbox" name="ADAM_val_acc">
@@ -221,9 +180,9 @@
 
       </div>
 
-      <div class="Value_Loss_editor" id="Dimension_editor">
+      <div class="Dimension_editor">
         <span class="Dimension_selector">Value Loss</span>
-        <div id="Algorithm_chooser">
+        <div class = "Algorithm_chooser">
           <div class="choice">
             <span class="edit_choice">ADAM</span>
             <input type="checkbox" name="ADAM_val_loss">
@@ -250,12 +209,51 @@
           </div>
         </div>
 
-      </div>
+      </div> -->
+
 
     </div>
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <span>Escolha a Pasta que contém os valores do Algoritmo</span>
+
+        <div class="Algorithm_getter">
+          <span>ADAM</span>
+          <input type="file" id="adamdir" webkitdirectory directory multiple/>
+          <input type="color" id="adamcolor" name="favcolor" value="#ff0000">
+        </div>
+
+        <div class="Algorithm_getter">
+          <span>ADAMW</span>
+          <input type="file" id="adamwdir" webkitdirectory directory multiple/>
+          <input type="color" id="adamwcolor" name="favcolor" value="#ff0000">
+        </div>
+
+        <div class="Algorithm_getter">
+          <span>RADAM</span>
+          <input type="file" id="radamdir" webkitdirectory directory multiple/>
+          <input type="color" id="radamcolor" name="favcolor" value="#ff0000">
+        </div>
+
+        <div class="Algorithm_getter">
+          <span>RMSprop</span>
+          <input type="file" id="rmspropdir" webkitdirectory directory multiple/>
+          <input type="color" id="rmspropcolor" name="favcolor" value="#ff0000">
+        </div>
+        <div class="Algorithm_getter">
+          <span>SGD</span>
+          <input type="file" id="sgddir" webkitdirectory directory multiple/>
+          <input type="color" id="sgdcolor" name="favcolor" value="#ff0000">
+        </div>
+
+      </div>
+    </div>
+
 
   </div>
-
+  <script type="text/javascript" src="./JS/sidemenu_creater.js"></script>
   <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
   <script type="text/javascript" src="./JS/data_handler.js"></script>
   <script type="text/javascript" src="./JS/graph_handler.js"></script>
