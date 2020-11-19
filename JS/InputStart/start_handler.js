@@ -3,6 +3,8 @@ var input_content = document.getElementById("input_content");
 
 var Algorithms_names = [];
 var Dimensions_names = [];
+var Algorithms_data = [];
+var Algorithms_colores = [];
 
 welcome_text.addEventListener('mouseover',function(){
   welcome_text.style = 'color:gray'
@@ -230,6 +232,18 @@ function get_folder_dimensions(files,file_data_div){
           create_data_visualizer(dimension,file_data_div,index)
         });
 
+        let container = document.querySelector('.dimensions_content');
+
+        var cor = document.createElement('span');
+        cor.innerHTML = 'Cor:';
+
+        var color_chooser = document.createElement('input');
+        color_chooser.type = 'color';
+        color_chooser.value = '#ff0000';
+
+        container.appendChild(cor);
+        container.appendChild(color_chooser);
+
       }
       break;
     }
@@ -269,24 +283,44 @@ function create_data_visualizer(dimension,file_data_div,index){
     }
 
   });
+
+
+
   if(!document.getElementById('add_button')){
+
     var add_button = document.createElement('span');
     add_button.id = 'add_button';
     add_button.innerHTML = 'Adicionar';
 
-    add_button.addEventListener('click' , e => {
-      document.querySelector('.drop-zone__thumb').remove();
-      document.querySelector('.drop-zone__prompt').style.display = 'block';
-      document.querySelector('.file_data').remove();
-      document.querySelector('.input_file_start').remove();
-      document.querySelector('.main_content').style.display = 'block';
-      document.querySelector('.sidemenu').style.display = 'block';
-    });
+    add_button.addEventListener('click' , add_button_action);
     file_data_div.appendChild(add_button);
   }
 }
 
+function add_button_action(){
+  updateAddedDimensions();
+  document.querySelector('.drop-zone__thumb').remove();
+  document.querySelector('.drop-zone__prompt').style.display = 'block';
+  document.querySelector('.file_data').remove();
+
+  //document.querySelector('.input_file_start').remove();
+  // document.querySelector('.main_content').style.display = 'block';
+  // document.querySelector('.sidemenu').style.display = 'block';
+
+  let start_content = document.querySelector('.start_content');
+
+  start_content.style.animation = "fadeIn 1s";
+
+}
+
 
 function updateAddedDimensions(){
+  var filename_content = document.querySelector('.filename_content');
+  var input = filename_content.getElementsByTagName('input')[0];
 
+  var dim_added = document.createElement('span');
+  dim_added.classList.add('dim_added');
+  dim_added.innerHTML = input.value;
+
+  document.querySelector('.Dimensions_added').appendChild(dim_added);
 }

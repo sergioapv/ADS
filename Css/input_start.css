@@ -22,12 +22,13 @@
 }
 #welcome_text{
   font-size: 70px;
+  cursor: pointer;
+
 }
 
 .input_file_start span{
   font-family: 'Segoe UI';
   color: white;
-  cursor: pointer;
   transition: color 0.5s;
 }
 
@@ -116,6 +117,16 @@
   color: white;
 }
 
+.Dimensions_added{
+  margin: 40px;
+}
+
+.Dimensions_added .dim_added{
+  margin: 20px;
+  padding: 5px 15px;
+  border-radius: 7px;
+  border: 2px solid #009578;
+}
 
 /* ANIMATIONS */
 
