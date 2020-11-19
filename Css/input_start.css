@@ -115,6 +115,17 @@
   background-color: gray;
   border-radius: 7px;
   color: white;
+  cursor: pointer;
+}
+
+#done_button {
+  position: absolute;
+  margin-top: 100px;
+  margin-left: 500px;
+  background: #009578;
+  padding: 5px 15px;
+  border-radius: 7px;
+  cursor: pointer;
 }
 
 .Dimensions_added{

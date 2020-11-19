@@ -6,6 +6,21 @@ var Dimensions_names = [];
 var Algorithms_data = [];
 var Algorithms_colores = [];
 
+function get_data_from_start(what){
+  switch (what) {
+    case 'Algorithms_names':return Algorithms_names;
+    case 'Dimensions_names':return Dimensions_names;
+    case 'Algorithms_data':return Algorithms_data;
+    case 'Algorithms_colores':return Algorithms_colores;        
+  }
+}
+
+document.getElementById('done_button').addEventListener('click', e => {
+  document.querySelector('.input_file_start').remove();
+  document.querySelector('.main_content').style.display = 'block';
+  document.querySelector('.sidemenu').style.display = 'block';
+});
+
 welcome_text.addEventListener('mouseover',function(){
   welcome_text.style = 'color:gray'
 })
@@ -19,6 +34,7 @@ welcome_text.addEventListener('click',function(){
   setTimeout(function(){
     welcome_content.style.display = 'none';
     input_content.style.display = 'block';
+    document.getElementById('done_button').style.display = 'block';
     input_content.style.animation = 'fadeIn 2s'
   },1000)
 })
@@ -42,8 +58,6 @@ document.querySelectorAll('.drop-zone__input').forEach((inputElement) => {
       var theFiles = inputElement.files;
       var relativePath = theFiles[0].webkitRelativePath;
       var folder_name = relativePath.split("/")[0];
-
-      console.log(folder_name);
 
       updateThumbnail(dropZoneElement,folder_name)
       display_folder_data(folder_name,inputElement.files)
@@ -228,7 +242,15 @@ function get_folder_dimensions(files,file_data_div){
         let dimensions = csv.split('\n')[0].split(';')
         console.log(dimensions);
         dimensions.forEach( (dimension,index) => {
-          Dimensions_names.push(dimension);
+          if (Dimensions_names.length > 0) {
+            if (!Dimensions_names.includes(dimension)) {
+              Dimensions_names.push(dimension);
+            }
+          }
+          else {
+            Dimensions_names.push(dimension);
+          }
+
           create_data_visualizer(dimension,file_data_div,index)
         });
 
@@ -244,13 +266,27 @@ function get_folder_dimensions(files,file_data_div){
         container.appendChild(cor);
         container.appendChild(color_chooser);
 
+
+        if(!document.getElementById('add_button')){
+
+          var add_button = document.createElement('span');
+          add_button.id = 'add_button';
+          add_button.innerHTML = 'Adicionar';
+
+          add_button.addEventListener('click' , e =>{
+            add_file_data(files)
+            add_button_action();
+          });
+          file_data_div.appendChild(add_button);
+        }
+
       }
       break;
     }
   }
 }
 
-function create_data_visualizer(dimension,file_data_div,index){
+function create_data_visualizer(dimension,file_data_div,index,files){
   var input = document.createElement('input');
   input.classList.add('input_' + index);
   input.type = 'text';
@@ -284,17 +320,6 @@ function create_data_visualizer(dimension,file_data_div,index){
 
   });
 
-
-
-  if(!document.getElementById('add_button')){
-
-    var add_button = document.createElement('span');
-    add_button.id = 'add_button';
-    add_button.innerHTML = 'Adicionar';
-
-    add_button.addEventListener('click' , add_button_action);
-    file_data_div.appendChild(add_button);
-  }
 }
 
 function add_button_action(){
@@ -303,14 +328,10 @@ function add_button_action(){
   document.querySelector('.drop-zone__prompt').style.display = 'block';
   document.querySelector('.file_data').remove();
 
-  //document.querySelector('.input_file_start').remove();
-  // document.querySelector('.main_content').style.display = 'block';
-  // document.querySelector('.sidemenu').style.display = 'block';
 
   let start_content = document.querySelector('.start_content');
 
   start_content.style.animation = "fadeIn 1s";
-
 }
 
 
@@ -324,3 +345,42 @@ function updateAddedDimensions(){
 
   document.querySelector('.Dimensions_added').appendChild(dim_added);
 }
+
+function add_file_data(files){
+  // let algorithm_index = Algorithms_names.length;
+  let num_dimensions = Dimensions_names.length;
+
+  let data = [];
+
+  for (var a = 0; a < num_dimensions ; a++) {
+    data.push([]);
+  }
+  // creates the data with the wanted structure
+
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    if (file.name.includes('.csv')) {
+      var reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = function(e) {
+          //get the file.
+         var csv = event.target.result;
+         //split and get the rows in an array
+         var rows = csv.split('\n');
+
+         for (j=0; j<rows.length - 1; j++){ //runs throught lines
+           for (var k = 0; k < data.length; k++) { //runs throught columns
+             data[k].push(rows[j].split(';')[k]);
+           }
+         }
+       }
+     }
+   }
+
+   Algorithms_data.push([data]);
+   files = [];
+   console.clear();
+   console.log(Algorithms_data);
+   console.log(Algorithms_names);
+   console.log(Dimensions_names);
+ }
