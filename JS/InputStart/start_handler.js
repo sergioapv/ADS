@@ -373,7 +373,10 @@ function add_file_data(files){
 
          for (j=0; j<rows.length - 1; j++){ //runs throught lines
            for (var k = 0; k < data.length; k++) { //runs throught columns
-             data[k].push(rows[j].split(';')[k]);
+             if(!isNaN(rows[j].split(';')[k])){
+               console.log('its a number');
+               data[k].push(rows[j].split(';')[k]);
+             }
            }
          }
        }
