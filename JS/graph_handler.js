@@ -67,10 +67,10 @@ changeGraph[0].addEventListener('click',function(){
 function handle_graphs(plotType){
   var dims= getDimensions();
   let div = create_dimension_div(algorithms_chosen);
+  let chosen_algs_names = getAlgorithms();
 
   switch (dims.length) {
     case 1:
-      let chosen_algs_names = getAlgorithms();
       makeOneDimPlot(dims, chosen_algs_names, plotType, div);
       break;
     case 2:
@@ -78,7 +78,7 @@ function handle_graphs(plotType){
       let ratio = algorithms.length;
       let total_chosen = algorithms_chosen.length;
       if(ratio * dims.length == total_chosen){
-        twoDimPlot(div, dims, algorithms)
+        twoDimPlot(div, dims, chosen_algs_names);
       }else{
         alert('You need to select the same algorithms in both dimensions')
       }
@@ -459,107 +459,32 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
 }
 
 function twoDimPlot(div, dims, chosen_algs){
-  var indexes = []
-  var colors = ['','','','',''];
-  var algNames = ['','','','',''];
-  var dimensions = ['',''];
+  dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
+  var data =[];
+  console.log(colors);
 
-  for(let i = 0; i<2; i++){
-    switch (dims[i]) {
-      case 'acc':
-        indexes.push(0);
-        dimensions[i] = 'Accuracy'
-        break;
-      case 'loss':
-        indexes.push(1);
-        dimensions[i] = 'Loss'
-        break;
-      case 'val_acc':
-        indexes.push(2);
-        dimensions[i] = 'Value Accuracy'
-        break;
-      case 'val_loss':
-        indexes.push(3);
-        dimensions[i] = 'Value Loss'
-        break;
-      default:
+  for(let i = 0; i<chosen_algs.length; i++){
+    algIndex = Algorithms_name.indexOf(chosen_algs[i]);
+    if(aux[i].length > 0){
+      console.log();
+      var trace = {
+      x: Algorithms_data[algIndex][dim_indexes[0]],
+      y: Algorithms_data[algIndex][dim_indexes[1]],
+      mode: 'markers',
+      type: 'line',
+      line: {
+        color: Algorithms_colors[algIndex]
+      },
+      name: chosen_algs[i],
+      };
+      data.push(trace);
     }
   }
+  layout = {
+         hovermode:'closest',
+         xaxis:{zeroline:false, title: dimensions[0]},
+         yaxis:{zeroline:false, title: dimensions[1]}
+      };
 
-  console.log(chosen_algs + ' indexes');
-  let aux = [[], [], [], [], []];
-
-  for(let j = 0; j<indexes.length; j++){
-    //lista correspondente às dimensoes cada algoritmo
-    for(let i = 0; i<chosen_algs.length; i++){
-      switch (chosen_algs[i]){
-        case 'ADAM':
-          aux[0].push(ADAM[indexes[j]]);
-          colors[0] = ADAMCOLOR
-          algNames[0] = 'ADAM';
-          break;
-        case 'ADAMW':
-          aux[1].push(ADAMW[indexes[j]]);
-          colors[1] = ADAMWCOLOR
-          algNames[1] = 'ADAM';
-          break;
-        case 'RADAM':
-          aux[2].push(RADAM[indexes[j]]);
-          colors[2] = RADAMCOLOR
-          algNames[2] = 'ADAMW';
-          break;
-        case 'RMSprop':
-          aux[3].push(RMSPROP[indexes[j]]);
-          colors[3] = RMSPROPCOLOR
-          algNames[3] = 'RMSprop';
-          break;
-        case 'SGD':
-          aux[4].push(SGD[indexes[j]]);
-          colors[4] = SGDCOLOR
-          algNames[4] = 'SGD';
-          break;
-        default:
-      }
-    }
-  }
-
-  for(let i = 0; i<aux.length; i++){
-    console.log(aux[i]);
-    for(let j = 0; j<aux[i].length; j++){
-     let dimension = [];
-      for(let x = 0; x<aux[i][j].length; x++){
-        for(let c = 0; c<aux[i][j][x].length; c++ ){
-          dimension.push(aux[i][j][x][c]);
-        }
-      }
-    aux[i][j] = dimension;
-   }
-  }
-
-var data =[];
-console.log(colors);
-
-for(let i = 0; i<aux.length; i++){
-  if(aux[i].length > 0){
-    console.log();
-    var trace = {
-    x: aux[i][0],
-    y: aux[i][1],
-    mode: 'markers',
-    type: 'line',
-    line: {
-      color: colors[i]
-    },
-    name: algNames[i],
-    };
-    data.push(trace);
-  }
-}
-layout = {
-       hovermode:'closest',
-       xaxis:{zeroline:false, title: dimensions[0]},
-       yaxis:{zeroline:false, title: dimensions[1]}
-    };
-
-Plotly.newPlot(div, data, layout);
+  Plotly.newPlot(div, data, layout);
 }
