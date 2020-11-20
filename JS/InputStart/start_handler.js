@@ -4,14 +4,14 @@ var input_content = document.getElementById("input_content");
 var Algorithms_names = [];
 var Dimensions_names = [];
 var Algorithms_data = [];
-var Algorithms_colores = [];
+var Algorithms_colors = [];
 
 function get_data_from_start(what){
   switch (what) {
     case 'Algorithms_names':return Algorithms_names;
     case 'Dimensions_names':return Dimensions_names;
     case 'Algorithms_data':return Algorithms_data;
-    case 'Algorithms_colores':return Algorithms_colores;
+    case 'Algorithms_colors':return Algorithms_colors;
   }
 }
 
@@ -327,7 +327,7 @@ function create_data_visualizer(dimension,file_data_div,index,files){
 function add_button_action(){
   updateAddedDimensions();
   let color = document.getElementById('color_getter').value;
-  Algorithms_colores.push(color);
+  Algorithms_colors.push(color);
   document.querySelector('.drop-zone__thumb').remove();
   document.querySelector('.drop-zone__prompt').style.display = 'block';
   document.querySelector('.file_data').remove();
@@ -389,5 +389,5 @@ function add_file_data(files){
    console.log(Algorithms_data);
    console.log(Algorithms_names);
    console.log(Dimensions_names);
-   console.log(Algorithms_colores);
+   console.log(Algorithms_colors);
  }
