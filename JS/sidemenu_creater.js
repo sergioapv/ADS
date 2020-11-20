@@ -39,4 +39,5 @@ function create_sidemenu_automatic(){
   Dimensions_names.forEach((dimension) => {
     create_dimension_editor(dimension);
   });
+  algs_chosen();
 }
