@@ -66,14 +66,12 @@ changeGraph[0].addEventListener('click',function(){
 
 function handle_graphs(plotType){
   var dims= getDimensions();
-  //console.log('nr de dimensoes = '+ dims.length);
   let div = create_dimension_div(algorithms_chosen);
+
   switch (dims.length) {
     case 1:
-      for(var i = 0; i < INDEXRECORDER.length; i++){
-        console.log(INDEXRECORDER[i]);
-      }
-      oneDim(dims, algorithms_chosen, plotType, div);
+      let chosen_algs_names = getAlgorithms();
+      makeOneDimPlot(dims, chosen_algs_names, plotType, div);
       break;
     case 2:
       let algorithms = getAlgorithms();
@@ -122,57 +120,13 @@ function getAlgorithms(){
     element = algorithms_chosen[i].split("_");
       algs.push(element[0]);
   }
-  var dims = [];
+  var algorithms = [];
   var filteredArray = algs.filter(function(item, pos){
     if(algs.indexOf(item) == pos){
-      dims.push(item);
+      algorithms.push(item);
     }
   });
-  return dims;
-}
-
-// Finds info needed to plot one dimension graphs, calls function to draw the plot
-function oneDim(dim, chosen_algs, plotType, div){
-  console.log(dim);
-  var index = 0
-  switch (dim) {
-    case 'acc':
-      index = 0;
-      break;
-    case 'loss':
-      index = 1;
-      break;
-    case 'val_acc':
-      index = 2;
-      break;
-    case 'val_loss':
-      index = 3;
-      break;
-    default:
-
-  }
-
-  //lista correspondentes a cada run para dita dimesao
-  let aux = [[], [], [], [], []];
-
-  for(var i = 0; i < chosen_algs.length; i++){
-    if(chosen_algs[i].includes('ADAMW')){
-      aux[0] = ADAMW[index];
-    }
-    if(chosen_algs[i].includes('RADAM')){
-      aux[1] = RADAM[index];
-    }
-    if(chosen_algs[i].includes('RMSprop')){
-      aux[2] = RMSPROP[index];
-    }
-    if(chosen_algs[i].includes('SGD')){
-      aux[3] = SGD[index];
-    }
-    else{
-      aux[4] = ADAM[index];
-    }
-  }
-  makeOneDimPlot(aux, plotType, div)
+  return algorithms;
 }
 
 //creates listener for each dropdown
@@ -408,7 +362,7 @@ function create_delete_listener(trash_button){
 }
 
 //takes info from algorithms vector and puts it in a single column, also stores the color in a vector with accondingly indexes
-function getInfoAlgs(algs){
+/*function getInfoAlgs(algs){
   var columns = [];
   var colors = [];
   var algNames = [];
@@ -450,40 +404,35 @@ function getInfoAlgs(algs){
   let info = [columns, colors, algNames]
   return info
 }
-
+*/
 
 //Draws plot for 1 dimension, algs(list with the algs to be represented), plotType('box' or 'violin'), div to draw the plot
-function makeOneDimPlot(algs, plotType, div){
-  let info = getInfoAlgs(algs);
-
-  let columns = info[0];
-  let colors = info[1];
-  let algNames = info[2];
-
+function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
   let data = [];
   let trace ={};
 
+  let dimensionIndex = Dimensions_names.indexOf(dim)
 
-  for (var i = 0; i<columns.length; i++){
-
+  for (var i = 0; i<chosen_algs_names.length; i++){
+    let algorithm_index = Algorithms_names.indexOf(chosen_algs_names[i]);
     trace = {
       type: plotType,
-      y: columns[i],
-      name : algNames[i],
+      y: Algorithms_data[algorithm_index][dimensionIndex],
+      name : chosen_algs_names[i],
       points: 'none',
       box: {
         visible: true
       },
       boxpoints: false,
       line: {
-        color: colors[i]
+        color: Algorithms_colors[algorithm_index]
       },
       fillcolor: 'white',
       opacity: 0.6,
       meanline: {
         visible: true
       },
-      x0: algNames[i]
+      x0: chosen_algs_names[i]
     }
 
     data.push(trace);
