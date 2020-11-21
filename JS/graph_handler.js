@@ -111,6 +111,7 @@ function getDimensions(){
       dims.push(item);
     }
   });
+  console.log(dims);
   return dims;
 }
 
@@ -126,6 +127,8 @@ function getAlgorithms(){
       algorithms.push(item);
     }
   });
+
+  console.log(algorithms);
   return algorithms;
 }
 
@@ -361,60 +364,20 @@ function create_delete_listener(trash_button){
   });
 }
 
-//takes info from algorithms vector and puts it in a single column, also stores the color in a vector with accondingly indexes
-/*function getInfoAlgs(algs){
-  var columns = [];
-  var colors = [];
-  var algNames = [];
-
-  for(var x=0; x < algs.length; x++){
-    if(algs[x].length > 0){
-    column = [];
-    for(var i=0; i < algs[x].length; i++){
-      for(var j=0;j < algs[x][i].length; j++){
-        column.push(algs[x][i][j]);
-      }
-    }
-    switch (x) {
-      case 0:
-        colors.push(ADAMWCOLOR);
-        algNames.push('ADAMW');
-        break;
-      case 1:
-        colors.push(RADAMCOLOR);
-        algNames.push('RADAM');
-        break;
-      case 2:
-        colors.push(RMSPROPCOLOR);
-        algNames.push('RMSPROP');
-        break;
-      case 3:
-        colors.push(SGDCOLOR);
-        algNames.push('SGD');
-        break;
-      case 4:
-        colors.push(ADAMCOLOR);
-        algNames.push('ADAM');
-        break;
-      default:
-    }
-    columns.push(column);
-    }
-  }
-  let info = [columns, colors, algNames]
-  return info
-}
-*/
 
 //Draws plot for 1 dimension, algs(list with the algs to be represented), plotType('box' or 'violin'), div to draw the plot
 function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
   let data = [];
   let trace ={};
 
-  let dimensionIndex = Dimensions_names.indexOf(dim)
+  console.log(Dimensions_names);
+  console.log(Algorithms_names);
 
+  let dimensionIndex = Dimensions_names.indexOf(dim[0])
+  console.log('Dimension index = ' + dimensionIndex);
   for (var i = 0; i<chosen_algs_names.length; i++){
     let algorithm_index = Algorithms_names.indexOf(chosen_algs_names[i]);
+    console.log('Algorithm index = ' + dimensionIndex);
     trace = {
       type: plotType,
       y: Algorithms_data[algorithm_index][dimensionIndex],
@@ -460,16 +423,15 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
 
 function twoDimPlot(div, dims, chosen_algs){
   dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
+  console.log('dimensions ' + dim_indexes);
   var data =[];
-  console.log(colors);
-
   for(let i = 0; i<chosen_algs.length; i++){
-    algIndex = Algorithms_name.indexOf(chosen_algs[i]);
-    if(aux[i].length > 0){
-      console.log();
+      algIndex = Algorithms_names.indexOf(chosen_algs[i]);
+      alg = Algorithms_data[algIndex]
+      console.log(alg);
       var trace = {
-      x: Algorithms_data[algIndex][dim_indexes[0]],
-      y: Algorithms_data[algIndex][dim_indexes[1]],
+      x: alg[dim_indexes[0]],
+      y: alg[dim_indexes[1]],
       mode: 'markers',
       type: 'line',
       line: {
@@ -478,12 +440,11 @@ function twoDimPlot(div, dims, chosen_algs){
       name: chosen_algs[i],
       };
       data.push(trace);
-    }
   }
   layout = {
          hovermode:'closest',
-         xaxis:{zeroline:false, title: dimensions[0]},
-         yaxis:{zeroline:false, title: dimensions[1]}
+         xaxis:{zeroline:false, title: chosen_algs[0]},
+         yaxis:{zeroline:false, title: chosen_algs[1]}
       };
 
   Plotly.newPlot(div, data, layout);

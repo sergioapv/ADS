@@ -383,7 +383,7 @@ function add_file_data(files){
      }
    }
 
-   Algorithms_data.push([data]);
+   Algorithms_data.push(data);
    files = [];
    console.clear();
    console.log(Algorithms_data);
