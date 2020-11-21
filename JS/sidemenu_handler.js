@@ -87,12 +87,12 @@ dimension_type.forEach((dimension) => {
 
 function algs_chosen(){
   let select_all_list = document.querySelectorAll('.Dimension_selector');
-  console.log(select_all_list);
   select_all_list.forEach((div) => {
     let selectors = div.parentNode.getElementsByTagName('input');
     for (var i = 0; i < selectors.length; i++) {
       if (selectors[i].id === 'select_all') {
         selectors[i].addEventListener('change',function(){
+          console.log(selectors);
           console.clear()
           let all_selectors = this.parentNode.parentNode.getElementsByTagName('input');
           if (this.checked === true) {
@@ -125,14 +125,15 @@ function algs_chosen(){
         let class_choice = selectors[i].parentNode;
         let algorithms = class_choice.getElementsByTagName('input');
         for (var j = 0; j < algorithms.length; j++) {
+          console.log(algorithms[j]);
           algorithms[j].addEventListener('change',function(){
             console.clear()
             if (this.checked === true) {
-                algorithms_chosen.push(this.name);
+                algorithms_chosen.push(this.parentNode.textContent + '_' + this.parentNode.parentNode.parentNode.childNodes[0].textContent);
                 console.log(algorithms_chosen);
             }
             else {
-              let index = algorithms_chosen.indexOf(this.name);
+              let index = algorithms_chosen.indexOf(this.parentNode.textContent + '_' + this.parentNode.parentNode.parentNode.childNodes[0].textContent);
               if (index > -1) {
                 algorithms_chosen.splice(index,1);
               }
