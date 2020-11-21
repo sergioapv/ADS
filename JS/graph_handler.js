@@ -66,16 +66,15 @@ changeGraph[0].addEventListener('click',function(){
 
 function handle_graphs(plotType){
   var dims= getDimensions();
-  let div = create_dimension_div(algorithms_chosen);
   let chosen_algs_names = getAlgorithms();
+  let div = create_dimension_div(dims, chosen_algs_names);
 
   switch (dims.length) {
     case 1:
       makeOneDimPlot(dims, chosen_algs_names, plotType, div);
       break;
     case 2:
-      let algorithms = getAlgorithms();
-      let ratio = algorithms.length;
+      let ratio = chosen_algs_names.length;
       let total_chosen = algorithms_chosen.length;
       if(ratio * dims.length == total_chosen){
         twoDimPlot(div, dims, chosen_algs_names);
@@ -211,100 +210,28 @@ function create_oneDim_dropDown(icon, plot_title){
   console.log('creating');
   createDropListner(icon, dropdown)
 }
-function create_dimension_div(dimensions){
+function create_dimension_div(dimensions, algorithms){
   //keps track of which algorithms are being ploted
   let algorithms_title = '';
 
   //keps track of which dimension that's being ploted
   let dimensions_title = ''
 
-  dimensions.forEach((dimension,i) => {
-
-    if (dimension.includes('ADAM') && !dimension.includes('ADAMW') && !dimension.includes('RADAM')) {
-      if ((!algorithms_title.includes('ADAM ')) && (algorithms_title === '')) {
-        algorithms_title += 'ADAM';
-      }
-      else {
-        algorithms_title += ' vs ADAM';
-      }
-        added = true;
+  for(var i = 0; i < dimensions.length; i ++){
+    if(i === dimensions.length - 1){
+      dimensions_title += dimensions[i];
+    }else{
+      dimensions_title += dimensions[i] + ' vs ';
     }
+  }
 
-    else if (dimension.includes('ADAMW')) {
-      if ((!algorithms_title.includes('ADAMW')) && (algorithms_title === '')) {
-        algorithms_title += 'ADAMW';
-      }
-      else {
-        algorithms_title += ' vs ADAMW';
-      }
+  for(var i = 0; i < algorithms.length; i ++){
+    if(i === algorithms.length - 1){
+      algorithms_title += algorithms[i];
+    }else{
+      algorithms_title += algorithms[i] + ' vs ';
     }
-
-    else if (dimension.includes('RADAM')) {
-      if ((!algorithms_title.includes('RADAM')) && (algorithms_title === '')) {
-        algorithms_title += 'RADAM';
-      }
-      else {
-        algorithms_title += ' vs RADAM';
-      }
-    }
-
-    else if (dimension.includes('RMSprop')) {
-      if ((!algorithms_title.includes('RMSprop')) && (algorithms_title === '')) {
-        algorithms_title += 'RMSprop';
-      }
-      else {
-        algorithms_title += ' vs RMSprop';
-      }
-    }
-
-    else if (dimension.includes('SGD')) {
-      if ((!algorithms_title.includes('SGD')) && (algorithms_title === '')) {
-        algorithms_title += 'SGD';
-      }
-      else {
-        algorithms_title += ' vs SGD';
-      }
-    }
-  });
-
-  let dim_selected = getDimensions();
-
-  dim_selected.forEach((dimension,i) => {
-    switch (dimension) {
-      case 'acc':{
-        if (!dimensions_title.includes('Accuracy')) {
-          dimensions_title += 'Accuracy'
-        }
-        break;
-      }
-      case 'loss':{
-        if (!dimensions_title.includes('Loss')) {
-          dimensions_title += 'Loss'
-        }
-        break;
-      }
-      case 'val_acc':{
-        if (!dimensions_title.includes( 'Value Accuracy')) {
-          dimensions_title +=  'Value Accuracy'
-        }
-        break;
-      }
-      case 'val_loss':{
-        if (!dimensions_title.includes('Value Loss')) {
-          dimensions_title +=  'Value Loss'
-        }
-        break;
-      }
-      if (i != dim_selected.length -1) {
-        dimensions_title += ' vs '
-      }
-
-    }
-  });
-
-  console.log(algorithms_title);
-  console.log(dim_selected);
-  console.log(dimensions_title);
+  }
 
   let plot_content = document.createElement('div');
   plot_content.className = 'Plot_content';
