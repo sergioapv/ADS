@@ -350,12 +350,15 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
 
 function twoDimPlot(div, dims, chosen_algs){
   dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
-  console.log('dimensions ' + dim_indexes);
+  for(var x = 0; x<dim_indexes.length; x++){
+    if(dim_indexes[x] == -1){
+      dim_indexes[x] = dim_indexes.length - 1
+    }
+  }
   var data =[];
   for(let i = 0; i<chosen_algs.length; i++){
       algIndex = Algorithms_names.indexOf(chosen_algs[i]);
       alg = Algorithms_data[algIndex]
-      console.log(alg);
       var trace = {
       x: alg[dim_indexes[0]],
       y: alg[dim_indexes[1]],
