@@ -74,13 +74,14 @@ function handle_graphs(plotType){
       makeOneDimPlot(dims[0], chosen_algs_names, plotType, div);
       break;
     case 2:
-      let ratio = chosen_algs_names.length;
+      /*let ratio = chosen_algs_names.length;
       let total_chosen = algorithms_chosen.length;
       if(ratio * dims.length == total_chosen){
-        twoDimPlot(div, dims, chosen_algs_names);
+        twoDimScatterPlot(div, dims, chosen_algs_names);
       }else{
         alert('You need to select the same algorithms in both dimensions')
-      }
+      }*/
+      twoDimDensityPlot(div, dims, chosen_algs_names)
       break;
     case 3:
 
@@ -332,7 +333,7 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
   });
 }
 
-function twoDimPlot(div, dims, chosen_algs){
+function twoDimScatterPlot(div, dims, chosen_algs){
   dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
   for(var x = 0; x<dim_indexes.length; x++){
     if(dim_indexes[x] == -1){
@@ -361,5 +362,68 @@ function twoDimPlot(div, dims, chosen_algs){
          yaxis:{zeroline:false, title: {text: dims[1]}}
       };
 
+  Plotly.newPlot(div, data, layout);
+}
+
+function twoDimDensityPlot(div, dims, chosen_algs){
+  algIndex1 = Algorithms_names.indexOf(chosen_algs[0]);
+  dim_index1 = Dimensions_names.indexOf(dims[0])
+  dim_index2 = Dimensions_names.indexOf(dims[1])
+  alg1 = Algorithms_data[algIndex1]
+
+  var trace1 = {
+    x: alg1[dim_index1],
+    y: alg1[dim_index2],
+    name: 'density',
+    ncontours: 20,
+    colorscale: 'Hot',
+    reversescale: true,
+    showscale: false,
+    type: 'histogram2dcontour'
+  };
+  var trace2 = {
+    x: alg1[dim_index1],
+    name: 'x density',
+    marker: {color: 'rgb(102,0,0)'},
+    yaxis: 'y2',
+    type: 'histogram'
+  };
+  var trace3 = {
+    y: alg1[dim_index2],
+    name: 'y density',
+    marker: {color: 'rgb(102,0,0)'},
+    xaxis: 'x2',
+    type: 'histogram'
+  };
+  var data = [trace1, trace2, trace3];
+  var layout = {
+    showlegend: false,
+    autosize: false,
+    width: 600,
+    height: 550,
+    margin: {t: 50},
+    hovermode: 'closest',
+    bargap: 0,
+    xaxis: {
+      domain: [0, 0.85],
+      showgrid: false,
+      zeroline: false
+    },
+    yaxis: {
+      domain: [0, 0.85],
+      showgrid: false,
+      zeroline: false
+    },
+    xaxis2: {
+      domain: [0.85, 1],
+      showgrid: false,
+      zeroline: false
+    },
+    yaxis2: {
+      domain: [0.85, 1],
+      showgrid: false,
+      zeroline: false
+    }
+  };
   Plotly.newPlot(div, data, layout);
 }
