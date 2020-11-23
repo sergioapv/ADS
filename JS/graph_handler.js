@@ -71,7 +71,7 @@ function handle_graphs(plotType){
 
   switch (dims.length) {
     case 1:
-      makeOneDimPlot(dims, chosen_algs_names, plotType, div);
+      makeOneDimPlot(dims[0], chosen_algs_names, plotType, div);
       break;
     case 2:
       let ratio = chosen_algs_names.length;
@@ -141,27 +141,10 @@ function createDropListner(icon, dropdown){
       let dim ='';
       let dimName = dropdown.parentNode.getElementsByClassName('dim_title')[0].textContent;
       let algs_chosen = dropdown.parentNode.getElementsByClassName('alg_title')[0].textContent.split(' vs ');
-      switch (dimName) {
-        case 'Accuracy':
-          dim = 'acc';
-          break;
-        case 'Loss':
-          dim = 'loss';
-          break;
-        case 'Value Accuracy':
-          dim = 'val_acc';
-          break;
-        case 'Value Loss':
-          dim = 'val_loss';
-          break;
-        default:
-
-      }
       let div = dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('graph')[0];
-
+      console.log(dimName + algs_chosen);
       console.log(div);
-      oneDim(dim, algs_chosen ,options[i].value, div);
-
+      makeOneDimPlot(dimName, algs_chosen, options[i].value, div)
     });
   }
   icon.addEventListener('click', function(){
@@ -297,10 +280,11 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
   let data = [];
   let trace ={};
 
-  console.log(Dimensions_names);
-  console.log(Algorithms_names);
+  console.log(dim);
+  console.log(chosen_algs_names);
 
-  let dimensionIndex = Dimensions_names.indexOf(dim[0])
+  let dimensionIndex = Dimensions_names.indexOf(dim)
+
   console.log('Dimension index = ' + dimensionIndex);
   for (var i = 0; i<chosen_algs_names.length; i++){
     let algorithm_index = Algorithms_names.indexOf(chosen_algs_names[i]);
@@ -373,8 +357,8 @@ function twoDimPlot(div, dims, chosen_algs){
   }
   layout = {
          hovermode:'closest',
-         xaxis:{zeroline:false, title: chosen_algs[0]},
-         yaxis:{zeroline:false, title: chosen_algs[1]}
+         xaxis:{zeroline:false, title: {text: dims[0]}},
+         yaxis:{zeroline:false, title: {text: dims[1]}}
       };
 
   Plotly.newPlot(div, data, layout);
