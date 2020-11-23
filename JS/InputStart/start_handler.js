@@ -105,7 +105,7 @@ document.querySelectorAll('.drop-zone__input').forEach((inputElement) => {
       else {
         display_file_data(inputElement.files[0])
       }
-
+// 
     }
     dropZoneElement.classList.remove('drop-zone--over');
   });
