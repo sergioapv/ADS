@@ -10,7 +10,6 @@ var RMSPROPCOLOR = '#ff0000';
 var ADAMWCOLOR = '#ff0000';
 var SGDCOLOR = '#ff0000';
 
-var INDEXRECORDER = [[], [], [], [], []];
 
 var ADAMPATH = '';
 var ADAMWPATH = '';
@@ -144,17 +143,14 @@ function attributeData(ev) {
     case 'ADAM':
       ADAM = [[],[],[],[]];
       ADAM = algorithm;
-      INDEXRECORDER[0] = sizes;
       break;
     case 'ADAMW':
       ADAMW = [[],[],[],[]];
       ADAMW = algorithm;
-      INDEXRECORDER[1] = sizes;
       break;
     case 'RADAM':
       RADAM = [[],[],[],[]];
       RADAM = algorithm;
-      INDEXRECORDER[2] = sizes;
       break;
     case 'RMSprop':
       RMSPROP = [[],[],[],[]];
@@ -164,7 +160,6 @@ function attributeData(ev) {
     case 'SGD':
       SGD =  [[],[],[],[]];
       SGD = algorithm;
-      INDEXRECORDER[4] = sizes;
       break;
 
   }
