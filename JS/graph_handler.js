@@ -69,14 +69,14 @@ function handle_graphs(plotType){
   var dims= getDimensions();
   let chosen_algs_names = getAlgorithms();
   let div = {};
+  let nr_algs = chosen_algs_names.length;
+  let total_chosen = algorithms_chosen.length;
   switch (dims.length) {
     case 1:
       div = create_dimension_div(dims, chosen_algs_names);
       makeOneDimPlot(dims[0], chosen_algs_names, plotType, div);
       break;
     case 2:
-      let nr_algs = chosen_algs_names.length;
-      let total_chosen = algorithms_chosen.length;
       div = create_dimension_div(dims, chosen_algs_names);
       if(nr_algs == 1){
         	twoDimDensityPlot(div, dims, chosen_algs_names);
@@ -89,6 +89,12 @@ function handle_graphs(plotType){
       }
       break;
     case 3:
+      div = create_dimension_div(dims, chosen_algs_names);
+      if(nr_algs * dims.length == total_chosen){
+        threeDimScatterPlot(div, dims, chosen_algs_names);
+      }else{
+        alert('You need to select the same algorithms in the three dimensions')
+      }
 
       break;
     case 4:
@@ -432,3 +438,52 @@ function twoDimDensityPlot(div, dims, chosen_algs){
   };
   Plotly.newPlot(div, data, layout);
 }
+
+function threeDimScatterPlot(div, dims, chosen_algs){
+  let data = [];
+  dims = Array.from(dims);
+  dim1 = elementIndex(Dimensions_names, dims[0]);
+  dim2 = elementIndex(Dimensions_names, dims[1]);
+  dim3 = elementIndex(Dimensions_names, dims[2]);
+
+  for(var i = 0; i < chosen_algs.length; i++){
+    algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
+    var trace1 = {
+  	x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
+  	mode: 'markers',
+  	marker: {
+  		size: 3,
+  		line: {
+  		color: 'rgba(217, 217, 217, 0.14)',
+  		width: 0.5},
+  		opacity: 0.8},
+  	type: 'scatter3d'
+    };
+    data.push(trace1);
+  }
+
+  var layout = {margin: {
+    l: 0,
+    r: 0,
+    b: 0,
+    t: 0
+  },
+  xaxis : {
+    title : { text :dims[0]}
+  },
+  yaxis : {
+    title : { text : dims[1]}
+  },
+  zaxis : {
+    title : { text : dims[2]}
+  }};
+  Plotly.newPlot(div, data, layout);
+}
+
+  function elementIndex(list, element){
+    var index = list.indexOf(element);
+    if(index == -1){
+      index = list.length - 1;
+    }
+    return index;
+  }
