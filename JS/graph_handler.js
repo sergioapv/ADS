@@ -65,23 +65,28 @@ changeGraph[0].addEventListener('click',function(){
 
 
 function handle_graphs(plotType){
+  console.log(INDEXRECORDER);
   var dims= getDimensions();
   let chosen_algs_names = getAlgorithms();
-  let div = create_dimension_div(dims, chosen_algs_names);
-
+  let div = {};
   switch (dims.length) {
     case 1:
+      div = create_dimension_div(dims, chosen_algs_names);
       makeOneDimPlot(dims[0], chosen_algs_names, plotType, div);
       break;
     case 2:
-      /*let ratio = chosen_algs_names.length;
+      let nr_algs = chosen_algs_names.length;
       let total_chosen = algorithms_chosen.length;
-      if(ratio * dims.length == total_chosen){
-        twoDimScatterPlot(div, dims, chosen_algs_names);
+      div = create_dimension_div(dims, chosen_algs_names);
+      if(nr_algs == 1){
+        	twoDimDensityPlot(div, dims, chosen_algs_names);
       }else{
-        alert('You need to select the same algorithms in both dimensions')
-      }*/
-      twoDimDensityPlot(div, dims, chosen_algs_names)
+        if(nr_algs * dims.length == total_chosen){
+          twoDimScatterPlot(div, dims, chosen_algs_names);
+        }else{
+          alert('You need to select the same algorithms in both dimensions')
+        }
+      }
       break;
     case 3:
 
@@ -262,7 +267,9 @@ function create_dimension_div(dimensions, algorithms){
 
   plot_content.appendChild(graphs_content);
   //Only call function when there is one dimension
-  create_oneDim_dropDown(info_icon, plot_title);
+  if(dimensions.length == 1){
+    create_oneDim_dropDown(info_icon, plot_title);
+  }
   document.querySelector('.main_content').appendChild(plot_content);
 
   return graph
@@ -398,9 +405,7 @@ function twoDimDensityPlot(div, dims, chosen_algs){
   var data = [trace1, trace2, trace3];
   var layout = {
     showlegend: false,
-    autosize: false,
-    width: 600,
-    height: 550,
+    autosize: true,
     margin: {t: 50},
     hovermode: 'closest',
     bargap: 0,

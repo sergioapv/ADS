@@ -5,6 +5,7 @@ var Algorithms_names = [];
 var Dimensions_names = [];
 var Algorithms_data = [];
 var Algorithms_colors = [];
+var INDEXRECORDER = [];
 
 function get_data_from_start(what){
   switch (what) {
@@ -352,6 +353,7 @@ function updateAddedDimensions(){
 }
 
 function add_file_data(files){
+  INDEXRECORDER.push([]);
   // let algorithm_index = Algorithms_names.length;
   let num_dimensions = Dimensions_names.length;
 
@@ -361,9 +363,18 @@ function add_file_data(files){
     data.push([]);
   }
   // creates the data with the wanted structure
-
+  files = Array.from(files);
+  files.sort(function (a, b) {
+    if( a.name.includes('run') && b.name.includes('run')){
+      console.log(a.name.split('run')[0])
+      console.log(b.name.split('run')[0])
+      return (parseInt(a.name.split('run')[1]) - parseInt(b.name.split('run')[1]));
+    }
+    return;
+  });
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
+    console.log(file.name);
     if (file.name.includes('.csv')) {
       var reader = new FileReader();
       reader.readAsText(file);
@@ -372,8 +383,9 @@ function add_file_data(files){
          var csv = event.target.result;
          //split and get the rows in an array
          var rows = csv.split('\n');
-
-         for (j=0; j<rows.length - 1; j++){ //runs throught lines
+         //-2 because csv.split('\n') adds one extra line.
+         INDEXRECORDER[INDEXRECORDER.length-1].push(rows.length - 2);
+         for (var j=0; j<rows.length - 1; j++){ //runs throught lines
            for (var k = 0; k < data.length; k++) { //runs throught columns
              if(!isNaN(rows[j].split(';')[k])){
                data[k].push(rows[j].split(';')[k]);
