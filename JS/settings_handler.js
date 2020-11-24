@@ -59,6 +59,7 @@ function submit_changes(){
     change_algorithm_name(i,name_input.value);
     change_algorithm_color(i, color_input.value);
   });
+  update_sidemenu()
 
 }
 
@@ -70,4 +71,13 @@ function change_algorithm_name(index,new_name){
 
 function change_algorithm_color(index,new_color){
   Algorithms_colors[index] = new_color;
+}
+
+function update_sidemenu(){
+  document.querySelectorAll('.Dimension_editor').forEach((dim_edit) => {
+    dim_edit.remove()
+  });
+  algorithms_chosen = []
+  create_sidemenu_automatic();
+
 }
