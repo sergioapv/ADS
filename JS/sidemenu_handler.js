@@ -1,6 +1,6 @@
 var algorithms_chosen = [];
 
-var plotType1 = 'box'
+var plotType1 = 'box';
 
 var modal = document.getElementById("myModal");
 
