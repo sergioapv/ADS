@@ -26,6 +26,7 @@ body{
   padding: 20px;
   border: 1px solid #888;
   width: 200px;
+  align-items: center;
 }
 
 /* The Close Button */
@@ -110,8 +111,6 @@ body{
   margin-top: 11px;
   margin-right: 15px;
 }
-
-
 
 .Plot_title .info_icon{
   position: absolute;
@@ -220,29 +219,15 @@ body{
   margin-top: 8px;
   margin-bottom: 20px;
 }
-.Setting_modal{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-background{
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0 ,0 ,0 , 0.4);
-  position: absolute;
-}
 
 .modal-content{
   position: relative;
   width: 600px;
-  height: 400px;
+  /* height: 400px; */
   background: white;
   border-radius: 13px;
+  text-align: center;
+  align-items: center;
 }
 .modal-content span{
   font-family: 'Segoe UI';
@@ -252,13 +237,30 @@ body{
   margin-left: 8px;
 }
 
+#settings_title{
+  font-size: 30px;
+}
+
 .Algorithm_getter{
   display:flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 10px;
-  margin-right: 85px;
   margin-top: 40px;
-  right: 50px;
+}
+.algorithm_name_changer{
+  text-align: center;
+  font-size: 20px;
+}
+
+.submit_changes_button{
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  background: #822E2E;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 7px;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar {

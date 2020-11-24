@@ -21,6 +21,7 @@ document.getElementById('done_button').addEventListener('click', e => {
   document.querySelector('.main_content').style.display = 'block';
   document.querySelector('.sidemenu').style.display = 'block';
   create_sidemenu_automatic();
+  create_settings_modal();
 });
 
 welcome_text.addEventListener('mouseover',function(){
@@ -38,6 +39,7 @@ welcome_text.addEventListener('click',function(){
     input_content.style.display = 'block';
     document.getElementById('done_button').style.display = 'block';
     input_content.style.animation = 'fadeIn 2s'
+    document.getElementById('done_button').style.animation = 'fadeIn 2s'
   },1000)
 })
 
