@@ -190,6 +190,16 @@ function create_oneDim_dropDown(icon, plot_title){
   box.textContent = 'Boxplot'
   dropdown.appendChild(box)
 
+  let progressive = document.createElement('span');
+  box.setAttribute('class', 'graphOption')
+  box.setAttribute('id', 'progressive');
+  box.setAttribute('name', 'oneDim');
+  box.value = 'progressive';
+  box.setAttribute('width', '100%');
+  box.setAttribute('height', '100%');
+  box.textContent = 'Progressive Graph'
+  dropdown.appendChild(progressive)
+
   let violin = document.createElement('span')
   violin.setAttribute('class', 'graphOption')
   violin.setAttribute('id', 'violin');
@@ -297,54 +307,83 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
   console.log(dim);
   console.log(chosen_algs_names);
 
-  let dimensionIndex = Dimensions_names.indexOf(dim)
+  let dimensionIndex = elementIndex(Dimensions_names, dim);
 
   console.log('Dimension index = ' + dimensionIndex);
-  for (var i = 0; i<chosen_algs_names.length; i++){
-    let algorithm_index = Algorithms_names.indexOf(chosen_algs_names[i]);
-    console.log('Algorithm index = ' + dimensionIndex);
-    trace = {
-      type: plotType,
-      y: Algorithms_data[algorithm_index][dimensionIndex],
-      name : chosen_algs_names[i],
-      points: 'none',
-      box: {
-        visible: true
+  if(plotType != "progressive"){
+    for (var i = 0; i<chosen_algs_names.length; i++){
+      let algorithm_index = elementIndex(Algorithms_names, chosen_algs_names[i]);
+      console.log('Algorithm index = ' + dimensionIndex);
+      trace = {
+        type: plotType,
+        y: Algorithms_data[algorithm_index][dimensionIndex],
+        name : chosen_algs_names[i],
+        points: 'none',
+        box: {
+          visible: true
+        },
+        boxpoints: false,
+        line: {
+          color: Algorithms_colors[algorithm_index]
+        },
+        fillcolor: 'white',
+        opacity: 0.6,
+        meanline: {
+          visible: true
+        },
+        x0: chosen_algs_names[i]
+      }
+
+      data.push(trace);
+
+    }
+
+    var layout = {
+      title: "",
+      yaxis: {
+        zeroline: false
       },
-      boxpoints: false,
+      hovermode:'closest'
+    }
+
+    Plotly.newPlot(div, data, layout);
+
+  }else{
+    let data = [];
+    for (var i = 0; i<chosen_algs_names.length; i++){
+      let algorithm_index = elementIndex(Algorithms_names, chosen_algs_names[i]);
+      let alg_data = Algorithms_data[algorithm_index][dimensionIndex];
+      let range = Array.from(Array(alg_data.length).keys())
+
+      var trace1 = {
+      x: range,
+      y: alg_data,
+      type: 'scatter',
       line: {
         color: Algorithms_colors[algorithm_index]
       },
-      fillcolor: 'white',
-      opacity: 0.6,
-      meanline: {
-        visible: true
+      name: chosen_algs_names[i],
+      transition: {
+        duration: 500,
+        easing: 'cubic-in-out'
       },
-      x0: chosen_algs_names[i]
+      frame: {
+        duration: 500
+        }
+      };
+
+      data.push(trace1);
+
+      }
+
+      var layout = {
+         yaxis:{zeroline:false, title: {text: dim}},
+         xaxis:{zeroline:false, title: {text: 'x'}}
+      };
+
+      Plotly.newPlot(div, data, layout)
     }
-
-    data.push(trace);
-
   }
-
-  var layout = {
-    title: "",
-    yaxis: {
-      zeroline: false
-    },
-    hovermode:'closest'
-  }
-
-  Plotly.newPlot(div, data, layout);
-
-  div.on('plotly_click', (eventData) => {
-    // var marginT = div._fullLayout.margin.t;
-    // var y = Y - marginT;
-    // console.log(eventData)
-    console.log(eventData.event.clientY, div.offsetHeight);
-
-  });
-}
 
 function twoDimScatterPlot(div, dims, chosen_algs){
   dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
@@ -368,8 +407,9 @@ function twoDimScatterPlot(div, dims, chosen_algs){
       name: chosen_algs[i],
       };
       data.push(trace);
-  }
-  layout = {
+      }
+
+      layout = {
          hovermode:'closest',
          xaxis:{zeroline:false, title: {text: dims[0]}},
          yaxis:{zeroline:false, title: {text: dims[1]}}
