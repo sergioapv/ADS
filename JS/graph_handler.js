@@ -42,8 +42,8 @@ changeGraph[0].addEventListener('click',function(){
 
   if(oneDim.style.visibility == 'hidden'){
     oneDim.style.visibility = 'visible';
-    oneDim.style.height = '75px';
-    oneDim.style.width = '150px';
+    oneDim.style.height = '100px';
+    oneDim.style.width = '210px';
     oneDim.style.padding = '.5em';
   }else{
     oneDim.style.visibility = 'hidden';
@@ -146,7 +146,7 @@ function getAlgorithms(){
 //creates listener for each dropdown
 function createDropListner(icon, dropdown){
   let options = dropdown.childNodes;
-  console.log(options + 'options');
+  console.log(options);
   for(let i = 0; i<options.length; i++){
     console.log(options[i].value)
     options[i].addEventListener('click', function(){
@@ -162,8 +162,8 @@ function createDropListner(icon, dropdown){
   icon.addEventListener('click', function(){
     if(dropdown.style.visibility == 'hidden'){
       dropdown.style.visibility = 'visible';
-      dropdown.style.height = '75px';
-      dropdown.style.width = '150px';
+      dropdown.style.height = '100px';
+      dropdown.style.width = '210px';
       dropdown.style.padding = '.5em';
     }else{
       dropdown.style.visibility = 'hidden';
@@ -181,32 +181,33 @@ function create_oneDim_dropDown(icon, plot_title){
   dropdown.setAttribute('style', 'visibility: hidden');
 
   let box = document.createElement('span');
-  box.setAttribute('class', 'graphOption')
+  box.setAttribute('class', 'graphOption');
   box.setAttribute('id', 'box');
   box.setAttribute('name', 'oneDim');
   box.value = 'box';
-  box.setAttribute('width', '100%');
-  box.setAttribute('height', '100%');
-  box.textContent = 'Boxplot'
-  dropdown.appendChild(box)
+  // box.setAttribute('width', '100%');
+  // box.setAttribute('height', '100%');
+  box.textContent = 'Boxplot';
+  dropdown.appendChild(box);
+  console.log(box);
 
   let progressive = document.createElement('span');
-  box.setAttribute('class', 'graphOption')
-  box.setAttribute('id', 'progressive');
-  box.setAttribute('name', 'oneDim');
-  box.value = 'progressive';
-  box.setAttribute('width', '100%');
-  box.setAttribute('height', '100%');
-  box.textContent = 'Progressive Graph'
-  dropdown.appendChild(progressive)
+  progressive.setAttribute('class', 'graphOption');
+  progressive.setAttribute('id', 'progressive');
+  progressive.setAttribute('name', 'oneDim');
+  progressive.value = 'progressive';
+  // progressive.setAttribute('width', '100%');
+  // progressive.setAttribute('height', '100%');
+  progressive.textContent = 'Progressive Graph';
+  dropdown.appendChild(progressive);
 
   let violin = document.createElement('span')
   violin.setAttribute('class', 'graphOption')
   violin.setAttribute('id', 'violin');
   violin.setAttribute('name', 'oneDim');
   violin.value = 'violin';
-  violin.setAttribute('width', '100%');
-  violin.setAttribute('height', '100%');
+  // violin.setAttribute('width', '100%');
+  // violin.setAttribute('height', '100%');
   violin.textContent = 'Violinplot'
   dropdown.appendChild(violin)
 
