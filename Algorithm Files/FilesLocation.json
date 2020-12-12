@@ -1,0 +1,28 @@
+{
+  "Algorithms":{
+    "PartialPath": "https://raw.githubusercontent.com/Eduardo-Filipe-Ferreira/ADS-Files-Repository/main",
+    "Files": {
+      "ADAM-25runs": {
+        "num_files" : "25",
+        "common_name" : "ADAM_run"
+      },
+      "ADAMW-25runs": {
+        "num_files" : "25",
+        "common_name" : "ADAMW_run"
+      },
+      "RADAM-25runs": {
+        "num_files" : "25",
+        "common_name" : "RADAM_run"
+      },
+      "RMSprop-25runs": {
+        "num_files" : "25",
+        "common_name" : "RMSprop_run"
+      },
+      "SGD-25runs": {
+        "num_files" : "25",
+        "common_name" : "SGD_run"
+      }
+    }
+
+  }
+}

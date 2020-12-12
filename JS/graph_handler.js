@@ -1,67 +1,15 @@
-// Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows){
-// function unpack(rows, key) {
-//   return rows.map(function(row) { return row[key]; });
-// }
-//
-// var z_data=[ ]
-// for(i=0;i<24;i++)
-// {
-//   z_data.push(unpack(rows,i));
-// }
-//
-// // console.log(z_data);
-//
-//
-// var data = [{
-//            z: z_data,
-//            type: 'surface'
-//         }];
-//
-// var layout = {
-//   title: 'Mt Bruno Elevation',
-//   autosize: false,
-//   width: 500,
-//   height: 500,
-//   margin: {
-//     l: 65,
-//     r: 50,
-//     b: 65,
-//     t: 90,
-//   }
-// };
-// Plotly.newPlot('ADAM_D1', data, layout);
-// });
-//Get the icon that makes appear the types of graphs
+Plotly.d3.csv('https://raw.githubusercontent.com/Eduardo-Filipe-Ferreira/ADS-Files-Repository/main/ADAM-25runs/ADAM_run1.csv', function(data){ processData(data) } );
 
-let changeGraph = document.getElementsByClassName("info_icon");
+function processData(allRows) {
+
+  console.log(allRows);
+  for (var i = 0; i < allRows.length; i++) {
+    let row = allRows[i]
 
 
-changeGraph[0].addEventListener('click',function(){
-  let oneDim = document.getElementsByClassName("choose_one_dim")[0];
-  // console.log(oneDim);
-
-  if(oneDim.style.visibility == 'hidden'){
-    oneDim.style.visibility = 'visible';
-    oneDim.style.height = '100px';
-    oneDim.style.width = '210px';
-    oneDim.style.padding = '.5em';
-  }else{
-    oneDim.style.visibility = 'hidden';
-    oneDim.style.height = '0';
-    oneDim.style.width = '0';
-    oneDim.style.padding = '0';
   }
+}
 
-  oneDim.addEventListener('click',function(){
-    let childs = document.getElementsByName("oneDim");
-    for (var i = 0; i<childs.length; i++){
-      if(childs[i].checked){
-        plotType1 = childs[i].value
-      }
-    }
-    console.log(plotType1);
-  });
-});
 
 
 function handle_graphs(plotType){
