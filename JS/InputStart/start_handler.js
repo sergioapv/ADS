@@ -1,5 +1,7 @@
 var welcome_text = document.getElementById("welcome_text");
 var input_content = document.getElementById("input_content");
+var local_files_choice = document.getElementById('local_files_choice');
+var server_files_choice = document.getElementById('server_files_choice');
 
 var Algorithms_names = [];
 var Dimensions_names = [];
@@ -32,16 +34,40 @@ welcome_text.addEventListener('mouseleave',function(){
 })
 welcome_text.addEventListener('click',function(){
   let welcome_content = document.getElementById('welcome');
-  let input_content = document.getElementById('input_content');
+  let type_file_chooser = document.getElementById('type_file_chooser');
   welcome_content.style.animation = "fadeOut 1s";
   setTimeout(function(){
     welcome_content.style.display = 'none';
-    input_content.style.display = 'block';
-    document.getElementById('done_button').style.display = 'block';
-    input_content.style.animation = 'fadeIn 2s'
-    document.getElementById('done_button').style.animation = 'fadeIn 2s'
+    type_file_chooser.style.display = 'grid';
+    type_file_chooser.style.animation = 'fadeIn 2s'
   },1000)
 })
+
+document.getElementById('local_files_choice').addEventListener('click' , e => {
+  let type_file_chooser = document.getElementById('type_file_chooser');
+  let input_content = document.getElementById('input_content');
+  let done_button = document.getElementById('done_button');
+
+  type_file_chooser.style.animation = "fadeOut 1s";
+  setTimeout(function(){
+    type_file_chooser.style.display = 'none';
+
+    done_button.style.animation = 'fadeIn 2s';
+    done_button.style.display = 'block';
+
+    input_content.style.animation = 'fadeIn 2s';
+    input_content.style.display = 'block';
+
+  },1000)
+});
+
+document.getElementById('server_files_choice').addEventListener('click' , e => {
+  let type_file_chooser = document.getElementById('type_file_chooser');
+  get_files_from_server()
+  type_file_chooser.style.animation = "fadeOut 1s";
+
+
+});
 
 document.querySelectorAll('.drop-zone__input').forEach((inputElement) => {
   const dropZoneElement = inputElement.closest('.drop-zone');
@@ -406,3 +432,95 @@ function add_file_data(files){
    console.log(Dimensions_names);
    console.log(Algorithms_colors);
  }
+
+ function get_files_from_server(){
+   fetch("https://raw.githubusercontent.com/Eduardo-Filipe-Ferreira/ADS-Files-Repository/main/FilesLocation.json")
+  .then(response => response.json())
+  .then(json => handle_server_files(json[0]));
+ }
+
+ function handle_server_files(JsonFile){
+   console.log(JsonFile.Algorithms);
+   let partialPath = JsonFile.Algorithms.PartialPath;
+
+   let has_dims = false;
+
+
+   var processed_data = []
+
+   for (var i = 0; i < Dimensions_names.length; i++) {
+     processed_data.push([])
+   }
+
+
+   for (var key in JsonFile.Algorithms.Files) {
+    if (JsonFile.Algorithms.Files.hasOwnProperty(key)) {
+
+        let common_name = JsonFile.Algorithms.Files[key].common_name;
+        let num_files = JsonFile.Algorithms.Files[key].num_files;
+        let folder_name = JsonFile.Algorithms.Files[key].folder_name;
+
+        for (var i = 0; i < num_files; i++) {
+
+          let file_name = partialPath + '/' + folder_name + '/' + common_name + (i+1) +'.csv';
+          // console.log(file_name)
+
+          Plotly.d3.csv(file_name, function(data){
+            if(!has_dims){
+              for (key in data[0]){
+                  console.log(key);
+
+                  if (Dimensions_names.length === 0) {
+                    // console.log(key.split(';'));
+                    Dimensions_names = key.split(';');
+                    console.log(Dimensions_names);
+                  }
+
+                  has_dims = true;
+                  for (var i = 0; i < Dimensions_names.length; i++) {
+                    processed_data.push([])
+                  }
+                }
+              }
+            // console.log(file_name);
+
+            let data_ = processData(data);
+            console.clear();
+            console.log(data_[0]);
+            console.log(processed_data[0]);
+            for (var i = 0; i < Dimensions_names.length; i++) {
+              processed_data[i].push(data_[i])
+            }
+
+          });
+        }
+        console.log(processed_data);
+      }
+    }
+  }
+
+  function processData(rows) {
+    INDEXRECORDER.push([]);
+    // let algorithm_index = Algorithms_names.length;
+    let num_dimensions = Dimensions_names.length;
+
+    let data = [];
+
+    for (var a = 0; a < num_dimensions ; a++) {
+      data.push([]);
+    }
+
+    INDEXRECORDER[INDEXRECORDER.length-1].push(rows.length - 2);
+    for (var j=0; j<rows.length - 1; j++){ //runs throught lines
+      for (var k = 0; k < data.length; k++) {
+        // console.log(rows[j][0]);
+        for(key in rows[j]){
+          // console.log(rows[j][key].split(';'));
+          data[k].push(rows[j][key].split(';')[k]);
+          // console.log(key);
+        }
+      }
+    }
+    // console.log(data);
+    return data;
+  }

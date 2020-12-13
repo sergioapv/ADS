@@ -1,17 +1,3 @@
-Plotly.d3.csv('https://raw.githubusercontent.com/Eduardo-Filipe-Ferreira/ADS-Files-Repository/main/ADAM-25runs/ADAM_run1.csv', function(data){ processData(data) } );
-
-function processData(allRows) {
-
-  console.log(allRows);
-  for (var i = 0; i < allRows.length; i++) {
-    let row = allRows[i]
-
-
-  }
-}
-
-
-
 function handle_graphs(plotType){
   console.log(INDEXRECORDER);
   var dims= getDimensions();
