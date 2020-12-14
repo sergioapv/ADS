@@ -460,7 +460,9 @@ function add_file_data(files){
 
         console.log(folder_name);
 
-        let files_data = []
+        let folder_data = []
+
+        console.log(folder_data);
 
         if (!Algorithms_names.includes(folder_name)) {
           Algorithms_names.push(folder_name);
@@ -473,13 +475,14 @@ function add_file_data(files){
           // console.log(file_name)
 
           Plotly.d3.csv(file_name, function(data){
+            console.log(data.length);
             if(!has_dims){
               for (key in data[0]){
                   if (Dimensions_names.length === 0) {
 
                     for (var i = 0; i < key.split(';').length; i++) {
                       Dimensions_names.push(key.split(';')[i]);
-                      files_data.push([])
+                      // folder_data.push([])
                     }
                   }
                   has_dims = true;
@@ -488,14 +491,27 @@ function add_file_data(files){
 
             let file_data = processData(data);
 
-            for (var i = 0; i < files_data.length; i++) {
-              files_data[i].push(file_data[i]);
+            if (folder_data.length === 0) {
+              for (var i = 0; i < Dimensions_names.length; i++) {
+                folder_data.push([]);
+              }
+            }
+
+
+            for (var i = 0; i < folder_data.length; i++) {
+              for (var k = 0; k < file_data[i].length; k++) {
+
+                folder_data[i].push(file_data[i][k]);
+
+              }
+              // console.logi);
+              // folder_data[i].push(file_data[i]);
             }
 
           });
         }
-        console.log(files_data);
-        Algorithms_data.push(files_data);
+        // console.log(folder_data);
+        Algorithms_data.push(folder_data);
       }
     }
 
@@ -513,14 +529,14 @@ function add_file_data(files){
     INDEXRECORDER.push([]);
 
     INDEXRECORDER[INDEXRECORDER.length-1].push(rows.length - 2);
-    for (var j=0; j<rows.length - 1; j++){ //runs throught lines
+    for (var j=0; j<rows.length; j++){ //runs throught lines
       for (var k = 0; k < data.length; k++) {
         for(key in rows[j]){
           data[k].push(rows[j][key].split(';')[k]);
         }
       }
     }
-    console.log(data);
+    // console.log(data);
     return data
 
   }
