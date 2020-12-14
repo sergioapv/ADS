@@ -19,6 +19,12 @@ function get_data_from_start(what){
 }
 
 document.getElementById('done_button').addEventListener('click', e => {
+
+  console.log(Algorithms_data); //check
+  console.log(Algorithms_names); //check
+  console.log(Dimensions_names); //check
+  console.log(Algorithms_colors); //check
+
   document.querySelector('.input_file_start').remove();
   document.querySelector('.main_content').style.display = 'block';
   document.querySelector('.sidemenu').style.display = 'block';
@@ -440,18 +446,10 @@ function add_file_data(files){
  }
 
  function handle_server_files(JsonFile){
-   console.log(JsonFile.Algorithms);
+   // console.log(JsonFile.Algorithms);
    let partialPath = JsonFile.Algorithms.PartialPath;
 
    let has_dims = false;
-
-
-   var processed_data = []
-
-   for (var i = 0; i < Dimensions_names.length; i++) {
-     processed_data.push([])
-   }
-
 
    for (var key in JsonFile.Algorithms.Files) {
     if (JsonFile.Algorithms.Files.hasOwnProperty(key)) {
@@ -459,6 +457,15 @@ function add_file_data(files){
         let common_name = JsonFile.Algorithms.Files[key].common_name;
         let num_files = JsonFile.Algorithms.Files[key].num_files;
         let folder_name = JsonFile.Algorithms.Files[key].folder_name;
+
+        console.log(folder_name);
+
+        let files_data = []
+
+        if (!Algorithms_names.includes(folder_name)) {
+          Algorithms_names.push(folder_name);
+          Algorithms_colors.push(getRandomColor())
+        }
 
         for (var i = 0; i < num_files; i++) {
 
@@ -468,59 +475,61 @@ function add_file_data(files){
           Plotly.d3.csv(file_name, function(data){
             if(!has_dims){
               for (key in data[0]){
-                  console.log(key);
-
                   if (Dimensions_names.length === 0) {
-                    // console.log(key.split(';'));
-                    Dimensions_names = key.split(';');
-                    console.log(Dimensions_names);
-                  }
 
-                  has_dims = true;
-                  for (var i = 0; i < Dimensions_names.length; i++) {
-                    processed_data.push([])
+                    for (var i = 0; i < key.split(';').length; i++) {
+                      Dimensions_names.push(key.split(';')[i]);
+                      files_data.push([])
+                    }
                   }
+                  has_dims = true;
                 }
               }
-            // console.log(file_name);
 
-            let data_ = processData(data);
-            console.clear();
-            console.log(data_[0]);
-            console.log(processed_data[0]);
-            for (var i = 0; i < Dimensions_names.length; i++) {
-              processed_data[i].push(data_[i])
+            let file_data = processData(data);
+
+            for (var i = 0; i < files_data.length; i++) {
+              files_data[i].push(file_data[i]);
             }
 
           });
         }
-        console.log(processed_data);
+        console.log(files_data);
+        Algorithms_data.push(files_data);
       }
     }
+
+    document.getElementById('done_button').click();
   }
 
   function processData(rows) {
-    INDEXRECORDER.push([]);
-    // let algorithm_index = Algorithms_names.length;
-    let num_dimensions = Dimensions_names.length;
 
-    let data = [];
+    let data = []
 
-    for (var a = 0; a < num_dimensions ; a++) {
+    for (var i = 0; i < Dimensions_names.length; i++) {
       data.push([]);
     }
+
+    INDEXRECORDER.push([]);
 
     INDEXRECORDER[INDEXRECORDER.length-1].push(rows.length - 2);
     for (var j=0; j<rows.length - 1; j++){ //runs throught lines
       for (var k = 0; k < data.length; k++) {
-        // console.log(rows[j][0]);
         for(key in rows[j]){
-          // console.log(rows[j][key].split(';'));
           data[k].push(rows[j][key].split(';')[k]);
-          // console.log(key);
         }
       }
     }
-    // console.log(data);
-    return data;
+    console.log(data);
+    return data
+
+  }
+
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
