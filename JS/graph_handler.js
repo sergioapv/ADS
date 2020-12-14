@@ -426,10 +426,14 @@ function threeDimScatterPlot(div, dims, chosen_algs){
     var trace1 = {
   	x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
   	mode: 'markers',
+    type: 'line',
+    line: {
+      color: Algorithms_colors[algIndex]
+    },
   	marker: {
   		size: 3,
   		line: {
-  		color: 'rgba(217, 217, 217, 0.14)',
+  		color: 'WHITE',
   		width: 0.5},
   		opacity: 0.8},
   	type: 'scatter3d'
