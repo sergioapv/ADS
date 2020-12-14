@@ -25,11 +25,22 @@ document.getElementById('done_button').addEventListener('click', e => {
   console.log(Dimensions_names); //check
   console.log(Algorithms_colors); //check
 
-  document.querySelector('.input_file_start').remove();
-  document.querySelector('.main_content').style.display = 'block';
-  document.querySelector('.sidemenu').style.display = 'block';
-  create_sidemenu_automatic();
-  create_settings_modal();
+  document.querySelector('.input_file_start').style.animation = "fadeOut 1s";
+
+  setTimeout(function(){
+    document.querySelector('.input_file_start').remove();
+
+    document.querySelector('.main_content').style.display = 'block';
+    document.querySelector('.sidemenu').style.display = 'block';
+
+    document.querySelector('.main_content').style.animation = "fadeIn 2s";
+    document.querySelector('.sidemenu').style.animation = "fadeIn 2s";
+
+    create_sidemenu_automatic();
+    create_settings_modal();
+  },1000)
+
+
 });
 
 welcome_text.addEventListener('mouseover',function(){
@@ -458,11 +469,11 @@ function add_file_data(files){
         let num_files = JsonFile.Algorithms.Files[key].num_files;
         let folder_name = JsonFile.Algorithms.Files[key].folder_name;
 
-        console.log(folder_name);
+        // console.log(folder_name);
 
         let folder_data = []
 
-        console.log(folder_data);
+        // console.log(folder_data);
 
         if (!Algorithms_names.includes(folder_name)) {
           Algorithms_names.push(folder_name);
@@ -475,7 +486,7 @@ function add_file_data(files){
           // console.log(file_name)
 
           Plotly.d3.csv(file_name, function(data){
-            console.log(data.length);
+            // console.log(data.length);
             if(!has_dims){
               for (key in data[0]){
                   if (Dimensions_names.length === 0) {

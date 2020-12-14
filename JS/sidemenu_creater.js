@@ -36,14 +36,7 @@ function create_algorithm_chooser(algorithm_name,parent_div){
 }
 
 function create_sidemenu_automatic(){
-
-  // for (var i = 0; i < Dimensions_names.length; i++) {
-  //   console.log((Dimensions_names[i]));
-  //   create_dimension_editor(dimension);
-  // }
-
   Dimensions_names.forEach((dimension) => {
-    console.log(dimension);
     create_dimension_editor(dimension);
   });
   algs_chosen();
