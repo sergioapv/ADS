@@ -490,7 +490,7 @@ function colorRange(color, dim){
   let dimMin = Math.min.apply(Math,dim);
   let dimMax = Math.max.apply(Math,dim);
   for(let i = 0; i < dim.length; i++){
-    colorRangeList.push('rgb(' + color[0]*((dim[i] - dimMin)/(dimMax-dimMin)) + ',' + color[1]*((dim[i] - dimMin)/(dimMax-dimMin)) + ',' + color[2]*((dim[i] - dimMin)/(dimMax-dimMin))+ ')')
+    colorRangeList.push('rgb(' + color[0]/((dim[i] - dimMin)/(dimMax-dimMin)) + ',' + color[1]/((dim[i] - dimMin)/(dimMax-dimMin)) + ',' + color[2]/((dim[i] - dimMin)/(dimMax-dimMin))+ ')')
   }
   return colorRangeList
 }
