@@ -369,21 +369,21 @@ function twoDimDensityPlot(div, dims, chosen_algs){
     showscale: false,
     type: 'histogram2dcontour'
   };
-  var trace2 = {
-    x: alg1[dim_index1],
-    name: 'x density',
-    marker: {color: 'rgb(102,0,0)'},
-    yaxis: 'y2',
-    type: 'histogram'
-  };
-  var trace3 = {
-    y: alg1[dim_index2],
-    name: 'y density',
-    marker: {color: 'rgb(102,0,0)'},
-    xaxis: 'x2',
-    type: 'histogram'
-  };
-  var data = [trace1, trace2, trace3];
+  // var trace2 = {
+  //   x: alg1[dim_index1],
+  //   name: 'x density',
+  //   marker: {color: 'rgb(102,0,0)'},
+  //   yaxis: 'y2',
+  //   type: 'histogram'
+  // };
+  // var trace3 = {
+  //   y: alg1[dim_index2],
+  //   name: 'y density',
+  //   marker: {color: 'rgb(102,0,0)'},
+  //   xaxis: 'x2',
+  //   type: 'histogram'
+  // };
+  var data = [trace1];
   var layout = {
     showlegend: false,
     autosize: true,
@@ -434,28 +434,31 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   		size: 3,
   		line: {
   		color: 'WHITE',
-  		width: 0.5},
+  		width: 0.2},
   		opacity: 0.8},
   	type: 'scatter3d'
     };
     data.push(trace1);
   }
 
-  var layout = {margin: {
-    l: 0,
-    r: 0,
-    b: 0,
-    t: 0
-  },
-  xaxis : {
-    title : { text :dims[0]}
-  },
-  yaxis : {
-    title : { text : dims[1]}
-  },
-  zaxis : {
-    title : { text : dims[2]}
-  }};
+  var layout = {
+
+    scene: {
+  		xaxis:{title: dims[0]},
+
+  		yaxis:{title: dims[1]},
+
+  		zaxis:{title: dims[2]}},
+    margin: {
+        l: 0,
+        r: 0,
+        b: 0,
+        t: 0
+    }
+
+};
+
+  // console.log(layout.zaxis.title);
   Plotly.newPlot(div, data, layout);
 }
 
