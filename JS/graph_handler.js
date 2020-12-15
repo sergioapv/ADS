@@ -32,6 +32,12 @@ function handle_graphs(plotType){
 
       break;
     case 4:
+      div = create_dimension_div(dims, chosen_algs_names);
+      if(nr_algs * dims.length == total_chosen){
+        fourDimScatterPlot(div, dims, chosen_algs_names);
+      }else{
+        alert('You need to select the same algorithms in the three dimensions')
+      }
 
       break;
     default: alert("Select some algorithms");
@@ -420,23 +426,96 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   dim1 = elementIndex(Dimensions_names, dims[0]);
   dim2 = elementIndex(Dimensions_names, dims[1]);
   dim3 = elementIndex(Dimensions_names, dims[2]);
-
   for(var i = 0; i < chosen_algs.length; i++){
     algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
     var trace1 = {
   	x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
   	mode: 'markers',
-    type: 'line',
     line: {
       color: Algorithms_colors[algIndex]
     },
   	marker: {
   		size: 3,
   		line: {
-  		color: 'WHITE',
+  		color: Algorithms_colors[algIndex],
   		width: 0.5},
   		opacity: 0.8},
   	type: 'scatter3d'
+    };
+    data.push(trace1);
+  }
+
+  var layout = {margin: {
+    l: 0,
+    r: 0,
+    b: 0,
+    t: 0
+  },
+  xaxis : {
+    title : { text :dims[0]}
+  },
+  yaxis : {
+    title : { text : dims[1]}
+  },
+  zaxis : {
+    title : { text : dims[2]}
+  }};
+  Plotly.newPlot(div, data, layout);
+}
+
+function hexToRgb(hex){
+  var c;
+  if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+      c= hex.substring(1).split('');
+      if(c.length== 3){
+          c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c= '0x'+c.join('');
+      return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+')';
+  }
+  throw new Error('Bad Hex');
+}
+
+function colorRange(color, dim){
+  let colorRangeList = [];
+  var color = hexToRgb(color).split('(')[1].split(')')[0].split(',')
+  for(var i = 0; i<3; i++){
+    color[i] = parseInt(color[i])
+  }
+  let maxV = Math.max.apply(Math,color); // 3
+  let minV = Math.min.apply(Math,color);
+  color[elementIndex(color, maxV)] = 255;
+  color[elementIndex(color, minV)] = 0;
+  console.log(color);
+  let dimMin = Math.min.apply(Math,dim);
+  let dimMax = Math.max.apply(Math,dim);
+  for(let i = 0; i < dim.length; i++){
+    colorRangeList.push('rgb(' + color[0]*((dim[i] - dimMin)/(dimMax-dimMin)) + ',' + color[1]*((dim[i] - dimMin)/(dimMax-dimMin)) + ',' + color[2]*((dim[i] - dimMin)/(dimMax-dimMin))+ ')')
+  }
+  return colorRangeList
+}
+
+
+function fourDimScatterPlot(div, dims, chosen_algs){
+  let data = [];
+  dims = Array.from(dims);
+  dim1 = elementIndex(Dimensions_names, dims[0]);
+  dim2 = elementIndex(Dimensions_names, dims[1]);
+  dim3 = elementIndex(Dimensions_names, dims[2]);
+  dim4 = elementIndex(Dimensions_names, dims[3]);
+  for(var i = 0; i < chosen_algs.length; i++){
+    algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
+    let colorList = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][dim4])
+    var trace1 = {
+    mode: 'markers',
+    type: 'scatter3d',
+    x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
+    	marker: {
+    		size: 3,
+        color: colorList,
+        colorbar: {
+        }
+      },
     };
     data.push(trace1);
   }
