@@ -125,7 +125,7 @@ function algs_chosen(){
         let class_choice = selectors[i].parentNode;
         let algorithms = class_choice.getElementsByTagName('input');
         for (var j = 0; j < algorithms.length; j++) {
-          console.log(algorithms[j]);
+          // console.log(algorithms[j]);
           algorithms[j].addEventListener('change',function(){
             console.clear()
             if (this.checked === true) {

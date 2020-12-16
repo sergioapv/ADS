@@ -33,6 +33,7 @@ function handle_graphs(plotType){
       break;
     case 4:
       div = create_dimension_div(dims, chosen_algs_names);
+      console.log(div.parentNode);
       if(nr_algs * dims.length == total_chosen){
         fourDimScatterPlot(div, dims, chosen_algs_names);
       }else{
@@ -375,20 +376,6 @@ function twoDimDensityPlot(div, dims, chosen_algs){
     showscale: false,
     type: 'histogram2dcontour'
   };
-  // var trace2 = {
-  //   x: alg1[dim_index1],
-  //   name: 'x density',
-  //   marker: {color: 'rgb(102,0,0)'},
-  //   yaxis: 'y2',
-  //   type: 'histogram'
-  // };
-  // var trace3 = {
-  //   y: alg1[dim_index2],
-  //   name: 'y density',
-  //   marker: {color: 'rgb(102,0,0)'},
-  //   xaxis: 'x2',
-  //   type: 'histogram'
-  // };
   var data = [trace1];
   var layout = {
     showlegend: false,
@@ -485,15 +472,27 @@ function colorRange(color, dim){
   for(var i = 0; i<3; i++){
     color[i] = parseInt(color[i])
   }
-  let maxV = Math.max.apply(Math,color); // 3
-  let minV = Math.min.apply(Math,color);
-  color[elementIndex(color, maxV)] = 255;
-  color[elementIndex(color, minV)] = 0;
-  console.log(color);
+
   let dimMin = Math.min.apply(Math,dim);
   let dimMax = Math.max.apply(Math,dim);
+
   for(let i = 0; i < dim.length; i++){
-    colorRangeList.push('rgb(' + color[0]/((dim[i] - dimMin)/(dimMax-dimMin)) + ',' + color[1]/((dim[i] - dimMin)/(dimMax-dimMin)) + ',' + color[2]/((dim[i] - dimMin)/(dimMax-dimMin))+ ')')
+    let normalized_value = (dim[i] - dimMin)/(dimMax-dimMin)*255;
+
+    let r = color[0] + (normalized_value - 255/2);
+    let g = color[1] + (normalized_value - 255/2);
+    let b = color[2] + (normalized_value - 255/2);
+
+    if(r>255)   {r = 255;}
+    else if(r<0){r = 0;}
+
+    if(g>255)   {g = 255;}
+    else if(g<0){g = 0;}
+
+    if(b>255)   {b = 255;}
+    else if(b<0){b = 0;}
+
+    colorRangeList.push('rgb(' + r + ',' + g + ',' + b + ')');
   }
   return colorRangeList
 }
@@ -501,26 +500,29 @@ function colorRange(color, dim){
 
 function fourDimScatterPlot(div, dims, chosen_algs){
   let data = [];
+
+  var colorbar_list = create_bars(div);
+
   dims = Array.from(dims);
   dim1 = elementIndex(Dimensions_names, dims[0]);
   dim2 = elementIndex(Dimensions_names, dims[1]);
   dim3 = elementIndex(Dimensions_names, dims[2]);
   dim4 = elementIndex(Dimensions_names, dims[3]);
   for(var i = 0; i < chosen_algs.length; i++){
-    algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
-    let colorList = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][dim4])
+    let algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
+    let value_color_range = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][dim4]);
+
     var trace1 = {
     mode: 'markers',
     type: 'scatter3d',
     x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
     	marker: {
     		size: 3,
-        color: colorList,
-        // colorbar: {
-        // }
+        color: value_color_range,
       },
     };
     data.push(trace1);
+    create_colorbar(colorbar_list,algIndex,dim4,value_color_range);
   }
 
   var layout = {margin: {
@@ -536,6 +538,7 @@ function fourDimScatterPlot(div, dims, chosen_algs){
 
     zaxis:{title: dims[2]}},
   };
+
   Plotly.newPlot(div, data, layout);
 }
 

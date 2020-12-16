@@ -38,7 +38,49 @@
 
 
     <div class="main_content" style="display:none">
+      <!-- <div class="Plot_content">
+        <div class="Plot_title">
+          <span class="dim_title">teste dim</span>
+          <hr style="width: 40%; margin: 0px auto;">
+          <span class="alg_title">teste alg</span>
+          <img class="trash_icon" src="./images/trash_icon.png">
+          <img class="info_icon" src="./images/exchange.png">
+        </div>
+        <div class="graphs_content">
 
+
+
+          <div class="dim4graph">
+            <div class="graph">
+
+            </div>
+            <script type="text/javascript" src="./JS/colorbar_handler.js"></script>
+            <div class="colorbar_list">
+              <canvas class="colorbar" id="canvas" width="50" height="500" style="background-color: white; margin:20px"></canvas>
+
+              <div id="status"></div>
+              <script>
+                var c = document.getElementById("canvas");
+                var ctx = c.getContext("2d");
+
+                // Create gradient
+                var grd = ctx.createLinearGradient(0, 0, 0, 255);
+                grd.addColorStop(0, "red");
+                grd.addColorStop(1, "white");
+
+                // Fill with gradient
+                ctx.fillStyle = grd;
+                ctx.fillRect(0, 0, 50, 500);
+                event_get_color(c,'hasdhasd')
+
+              </script>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div> -->
     </div>
 
     <div class="sidemenu" style="display:none" onload="create_sidemenu_automatic">
@@ -96,6 +138,7 @@
 
 
   </div>
+  <script type="text/javascript" src="./JS/colorbar_handler.js"></script>
   <script type="text/javascript" src="./JS/sidemenu_creater.js"></script>
   <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
   <script type="text/javascript" src="./JS/settings_handler.js"></script>
