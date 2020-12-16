@@ -516,8 +516,8 @@ function fourDimScatterPlot(div, dims, chosen_algs){
     	marker: {
     		size: 3,
         color: colorList,
-        colorbar: {
-        }
+        // colorbar: {
+        // }
       },
     };
     data.push(trace1);
@@ -529,15 +529,13 @@ function fourDimScatterPlot(div, dims, chosen_algs){
     b: 0,
     t: 0
   },
-  xaxis : {
-    title : { text :dims[0]}
-  },
-  yaxis : {
-    title : { text : dims[1]}
-  },
-  zaxis : {
-    title : { text : dims[2]}
-  }};
+  scene: {
+    xaxis:{title: dims[0]},
+
+    yaxis:{title: dims[1]},
+
+    zaxis:{title: dims[2]}},
+  };
   Plotly.newPlot(div, data, layout);
 }
 
