@@ -325,7 +325,19 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
       Plotly.newPlot(div, data, layout)
     }
   }
-
+function plotArea(x, y){
+  let area = 0
+  if(x.length == y.length){
+    for(let i = 0; i<x.length-1; i++){
+      let xdif = Math.abs(x[i] - x[i+1])
+      let ydif = Math.abs(y[i] - y[i+1])
+      let upperarea = xdif*ydif/2
+      let lowerarea = Math.min(y[i], y[i+1])*xdif
+      area = area + upperarea + lowerarea;
+    }
+  }
+  return area
+}
 function twoDimScatterPlot(div, dims, chosen_algs){
   dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
   for(var x = 0; x<dim_indexes.length; x++){
@@ -337,6 +349,7 @@ function twoDimScatterPlot(div, dims, chosen_algs){
   for(let i = 0; i<chosen_algs.length; i++){
       algIndex = Algorithms_names.indexOf(chosen_algs[i]);
       alg = Algorithms_data[algIndex]
+      console.log(plotArea(alg[dim_indexes[0]], alg[dim_indexes[1]]));
       var trace = {
       x: alg[dim_indexes[0]],
       y: alg[dim_indexes[1]],
