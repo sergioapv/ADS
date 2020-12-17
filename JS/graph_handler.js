@@ -325,19 +325,102 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
       Plotly.newPlot(div, data, layout)
     }
   }
-function plotArea(x, y){
+function plotAreaPoints(x, y){
   let area = 0
+  let points = []
+  let area_points = []
   if(x.length == y.length){
-    for(let i = 0; i<x.length-1; i++){
-      let xdif = Math.abs(x[i] - x[i+1])
-      let ydif = Math.abs(y[i] - y[i+1])
-      let upperarea = xdif*ydif/2
-      let lowerarea = Math.min(y[i], y[i+1])*xdif
-      area = area + upperarea + lowerarea;
+    for(let i = 0; i<x.length; i++){
+      points.push([x[i], y[i]])
+    }
+    points.sort(function(a,b){return a[1] - b[1];});
+    let lowest_point = points[0]
+    let point = lowest_point
+    let next_point = [-lowest_point[0],-lowest_point[1]]
+    let i = 0
+    let vector = [1,0]
+    while(true){
+      i ++;
+      let lowest_angle = 360
+      for(let i = 0; i<points.length; i++){
+        let vector2 = [points[i][0] - point[0], points[i][1] - point[1]]
+        let angleDeg = angle(vector, vector2)
+        if(points[i] != point && angleDeg < lowest_angle){
+          next_point = points[i]
+          lowest_angle = angleDeg
+        }
+      }
+      vector = [next_point[0]-point[0], next_point[1] - point[1]]
+      point = next_point
+      area_points.push(point)
+      if(next_point == lowest_point){
+        break;
+      }
+      next_point = [-lowest_point[0],-lowest_point[1]]
     }
   }
-  return area
+  return area_points;
+
 }
+
+function plotline(leftP, rightP, p){
+  let m = (rightP[0] - leftP[0])/(rightP[1] - leftP[1])
+  let b = p[1] + m*p[0]
+
+  return m*p[0] + b
+}
+
+function plotArea(areaPoints){
+  let sortedList  = []
+  Array.prototype.push.apply(sortedList, areaPoints)
+  sortedList.sort();
+  let upArea = []
+  let downArea = []
+  for(let i = 0; i < areaPoints.length; i++){
+    if (areaPoints[i][1] >= plotline(sortedList[0], sortedList[sortedList.length - 1], areaPoints[i])){
+      upArea.push(areaPoints[i])
+    }else{
+      downArea.push(areaPoints[i])
+    }
+  }
+
+  let upAreaVal = 0
+  upArea.sort()
+  for(let i = 0; i < upArea.length-1; i++){
+    let xdif = Math.abs(upArea[i][0] - upArea[i+1][0])
+    let ydif = Math.abs(upArea[i][1] - upArea[i+1][1])
+    let yy = [upArea[i][1], upArea[i+1][1]]
+    let miny = Math.min.apply(Math, yy)
+    upAreaVal += ((xdif*miny) + (xdif*ydif/2))
+  }
+
+  let downAreaVal = 0
+  downArea.sort()
+  for(let i = 0; i < downArea.length-1; i++){
+    let xdif = Math.abs(downArea[i][0] - downArea[i+1][0])
+    let ydif = Math.abs(downArea[i][1] - downArea[i+1][1])
+    let yy = [downArea[i][1], downArea[i+1][1]]
+    let miny = Math.min.apply(Math, yy)
+    downAreaVal += ((xdif*miny) + (xdif*ydif/2))
+  }
+  return upAreaVal - downAreaVal
+}
+
+  function angle(v1, v2){
+    let angle = (Math.atan2(v2[1], v2[0]) - Math.atan2(v1[1], v1[0])) * 180/ Math.PI
+    if(angle < 0 ){
+      return angle + 360
+    }
+    return angle
+  }
+
+
+function pointDist(p1, p2){
+  var a = p1[0] - p2[0];
+  var b = p1[1] - p2[1];
+  return Math.sqrt( a*a + b*b );
+}
+
 function twoDimScatterPlot(div, dims, chosen_algs){
   dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
   for(var x = 0; x<dim_indexes.length; x++){
@@ -347,10 +430,12 @@ function twoDimScatterPlot(div, dims, chosen_algs){
   }
   var data =[];
   for(let i = 0; i<chosen_algs.length; i++){
-      algIndex = Algorithms_names.indexOf(chosen_algs[i]);
-      alg = Algorithms_data[algIndex]
-      console.log(plotArea(alg[dim_indexes[0]], alg[dim_indexes[1]]));
-      var trace = {
+    let algIndex = Algorithms_names.indexOf(chosen_algs[i]);
+    let alg = Algorithms_data[algIndex]
+    let pointsArea = plotAreaPoints(alg[dim_indexes[0]], alg[dim_indexes[1]]);
+    let area = plotArea(pointsArea)
+    console.log(area);
+    var trace = {
       x: alg[dim_indexes[0]],
       y: alg[dim_indexes[1]],
       mode: 'markers',
@@ -361,13 +446,12 @@ function twoDimScatterPlot(div, dims, chosen_algs){
       name: chosen_algs[i],
       };
       data.push(trace);
-      }
-
-      layout = {
-         hovermode:'closest',
-         xaxis:{zeroline:false, title: {text: dims[0]}},
-         yaxis:{zeroline:false, title: {text: dims[1]}}
-      };
+    }
+  layout = {
+     hovermode:'closest',
+     xaxis:{zeroline:false, title: {text: dims[0]}},
+     yaxis:{zeroline:false, title: {text: dims[1]}}
+  };
 
   Plotly.newPlot(div, data, layout);
 }
