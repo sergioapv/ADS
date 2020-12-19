@@ -1,7 +1,5 @@
 var algorithms_chosen = [];
 
-var plotType1 = 'box';
-
 var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
@@ -13,8 +11,32 @@ var span = document.getElementsByClassName("close")[0];
 var plotbtn = document.getElementById("Plots");
 
 plotbtn.addEventListener("click", function() {
-  // console.log(getDimensions());
-  handle_graphs(plotType1);
+  switch (getDimensions().length) {
+    case 1:{
+      handle_graphs('box')
+      break;
+    }
+    case 2:{
+      if(getAlgorithms().length == 1){
+        	handle_graphs('density');
+      }else{
+        if(getAlgorithms().length * getDimensions().length == algorithms_chosen.length){
+          handle_graphs('scatter2d');
+        }else{
+          alert('You need to select the same algorithms in both dimensions')
+        }
+      }
+      break;
+    }
+    case 3:{
+      handle_graphs('scatter3d')
+      break;
+    }
+    case 4:{
+      handle_graphs('scatter4d');
+      break;
+    }
+  }
 });
 
 

@@ -10,18 +10,12 @@ function handle_graphs(plotType){
       div = create_dimension_div(dims, chosen_algs_names);
       makeOneDimPlot(dims[0], chosen_algs_names, plotType, div);
       break;
+
     case 2:
       div = create_dimension_div(dims, chosen_algs_names);
-      if(nr_algs == 1){
-        	twoDimDensityPlot(div, dims, chosen_algs_names);
-      }else{
-        if(nr_algs * dims.length == total_chosen){
-          twoDimScatterPlot(div, dims, chosen_algs_names);
-        }else{
-          alert('You need to select the same algorithms in both dimensions')
-        }
-      }
+      makeTwoDimPlot(div , dims , chosen_algs_names, plotType)
       break;
+
     case 3:
       div = create_dimension_div(dims, chosen_algs_names);
       if(nr_algs * dims.length == total_chosen){
@@ -29,18 +23,18 @@ function handle_graphs(plotType){
       }else{
         alert('You need to select the same algorithms in the three dimensions')
       }
-
       break;
+
     case 4:
       div = create_dimension_div(dims, chosen_algs_names);
-      console.log(div.parentNode);
       if(nr_algs * dims.length == total_chosen){
-        fourDimScatterPlot(div, dims, chosen_algs_names);
+        plot4dim(div, dims, chosen_algs_names, plotType)
       }else{
-        alert('You need to select the same algorithms in the three dimensions')
+        alert('You need to select the same algorithms in the four dimensions')
       }
 
       break;
+
     default: alert("Select some algorithms");
 
   }
@@ -126,8 +120,7 @@ function create_oneDim_dropDown(icon, plot_title){
   box.setAttribute('id', 'box');
   box.setAttribute('name', 'oneDim');
   box.value = 'box';
-  // box.setAttribute('width', '100%');
-  // box.setAttribute('height', '100%');
+
   box.textContent = 'Boxplot';
   dropdown.appendChild(box);
   console.log(box);
@@ -137,8 +130,7 @@ function create_oneDim_dropDown(icon, plot_title){
   progressive.setAttribute('id', 'progressive');
   progressive.setAttribute('name', 'oneDim');
   progressive.value = 'progressive';
-  // progressive.setAttribute('width', '100%');
-  // progressive.setAttribute('height', '100%');
+
   progressive.textContent = 'Progressive Graph';
   dropdown.appendChild(progressive);
 
@@ -147,8 +139,7 @@ function create_oneDim_dropDown(icon, plot_title){
   violin.setAttribute('id', 'violin');
   violin.setAttribute('name', 'oneDim');
   violin.value = 'violin';
-  // violin.setAttribute('width', '100%');
-  // violin.setAttribute('height', '100%');
+
   violin.textContent = 'Violinplot'
   dropdown.appendChild(violin)
 
@@ -157,6 +148,7 @@ function create_oneDim_dropDown(icon, plot_title){
   console.log('creating');
   createDropListner(icon, dropdown)
 }
+
 function create_dimension_div(dimensions, algorithms){
   //keps track of which algorithms are being ploted
   let algorithms_title = '';
@@ -225,12 +217,41 @@ function create_dimension_div(dimensions, algorithms){
 
   plot_content.appendChild(graphs_content);
   //Only call function when there is one dimension
-  if(dimensions.length == 1){
-    create_oneDim_dropDown(info_icon, plot_title);
+  switch (dimensions.length) {
+    case 1:{
+      create_oneDim_dropDown(info_icon, plot_title);
+      break;
+    }
+    case 2:{
+      create_twoDim_dropDown(info_icon, plot_title);
+      break;
+    }
+    case 3:{
+      create_threeDim_dropDown(info_icon, plot_title);
+      break;
+    }
+    case 4:{
+      create_fourDim_dropDown(info_icon, plot_title);
+      break;
+    }
+
+
   }
+
   document.querySelector('.main_content').appendChild(plot_content);
 
   return graph
+}
+
+function append_plots(div){
+  let parent = div.parentNode;
+
+  var graph = document.createElement('div');
+  graph.classList.add('graph')
+
+  parent.appendChild(graph);
+
+  return graph;
 }
 
 function create_delete_listener(trash_button){
@@ -422,6 +443,22 @@ function pointDist(p1, p2){
   return Math.sqrt( a*a + b*b );
 }
 
+function makeTwoDimPlot(div , dims , chosen_algs, plotType){
+  switch (plotType) {
+    case 'scatter2d':
+      twoDimScatterPlot(div, dims, chosen_algs)
+      break;
+    case 'density':
+      twoDimDensityPlot(div, dims, chosen_algs)
+      break;
+
+  }
+}
+
+function create_twoDim_dropDown(info_icon, plot_title){
+
+}
+
 function twoDimScatterPlot(div, dims, chosen_algs){
   dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
   for(var x = 0; x<dim_indexes.length; x++){
@@ -504,6 +541,10 @@ function twoDimDensityPlot(div, dims, chosen_algs){
   Plotly.newPlot(div, data, layout);
 }
 
+function create_threeDim_dropDown(info_icon, plot_title){
+
+}
+
 function threeDimScatterPlot(div, dims, chosen_algs){
   let data = [];
   dims = Array.from(dims);
@@ -513,6 +554,7 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   for(var i = 0; i < chosen_algs.length; i++){
     algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
     var trace1 = {
+    name: chosen_algs[i],
   	x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
   	mode: 'markers',
     line: {
@@ -542,7 +584,8 @@ function threeDimScatterPlot(div, dims, chosen_algs){
         r: 0,
         b: 0,
         t: 0
-    }
+    },
+    showlegend:true,
 
 };
 
@@ -594,6 +637,26 @@ function colorRange(color, dim){
   return colorRangeList
 }
 
+function plot4dim(div, dims, chosen_algs, plotType){
+  switch (plotType) {
+    case 'scatter4d':{
+      fourDimScatterPlot(div, dims, chosen_algs);
+      break;
+    }
+    case 'paralelle':{
+      fourDimParallel(div, dims, chosen_algs_names[0]);
+      for (var i = 1; i < chosen_algs_names.length; i++) {
+        let append_div = append_plots(div);
+        fourDimParallel(append_div, dims, chosen_algs_names[i]);
+      }
+      break;
+    }
+  }
+}
+
+function create_fourDim_dropDown(info_icon, plot_title){
+
+}
 
 function fourDimScatterPlot(div, dims, chosen_algs){
   let data = [];
@@ -610,15 +673,22 @@ function fourDimScatterPlot(div, dims, chosen_algs){
     let value_color_range = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][dim4]);
 
     var trace1 = {
-    mode: 'markers',
-    type: 'scatter3d',
-    x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
+      name: chosen_algs[i],
+      mode: 'markers',
+      type: 'scatter3d',
+
+      x: Algorithms_data[algIndex][dim1],
+      y: Algorithms_data[algIndex][dim2],
+      z: Algorithms_data[algIndex][dim3],
+
     	marker: {
-    		size: 3,
+      	size: 3,
         color: value_color_range,
       },
+
     };
     data.push(trace1);
+    console.log(trace1.name);
     create_colorbar(colorbar_list,algIndex,dim4,value_color_range);
   }
 
@@ -628,6 +698,7 @@ function fourDimScatterPlot(div, dims, chosen_algs){
     b: 0,
     t: 0
   },
+  showlegend:true,
   scene: {
     xaxis:{title: dims[0]},
 
@@ -639,10 +710,58 @@ function fourDimScatterPlot(div, dims, chosen_algs){
   Plotly.newPlot(div, data, layout);
 }
 
-  function elementIndex(list, element){
-    var index = list.indexOf(element);
-    if(index == -1){
-      index = list.length - 1;
-    }
-    return index;
+function elementIndex(list, element){
+  var index = list.indexOf(element);
+  if(index == -1){
+    index = list.length - 1;
   }
+  return index;
+}
+
+function fourDimParallel(div, dims, chosen_alg){
+
+  var dimensions_ = [];
+  console.clear();
+  console.log(dims);
+
+  for (var i = 0; i < dims.length; i++) {
+
+    let dim = dims[i]
+    console.log(dim);
+
+    let index_dim = Dimensions_names.indexOf(dim);
+    let alg_index = Algorithms_names.indexOf(chosen_alg)
+    let dim_data = Algorithms_data[alg_index][index_dim]
+
+    let min = Math.min.apply(Math,dim_data);
+    let max = Math.max.apply(Math,dim_data);
+
+    let dim_adder = {
+      range: [min,max],
+      label: dim,
+      values: dim_data
+    }
+    console.log(dim_adder);
+
+    dimensions_.push(dim_adder);
+
+  }
+
+  console.log(dimensions_);
+
+  var data = [{
+    type: 'parcoords',
+    name: chosen_alg,
+    // pad: [80,80,80,80],
+    line: {
+      color: Algorithms_colors[Algorithms_names.indexOf(chosen_alg)],
+      colorscale: [[0, 'red'], [0.5, 'green'], [1, 'blue']]
+    },
+    dimensions: dimensions_
+  }];
+
+
+  Plotly.newPlot(div, data);
+
+
+}

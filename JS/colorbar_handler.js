@@ -4,19 +4,8 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
   canvas.classList.add('colobar');
 
   canvas.width = 50;
-  canvas.height = 500;
+  canvas.height = 600;
   canvas.style = 'background-image: linear-gradient(' + colorList[0] +','+ colorList[colorList.length - 1] +'); margin:20px';
-
-  // // canvas.id = 'algorithm';
-  let ctx = canvas.getContext('2d');
-  //
-  // var grd = ctx.createLinearGradient(0, 0, 200, 0);
-  // grd.addColorStop(0, "red");
-  // grd.addColorStop(1, "white");
-  //
-  // // Fill with gradient
-  // ctx.fillStyle = grd;
-  // ctx.fillRect(0, 0, 50, 500);
 
   event_get_color(canvas,algorithm_index,dim4);
 
@@ -29,7 +18,7 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
   let status = document.createElement('div');
   status.classList.add('status');
   status.id = 'status';
-  status.innerHTML = 'hover your mouse over a colorbar to see <br> the respective value'
+  status.innerHTML = 'hover your mouse'
   colorbar_list_div.appendChild(status);
 }
 
@@ -52,7 +41,7 @@ function event_get_color(colorbar,alg_index,dim4){
     let normalized_y = (y * max)/colorbar.height
 
 
-    var coord = "value=" + normalized_y.toFixed(2);
+    var coord = Dimensions_names[dim4] + " = " + normalized_y.toFixed(2);
     var c = colorbar.getContext('2d');
     var p = c.getImageData(x, y, 1, 1).data;
     // var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
