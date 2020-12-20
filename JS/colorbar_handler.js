@@ -44,7 +44,7 @@ function event_get_color(colorbar,alg_index,dim4){
     var coord = Dimensions_names[dim4] + " = " + normalized_y.toFixed(2);
     var c = colorbar.getContext('2d');
     var p = c.getImageData(x, y, 1, 1).data;
-    // var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+
     document.getElementById("status").innerHTML = coord;
 
   });

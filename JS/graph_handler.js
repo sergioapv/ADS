@@ -79,7 +79,7 @@ function getAlgorithms(){
 }
 
 //creates listener for each dropdown
-function createDropListner(icon, dropdown){
+function createOneDimDropListner(icon, dropdown){
   let options = dropdown.childNodes;
   console.log(options);
   for(let i = 0; i<options.length; i++){
@@ -113,7 +113,7 @@ function createDropListner(icon, dropdown){
 function create_oneDim_dropDown(icon, plot_title){
   let dropdown = document.createElement('div');
   dropdown.setAttribute('class', 'choose_one_dim');
-  dropdown.setAttribute('style', 'visibility: hidden');
+  dropdown.setAttribute('style', 'visibility: hidden; z-index:99');
 
   let box = document.createElement('span');
   box.setAttribute('class', 'graphOption');
@@ -146,7 +146,7 @@ function create_oneDim_dropDown(icon, plot_title){
   plot_title.appendChild(dropdown)
 
   console.log('creating');
-  createDropListner(icon, dropdown)
+  createOneDimDropListner(icon, dropdown)
 }
 
 function create_dimension_div(dimensions, algorithms){
@@ -644,18 +644,90 @@ function plot4dim(div, dims, chosen_algs, plotType){
       break;
     }
     case 'paralelle':{
-      fourDimParallel(div, dims, chosen_algs_names[0]);
-      for (var i = 1; i < chosen_algs_names.length; i++) {
+      fourDimParallel(div, dims, chosen_algs[0]);
+      for (var i = 1; i < chosen_algs.length; i++) {
         let append_div = append_plots(div);
-        fourDimParallel(append_div, dims, chosen_algs_names[i]);
+        fourDimParallel(append_div, dims, chosen_algs[i]);
       }
       break;
     }
   }
 }
 
-function create_fourDim_dropDown(info_icon, plot_title){
+function create_fourDim_dropDown(icon, plot_title){
+  let dropdown = document.createElement('div');
+  dropdown.setAttribute('class', 'choose_four_dim');
+  dropdown.setAttribute('style', 'visibility: hidden; z-index:99');
 
+  let scatter4d = document.createElement('span');
+  scatter4d.setAttribute('class', 'graphOption');
+  scatter4d.setAttribute('id', 'scatter4d');
+  scatter4d.setAttribute('name', 'fourDim');
+  scatter4d.value = 'scatter4d';
+
+  scatter4d.textContent = 'Scatter Plot 4D';
+  dropdown.appendChild(scatter4d);
+  console.log(scatter4d);
+
+  let paralelle = document.createElement('span');
+  paralelle.setAttribute('class', 'graphOption');
+  paralelle.setAttribute('id', 'paralelle');
+  paralelle.setAttribute('name', 'fourDim');
+  paralelle.value = 'paralelle';
+
+  paralelle.textContent = 'Paralelle Coordenates';
+  dropdown.appendChild(paralelle);
+
+  plot_title.appendChild(dropdown)
+
+  createFourDimDropListner(icon, dropdown)
+}
+
+function createFourDimDropListner(icon,dropdown){
+  console.clear();
+  let options = dropdown.childNodes;
+  console.log(options);
+  for(let i = 0; i<options.length; i++){
+    console.log(options[i].value)
+    options[i].addEventListener('click', function(){
+      let dim ='';
+      let dimNames = dropdown.parentNode.getElementsByClassName('dim_title')[0].textContent.split(' vs ');
+      let algs_chosen = dropdown.parentNode.getElementsByClassName('alg_title')[0].textContent.split(' vs ');
+      let div = dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('graph')[0];
+
+      let plot_content = div.parentNode.parentNode;
+
+      let graphs_content = div.parentNode;
+      graphs_content.remove();
+
+      let new_graphs_content = document.createElement('div');
+      new_graphs_content.classList.add('graphs_content');
+
+      let new_graph = document.createElement('div');
+      new_graph.className = 'graph';
+
+      plot_content.appendChild(new_graphs_content)
+      new_graphs_content.appendChild(new_graph);
+
+
+      console.log(dimNames + '\n' + algs_chosen);
+      console.log(new_graph);
+      plot4dim(new_graph, dimNames, algs_chosen, options[i].value)
+    });
+  }
+  icon.addEventListener('click', function(){
+    if(dropdown.style.visibility == 'hidden'){
+      dropdown.style.visibility = 'visible';
+      dropdown.style.height = '100px';
+      dropdown.style.width = '210px';
+      dropdown.style.padding = '.5em';
+    }else{
+      dropdown.style.visibility = 'hidden';
+      dropdown.style.height = '0';
+      dropdown.style.width = '0';
+      dropdown.style.padding = '0';
+    }
+  });
 }
 
 function fourDimScatterPlot(div, dims, chosen_algs){

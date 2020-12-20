@@ -126,7 +126,7 @@ body{
 }
 
 
-.Plot_title .choose_one_dim{
+.Plot_title .choose_one_dim , .choose_four_dim{
   position: absolute;
   /* display: block; */
   top: 70px;
