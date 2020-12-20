@@ -153,8 +153,12 @@ body{
   height: 600px;
   background: white;
   margin:20px;
-
 }
+
+.dim4graph{
+  margin:20px;
+}
+
 .edit_choice{
   font-family: 'Segoe UI';
   font-size: 20px;

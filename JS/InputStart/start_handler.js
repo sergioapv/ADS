@@ -247,8 +247,10 @@ function display_folder_data(folder_name,files){
 
   const filename_content = document.createElement('div');
   filename_content.classList.add('filename_content');
+
   var filename = document.createElement('span');
   filename.innerHTML = 'Algoritmo:'
+
   var input_name = document.createElement('input');
   input_name.type = 'text';
   input_name.size = '30';
@@ -266,12 +268,40 @@ function display_folder_data(folder_name,files){
     }
   });
 
+  var files_config_content = document.createElement('div');
+  files_config_content.classList.add('files_config_content');
 
+  var files_config_title = document.createElement('span');
+  files_config_title.innerHTML = 'Padrão de nome:'
+
+  var files_config_input = document.createElement('input');
+  files_config_input.type = 'text';
+  files_config_input.size = '30';
+  files_config_input.style = 'text-align: center;';
+
+  var file_separator_content = document.createElement('div');
+  file_separator_content.classList.add('file_separator_content');
+
+  var file_separator_title = document.createElement('span');
+  file_separator_title.innerHTML = 'Separador:'
+
+  var file_separator_input = document.createElement('input');
+  file_separator_input.type = 'text';
+  file_separator_input.size = '30';
+  file_separator_input.style = 'text-align: center;';
+
+  files_config_content.appendChild(files_config_title);
+  files_config_content.appendChild(files_config_input);
+
+  file_separator_content.appendChild(file_separator_title);
+  file_separator_content.appendChild(file_separator_input);
 
   filename_content.appendChild(filename)
   filename_content.appendChild(input_name)
 
-  file_data.appendChild(filename_content)
+  file_data.appendChild(filename_content);
+  file_data.appendChild(files_config_content);
+  file_data.appendChild(file_separator_content)
 
   document.getElementById('input_content').appendChild(file_data);
 
@@ -287,8 +317,10 @@ function get_folder_dimensions(files,file_data_div){
       reader.onload = function(e) {
         var csv = e.target.result;
 
-        let dimensions = csv.split('\n')[0].split(';')
+        let dimensions = csv.split('\n')[0].split(';');
+
         console.log(dimensions);
+
         dimensions.forEach( (dimension,index) => {
           if (Dimensions_names.length > 0) {
             if (!Dimensions_names.includes(dimension)) {
@@ -411,16 +443,18 @@ function add_file_data(files){
   files = Array.from(files);
   files.sort(function (a, b) {
     if( a.name.includes('run') && b.name.includes('run')){
-      console.log(a.name.split('run')[0])
-      console.log(b.name.split('run')[0])
+      // console.log(a.name.split('run')[0])
+      // console.log(b.name.split('run')[0])
       return (parseInt(a.name.split('run')[1]) - parseInt(b.name.split('run')[1]));
     }
     return;
   });
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
-    console.log(file.name);
-    if (file.name.includes('.csv')) {
+    // console.log(file.name);
+    console.log(valid_file_name(file.name));
+    if (valid_file_name(file.name)) {
+      var splitter = document.getElementsByClassName('file_separator_content')[0].getElementsByTagName('input')[0].value
       var reader = new FileReader();
       reader.readAsText(file);
       reader.onload = function(e) {
@@ -432,8 +466,8 @@ function add_file_data(files){
          INDEXRECORDER[INDEXRECORDER.length-1].push(rows.length - 2);
          for (var j=0; j<rows.length - 1; j++){ //runs throught lines
            for (var k = 0; k < data.length; k++) { //runs throught columns
-             if(!isNaN(rows[j].split(';')[k])){
-               data[k].push(rows[j].split(';')[k]);
+             if(!isNaN(rows[j].split(splitter)[k])){
+               data[k].push(rows[j].split(splitter)[k]);
              }
            }
          }
@@ -443,11 +477,26 @@ function add_file_data(files){
 
    Algorithms_data.push(data);
    files = [];
-   console.clear();
-   console.log(Algorithms_data);
-   console.log(Algorithms_names);
-   console.log(Dimensions_names);
-   console.log(Algorithms_colors);
+   // console.clear();
+   // console.log(Algorithms_data);
+   // console.log(Algorithms_names);
+   // console.log(Dimensions_names);
+   // console.log(Algorithms_colors);
+ }
+
+ function valid_file_name(file_name){
+   var patterns = document.getElementsByClassName('files_config_content')[0].getElementsByTagName('input')[0].value.split('*');
+   console.log(patterns);
+   console.log(file_name);
+   var valid = true;
+
+   for (var i = 1; i < patterns.length; i++) {
+     if (!file_name.includes(patterns[i])) {
+       valid = false;
+       break;
+     }
+   }
+   return valid;
  }
 
  function get_files_from_server(){

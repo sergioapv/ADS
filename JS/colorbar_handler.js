@@ -28,10 +28,6 @@ function event_get_color(colorbar,alg_index,dim4){
   let max = Math.max.apply(Math,data);
   let min = Math.min.apply(Math,data);
 
-  console.log(min);
-  console.log(max);
-
-
   colorbar.addEventListener('mousemove', e=>{
 
     var pos = findPos(colorbar);

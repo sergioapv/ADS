@@ -99,11 +99,11 @@
   margin-top: 10px;
 }
 
-.dimensions_content,.filename_content{
+.dimensions_content,.filename_content,.files_config_content , .file_separator_content{
   display: grid
 }
 
-.dimensions_content input,.filename_content input {
+.dimensions_content input,.filename_content input, .files_config_content input , .file_separator_content input{
   margin-top: 10px;
   width: 150px;
   font-family: 'Segoe UI'
