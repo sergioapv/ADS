@@ -7,22 +7,18 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
   canvas.height = 600;
   canvas.style = 'background-image: linear-gradient(' + colorList[0] +','+ colorList[colorList.length - 1] +'); margin:20px';
 
-  event_get_color(canvas,algorithm_index,dim4);
 
   colorbar_list_div.appendChild(canvas);
 
-  if (document.getElementById('status')) {
-    document.getElementById('status').remove();
-  }
-
   let status = document.createElement('div');
   status.classList.add('status');
-  status.id = 'status';
   status.innerHTML = 'hover your mouse'
   colorbar_list_div.appendChild(status);
+
+  event_get_color(canvas,algorithm_index,dim4,status);
 }
 
-function event_get_color(colorbar,alg_index,dim4){
+function event_get_color(colorbar,alg_index,dim4,status){
 
   let data = Algorithms_data[alg_index][dim4];
   let max = Math.max.apply(Math,data);
@@ -41,7 +37,7 @@ function event_get_color(colorbar,alg_index,dim4){
     var c = colorbar.getContext('2d');
     var p = c.getImageData(x, y, 1, 1).data;
 
-    document.getElementById("status").innerHTML = coord;
+    status.innerHTML = coord;
 
   });
 }

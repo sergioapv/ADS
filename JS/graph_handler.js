@@ -718,8 +718,8 @@ function createFourDimDropListner(icon,dropdown){
   icon.addEventListener('click', function(){
     if(dropdown.style.visibility == 'hidden'){
       dropdown.style.visibility = 'visible';
-      dropdown.style.height = '100px';
-      dropdown.style.width = '210px';
+      dropdown.style.height = '70px';
+      dropdown.style.width = '240px';
       dropdown.style.padding = '.5em';
     }else{
       dropdown.style.visibility = 'hidden';
