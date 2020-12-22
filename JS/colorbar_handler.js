@@ -10,6 +10,10 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
 
   colorbar_list_div.appendChild(canvas);
 
+  if (colorbar_list_div.getElementsByClassName('status')[0]) {
+    colorbar_list_div.getElementsByClassName('status')[0].remove();
+  }
+
   let status = document.createElement('div');
   status.classList.add('status');
   status.innerHTML = 'hover your mouse'
