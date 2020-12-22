@@ -10,12 +10,20 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
 
   colorbar_list_div.appendChild(canvas);
 
-  let status = document.createElement('div');
-  status.classList.add('status');
-  status.innerHTML = 'hover your mouse'
-  colorbar_list_div.appendChild(status);
+  if (colorbar_list_div.getElementsByClassName('status')[0]) {
+    event_get_color(canvas,algorithm_index,dim4,colorbar_list_div.getElementsByClassName('status')[0]);
+    colorbar_list_div.appendChild(colorbar_list_div.getElementsByClassName('status')[0]);
+  }
+  else {
+    let status = document.createElement('div');
+    status.classList.add('status');
+    status.innerHTML = 'hover your mouse'
+    colorbar_list_div.appendChild(status);
 
-  event_get_color(canvas,algorithm_index,dim4,status);
+    event_get_color(canvas,algorithm_index,dim4,status);
+  }
+
+
 }
 
 function event_get_color(colorbar,alg_index,dim4,status){
