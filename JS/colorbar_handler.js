@@ -22,8 +22,6 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
 
     event_get_color(canvas,algorithm_index,dim4,status);
   }
-
-
 }
 
 function event_get_color(colorbar,alg_index,dim4,status){
