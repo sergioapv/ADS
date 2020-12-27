@@ -492,6 +492,46 @@ function twoDimScatterPlot(div, dims, chosen_algs){
   };
 
   Plotly.newPlot(div, data, layout);
+
+  div.on('plotly_click',
+    function(data){
+      var point = data.points[0],
+          newAnnotation = {
+            x: point.xaxis.d2l(point.x),
+            y: point.yaxis.d2l(point.y),
+            arrowhead: 6,
+            ax: 0,
+            ay: -80,
+            bgcolor: 'rgba(255, 255, 255, 0.9)',
+            arrowcolor: point.fullData.marker.color,
+            font: {size:12},
+            bordercolor: point.fullData.marker.color,
+            borderwidth: 3,
+            borderpad: 4,
+            text:
+                  '<i>Point Identification</i><br>' +
+                  '<br><i>Point Values</i><br>' +
+                  '<b>A</b>     '+(point.x).toPrecision(4) +
+                  '<br><b>B</b>     '+(point.y).toPrecision(4)
+
+        },
+        divid = div,
+        newIndex = (divid.layout.annotations || []).length;
+    console.log(point.pointNumber)
+     // delete instead if clicked twice
+    if(newIndex) {
+       var foundCopy = false;
+       divid.layout.annotations.forEach(function(ann, sameIndex) {
+         if(ann.text === newAnnotation.text ) {
+           Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
+           foundCopy = true;
+         }
+       });
+       if(foundCopy) return;
+     }
+     Plotly.relayout(div, 'annotations[' + newIndex + ']', newAnnotation);
+  })
+
 }
 
 function twoDimDensityPlot(div, dims, chosen_algs){
@@ -582,7 +622,7 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   		yaxis:{title: dims[1]},
 
   		zaxis:{title: dims[2]}
-    },  
+    },
     margin: {
         l: 0,
         r: 0,
