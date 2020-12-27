@@ -510,6 +510,7 @@ function add_file_data(files){
    let partialPath = JsonFile.Algorithms.PartialPath;
 
    let has_dims = false;
+   let indexRecorderAux = [];
 
    for (var key in JsonFile.Algorithms.Files) {
     if (JsonFile.Algorithms.Files.hasOwnProperty(key)) {
@@ -527,9 +528,11 @@ function add_file_data(files){
         if (!Algorithms_names.includes(folder_name)) {
           Algorithms_names.push(folder_name);
           Algorithms_colors.push(getRandomColor())
+          indexRecorderAux.push([]);
         }
-
+        console.log(indexRecorderAux);
         for (var i = 0; i < num_files; i++) {
+          let lastIndex = indexRecorderAux.length - 1;
 
           let file_name = partialPath + '/' + folder_name + '/' + common_name + (i+1) +'.csv';
           // console.log(file_name)
@@ -549,7 +552,7 @@ function add_file_data(files){
                 }
               }
 
-            let file_data = processData(data);
+            let file_data = processData(data, lastIndex);
 
             if (folder_data.length === 0) {
               for (var i = 0; i < Dimensions_names.length; i++) {
@@ -578,7 +581,7 @@ function add_file_data(files){
     document.getElementById('done_button').click();
   }
 
-  function processData(rows) {
+  function processData(rows, lastIndex) {
 
     let data = []
 
@@ -586,9 +589,7 @@ function add_file_data(files){
       data.push([]);
     }
 
-    INDEXRECORDER.push([]);
-
-    INDEXRECORDER[INDEXRECORDER.length-1].push(rows.length - 2);
+    INDEXRECORDER[lastIndex].push(rows.length - 2);
     for (var j=0; j<rows.length; j++){ //runs throught lines
       for (var k = 0; k < data.length; k++) {
         for(key in rows[j]){
