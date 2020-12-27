@@ -463,7 +463,7 @@ function add_file_data(files){
          //split and get the rows in an array
          var rows = csv.split('\n');
          //-2 because csv.split('\n') adds one extra line.
-         INDEXRECORDER[INDEXRECORDER.length-1].push(rows.length - 2);
+         INDEXRECORDER[INDEXRECORDER.length-1].push([rows.length - 2, file.name]);
          for (var j=0; j<rows.length - 1; j++){ //runs throught lines
            for (var k = 0; k < data.length; k++) { //runs throught columns
              if(!isNaN(rows[j].split(splitter)[k])){
@@ -534,26 +534,25 @@ function add_file_data(files){
 
           let file_name = partialPath + '/' + folder_name + '/' + common_name + (i+1) +'.csv';
           // console.log(file_name)
-
+          let name = common_name + (i+1) +'.csv';
           Plotly.d3.csv(file_name, function(data){
             // console.log(data.length);
             if(!has_dims){
               for (key in data[0]){
                   if (Dimensions_names.length === 0) {
 
-                    for (var i = 0; i < key.split(';').length; i++) {
-                      Dimensions_names.push(key.split(';')[i]);
+                    for (var j = 0; j < key.split(';').length; j++) {
+                      Dimensions_names.push(key.split(';')[j]);
                       // folder_data.push([])
                     }
                   }
                   has_dims = true;
                 }
               }
-
-            let file_data = processData(data, lastIndex);
+            let file_data = processData(data, lastIndex, name);
 
             if (folder_data.length === 0) {
-              for (var i = 0; i < Dimensions_names.length; i++) {
+              for (var k = 0; k < Dimensions_names.length; k++) {
                 folder_data.push([]);
               }
             }
@@ -579,7 +578,7 @@ function add_file_data(files){
     document.getElementById('done_button').click();
   }
 
-  function processData(rows, lastIndex) {
+  function processData(rows, lastIndex, file_name) {
 
     let data = []
 
@@ -587,7 +586,7 @@ function add_file_data(files){
       data.push([]);
     }
 
-    INDEXRECORDER[lastIndex].push(rows.length);
+    INDEXRECORDER[lastIndex].push([rows.length, file_name]);
     for (var j=0; j<rows.length; j++){ //runs throught lines
       for (var k = 0; k < data.length; k++) {
         for(key in rows[j]){

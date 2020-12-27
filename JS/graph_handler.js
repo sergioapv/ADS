@@ -459,6 +459,38 @@ function create_twoDim_dropDown(info_icon, plot_title){
 
 }
 
+function getFilePath(algName, pointIndex){
+  let algIndex = elementIndex(Algorithms_names, algName);
+  let folderName = document.getElementsByClassName('Algorithm_getter')[algIndex].getElementsByTagName('input')[0].placeholder
+  let fileSizeList = INDEXRECORDER[algIndex];
+  let sum = 0;
+  let fileIndex = 0;
+  let line = 0;
+
+  for (var i = 0; i < fileSizeList.length ; i++) {
+    sum += fileSizeList[i][0];
+    if (sum > pointIndex ) {
+      fileIndex = i
+      break;
+    }
+  }
+  if(fileIndex == 0){
+    line = pointIndex;
+  }else{
+    console.clear()
+    console.log(INDEXRECORDER[algIndex][fileIndex][0]);
+    console.log(sum - pointIndex);
+    // 1+1 equals two and that's why I chose you
+    line = INDEXRECORDER[algIndex][fileIndex][0] - (sum - pointIndex) + 2
+  }
+  folderName += '/' + INDEXRECORDER[algIndex][fileIndex][1]
+  console.log(INDEXRECORDER);
+  console.log(fileSizeList);
+  console.log('file Name = ' + folderName);
+
+  return [folderName, line]
+}
+
 function twoDimScatterPlot(div, dims, chosen_algs){
   dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
   for(var x = 0; x<dim_indexes.length; x++){
@@ -495,13 +527,14 @@ function twoDimScatterPlot(div, dims, chosen_algs){
 
   div.on('plotly_click',
     function(data){
+      console.log(data);
       var point = data.points[0],
           newAnnotation = {
             x: point.xaxis.d2l(point.x),
             y: point.yaxis.d2l(point.y),
             arrowhead: 6,
             ax: 0,
-            ay: -80,
+            ay: -120,
             bgcolor: 'rgba(255, 255, 255, 0.9)',
             arrowcolor: point.fullData.marker.color,
             font: {size:12},
@@ -509,19 +542,18 @@ function twoDimScatterPlot(div, dims, chosen_algs){
             borderwidth: 3,
             borderpad: 4,
             text:
-                  '<i>Point Identification</i><br>' +
-                  '<br><i>Point Values</i><br>' +
-                  '<b>A</b>     '+(point.x).toPrecision(4) +
-                  '<br><b>B</b>     '+(point.y).toPrecision(4)
-
+                  '<b>Point Atributes</b><br><br>' +
+                  '<b>' + dims[0] + '</b><br>'+(point.x) +
+                  '<br><b>' + dims[1] + '</b><br>'+(point.y) +
+                  '<br><b>File Path</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[0]) +
+                  '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[1])
         },
-        divid = div,
-        newIndex = (divid.layout.annotations || []).length;
+        newIndex = (div.layout.annotations || []).length;
     console.log(point.pointNumber)
      // delete instead if clicked twice
     if(newIndex) {
        var foundCopy = false;
-       divid.layout.annotations.forEach(function(ann, sameIndex) {
+       div.layout.annotations.forEach(function(ann, sameIndex) {
          if(ann.text === newAnnotation.text ) {
            Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
            foundCopy = true;
@@ -635,6 +667,52 @@ function threeDimScatterPlot(div, dims, chosen_algs){
 
   console.log(data[0].name);
   Plotly.newPlot(div, data, layout);
+  div.addEventListener('click', e => {
+    div.once('plotly_click',
+      function(data){
+        // console.log(data);
+        var point = data.points[0],
+            newAnnotation = {
+              x: point.x,
+              y: point.y,
+              z: point.z,
+              arrowhead: 6,
+              ax: 0,
+              ay: -120,
+              bgcolor: 'rgba(255, 255, 255, 0.9)',
+              arrowcolor: point.fullData.marker.color,
+              font: {size:12},
+              bordercolor: point.fullData.marker.color,
+              borderwidth: 3,
+              borderpad: 4,
+              text:
+                    '<b>Point Atributes</b><br><br>' +
+                    '<b>' + dims[0] + '</b><br>'+(point.x) +
+                    '<br><b>' + dims[1] + '</b><br>'+(point.y) +
+                    '<br><b>' + dims[2] + '</b><br>'+(point.z) +
+                    '<br><b>File Path</b>  <br>'+(getFilePath(point.data.name, point.pointNumber)[0]) +
+                    '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointNumber)[1])
+          },
+          newIndex = (div.layout.scene.annotations || []).length;
+      console.log(point.pointNumber)
+      console.log(point.indexPoint);
+       // delete instead if clicked twice
+      if(newIndex > 0) {
+         var foundCopy = false;
+         div.layout.scene.annotations.forEach(function(ann, sameIndex) {
+           if(ann.text === newAnnotation.text ) {
+             Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
+             foundCopy = true;
+           }
+         });
+         if(foundCopy) return;
+       }
+       Plotly.relayout(div, 'scene.annotations[' + newIndex + ']', newAnnotation);
+       console.log(div.layout.scene.annotations);
+    })
+  });
+
+
 }
 
 function hexToRgb(hex){
