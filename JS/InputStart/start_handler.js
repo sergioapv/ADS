@@ -510,7 +510,6 @@ function add_file_data(files){
    let partialPath = JsonFile.Algorithms.PartialPath;
 
    let has_dims = false;
-   let indexRecorderAux = [];
 
    for (var key in JsonFile.Algorithms.Files) {
     if (JsonFile.Algorithms.Files.hasOwnProperty(key)) {
@@ -528,11 +527,10 @@ function add_file_data(files){
         if (!Algorithms_names.includes(folder_name)) {
           Algorithms_names.push(folder_name);
           Algorithms_colors.push(getRandomColor())
-          indexRecorderAux.push([]);
+          INDEXRECORDER.push([]);
         }
-        console.log(indexRecorderAux);
         for (var i = 0; i < num_files; i++) {
-          let lastIndex = indexRecorderAux.length - 1;
+          let lastIndex = INDEXRECORDER.length - 1;
 
           let file_name = partialPath + '/' + folder_name + '/' + common_name + (i+1) +'.csv';
           // console.log(file_name)
@@ -589,7 +587,7 @@ function add_file_data(files){
       data.push([]);
     }
 
-    INDEXRECORDER[lastIndex].push(rows.length - 2);
+    INDEXRECORDER[lastIndex].push(rows.length);
     for (var j=0; j<rows.length; j++){ //runs throught lines
       for (var k = 0; k < data.length; k++) {
         for(key in rows[j]){
