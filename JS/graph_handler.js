@@ -562,12 +562,15 @@ function threeDimScatterPlot(div, dims, chosen_algs){
     },
   	marker: {
   		size: 3,
+      text: [Algorithms_names[dim1],Algorithms_names[dim2],Algorithms_names[dim3]],
   		line: {
   		color: Algorithms_colors[algIndex],
   		width: 0.5},
   		opacity: 0.8},
   	type: 'scatter3d'
-    };
+    }
+    showlegend:true;
+
     data.push(trace1);
   }
 
@@ -578,7 +581,8 @@ function threeDimScatterPlot(div, dims, chosen_algs){
 
   		yaxis:{title: dims[1]},
 
-  		zaxis:{title: dims[2]}},
+  		zaxis:{title: dims[2]}
+    },  
     margin: {
         l: 0,
         r: 0,
@@ -589,7 +593,7 @@ function threeDimScatterPlot(div, dims, chosen_algs){
 
 };
 
-  // console.log(layout.zaxis.title);
+  console.log(data[0].name);
   Plotly.newPlot(div, data, layout);
 }
 
