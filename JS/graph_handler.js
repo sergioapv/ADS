@@ -477,7 +477,6 @@ function getFilePath(algName, pointIndex){
   if(fileIndex == 0){
     line = pointIndex;
   }else{
-    console.clear()
     console.log(INDEXRECORDER[algIndex][fileIndex][0]);
     console.log(sum - pointIndex);
     // 1+1 equals two and that's why I chose you
@@ -728,6 +727,29 @@ function hexToRgb(hex){
   throw new Error('Bad Hex');
 }
 
+function getValueByColor(point_color, original_color, dim){
+  let point_color_rgb = point_color.split('(')[1].split(')')[0].split(',')
+  let original_color_rgb = hexToRgb(original_color).split('(')[1].split(')')[0].split(',')
+  console.log(point_color_rgb);
+  console.log(original_color_rgb);
+  console.log(dim);
+  for(var i = 0; i<3; i++){
+    point_color_rgb[i] = parseFloat(point_color_rgb[i])
+    original_color_rgb[i] = parseFloat(original_color_rgb[i])
+  }
+
+  let normalized_value = point_color_rgb[0] - original_color_rgb[0] + 255/2
+
+  let dimMin = Math.min.apply(Math,dim);
+  let dimMax = Math.max.apply(Math,dim);
+
+  let value = (normalized_value/255 * (dimMax-dimMin)) + dimMin
+
+  return value
+
+
+}
+
 function colorRange(color, dim){
   let colorRangeList = [];
   var color = hexToRgb(color).split('(')[1].split(')')[0].split(',')
@@ -902,6 +924,58 @@ function fourDimScatterPlot(div, dims, chosen_algs){
   };
 
   Plotly.newPlot(div, data, layout);
+  div.addEventListener('click', e => {
+    div.once('plotly_click',
+      function(data){
+        let pointList = Object.values(data.points[0]);
+        let point_color = pointList[7]
+        let original_color = Algorithms_colors[elementIndex(Algorithms_names, data.points[0].data.name)]
+        let dim = Algorithms_data[elementIndex(Algorithms_names, data.points[0].data.name)][dim4]
+        console.log(point_color);
+        console.log(hexToRgb(original_color));
+        console.log(dim);
+        let fourDimPoint = getValueByColor(point_color, original_color, dim);
+        var point = data.points[0],
+            newAnnotation = {
+              x: point.x,
+              y: point.y,
+              z: point.z,
+              arrowhead: 6,
+              ax: 0,
+              ay: -120,
+              bgcolor: 'rgba(255, 255, 255, 0.9)',
+              arrowcolor: point.fullData.marker.color,
+              font: {size:12},
+              bordercolor: point.fullData.marker.color,
+              borderwidth: 3,
+              borderpad: 4,
+              text:
+                    '<b>Point Atributes</b><br><br>' +
+                    '<b>' + dims[0] + '</b><br>'+(point.x) +
+                    '<br><b>' + dims[1] + '</b><br>'+(point.y) +
+                    '<br><b>' + dims[2] + '</b><br>'+(point.z) +
+                    '<br><b>' + dims[3] + '</b><br>'+ fourDimPoint +
+                    '<br><b>File Path</b>  <br>'+(getFilePath(point.data.name, point.pointNumber)[0]) +
+                    '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointNumber)[1])
+
+          },
+          newIndex = (div.layout.scene.annotations || []).length;
+
+       // delete instead if clicked twice
+      if(newIndex > 0) {
+         var foundCopy = false;
+         div.layout.scene.annotations.forEach(function(ann, sameIndex) {
+           if(ann.text === newAnnotation.text ) {
+             Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
+             foundCopy = true;
+           }
+         });
+         if(foundCopy) return;
+       }
+       Plotly.relayout(div, 'scene.annotations[' + newIndex + ']', newAnnotation);
+
+    })
+  });
 }
 
 function elementIndex(list, element){
