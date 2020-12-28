@@ -282,6 +282,8 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
         },
         fillcolor: 'white',
         opacity: 0.6,
+        pointpos: 1.5,
+        points: "all",
         meanline: {
           visible: true
         },
@@ -337,6 +339,82 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
 
       Plotly.newPlot(div, data, layout)
     }
+    div.on('plotly_click',
+      function(data){
+        console.log(data);
+        let file = getFilePath(data.points[0].data.name, data.points[0].pointIndex)[0]
+        let algIndex = elementIndex(Algorithms_names, data.points[0].data.name)
+        let sum = 0
+        let interval = [];
+        let opacityPoints = [];
+        let borderColor = [];
+        let size = [];
+        for (var i = 0; i < INDEXRECORDER[algIndex].length; i++) {
+          sum += INDEXRECORDER[algIndex][i][0]
+          if(file.includes(INDEXRECORDER[algIndex][i][1])){
+            interval.push(sum - INDEXRECORDER[algIndex][i][0])
+            interval.push(sum)
+            break;
+          }
+        }
+
+        let y = []
+        for (var i = 0; i < Algorithms_data[algIndex][0].length; i++) {
+          if (i >= interval[0] && i <= interval[1]){
+            opacityPoints.push(1)
+            borderColor.push('red')
+            size.push(10)
+          }else{
+            opacityPoints.push(0.05)
+            borderColor.push(Algorithms_colors[algIndex])
+            size.push(1)
+          }
+        }
+
+        var point = data.points[0],
+            newAnnotation = {
+              y: point.y,
+              x: point.x,
+              arrowhead: 6,
+              ax: -10,
+              ay: -90,
+              bgcolor: 'rgba(255, 255, 255, 1)',
+              arrowcolor: point.fullData.marker.color,
+              font: {size:12},
+              bordercolor: point.fullData.marker.color,
+              borderwidth: 3,
+              borderpad: 4,
+              text:
+                    '<b>Point Atributes</b><br><br>' +
+                    '<b>' + dim + '</b><br>'+(point.y) +
+                    '<br><b>File Path</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[0]) +
+                    '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[1])
+          },
+          newIndex = (div.layout.annotations || []).length;
+      if(data.points.length > 1){
+        for (var i = 0; i < div.layout.annotations.length; i++) {
+          div.layout.annotations = []
+          Plotly.relayout(div, 'annotations[' + i + ']', 'remove');
+        }
+        return
+      }
+      if(newIndex) {
+         var foundCopy = false;
+         div.layout.annotations.forEach(function(ann, sameIndex) {
+            if(ann.text === newAnnotation.text ) {
+              div.layout.annotations = []
+              Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
+              foundCopy = true;
+          }
+         });
+         if(foundCopy){
+           return;
+         }
+       }
+       div.layout.annotations = []
+       div.layout.annotations.push(newAnnotation)
+       Plotly.relayout(div, 'annotations[' + newIndex + ']', newAnnotation);
+    })
   }
 function plotAreaPoints(x, y){
   let area = 0
@@ -542,8 +620,6 @@ function twoDimScatterPlot(div, dims, chosen_algs){
         }
       }
 
-
-
       var update = {
         marker: {
           opacity: opacityPoints,
@@ -568,8 +644,6 @@ function twoDimScatterPlot(div, dims, chosen_algs){
           }
         }
       };
-
-
 
       // let newData = div.data.splice(0,1)
       var point = data.points[0],
