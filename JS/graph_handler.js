@@ -81,7 +81,6 @@ function getAlgorithms(){
 //creates listener for each dropdown
 function createOneDimDropListner(icon, dropdown){
   let options = dropdown.childNodes;
-  console.log(options);
   for(let i = 0; i<options.length; i++){
     console.log(options[i].value)
     options[i].addEventListener('click', function(){
@@ -89,8 +88,6 @@ function createOneDimDropListner(icon, dropdown){
       let dimName = dropdown.parentNode.getElementsByClassName('dim_title')[0].textContent;
       let algs_chosen = dropdown.parentNode.getElementsByClassName('alg_title')[0].textContent.split(' vs ');
       let div = dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('graph')[0];
-      console.log(dimName + algs_chosen);
-      console.log(div);
       makeOneDimPlot(dimName, algs_chosen, options[i].value, div)
     });
   }
@@ -123,7 +120,6 @@ function create_oneDim_dropDown(icon, plot_title){
 
   box.textContent = 'Boxplot';
   dropdown.appendChild(box);
-  console.log(box);
 
   let progressive = document.createElement('span');
   progressive.setAttribute('class', 'graphOption');
@@ -145,7 +141,6 @@ function create_oneDim_dropDown(icon, plot_title){
 
   plot_title.appendChild(dropdown)
 
-  console.log('creating');
   createOneDimDropListner(icon, dropdown)
 }
 
@@ -267,16 +262,12 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
   let data = [];
   let trace ={};
 
-  console.log(dim);
-  console.log(chosen_algs_names);
 
   let dimensionIndex = elementIndex(Dimensions_names, dim);
 
-  console.log('Dimension index = ' + dimensionIndex);
   if(plotType != "progressive"){
     for (var i = 0; i<chosen_algs_names.length; i++){
       let algorithm_index = elementIndex(Algorithms_names, chosen_algs_names[i]);
-      console.log('Algorithm index = ' + dimensionIndex);
       trace = {
         type: plotType,
         y: Algorithms_data[algorithm_index][dimensionIndex],
@@ -477,17 +468,14 @@ function getFilePath(algName, pointIndex){
   if(fileIndex == 0){
     line = pointIndex;
   }else{
-    console.log(INDEXRECORDER[algIndex][fileIndex][0]);
-    console.log(sum - pointIndex);
+
     // 1+1 equals two and that's why I chose you
     line = INDEXRECORDER[algIndex][fileIndex][0] - (sum - pointIndex) + 2
   }
-  folderName += '/' + INDEXRECORDER[algIndex][fileIndex][1]
-  console.log(INDEXRECORDER);
-  console.log(fileSizeList);
-  console.log('file Name = ' + folderName);
+  let fileName = folderName + '/' + INDEXRECORDER[algIndex][fileIndex][1]
 
-  return [folderName, line]
+
+  return [fileName, line]
 }
 
 function twoDimScatterPlot(div, dims, chosen_algs){
@@ -526,7 +514,64 @@ function twoDimScatterPlot(div, dims, chosen_algs){
 
   div.on('plotly_click',
     function(data){
-      console.log(data);
+      console.log(div.data);
+      let file = getFilePath(data.points[0].data.name, data.points[0].pointIndex)[0]
+      let algIndex = elementIndex(Algorithms_names, data.points[0].data.name)
+      let sum = 0
+      let interval = [];
+      let opacityPoints = [];
+      let borderColor = [];
+      for (var i = 0; i < INDEXRECORDER[algIndex].length; i++) {
+        sum += INDEXRECORDER[algIndex][i][0]
+        if(file.includes(INDEXRECORDER[algIndex][i][1])){
+          interval.push(sum - INDEXRECORDER[algIndex][i][0])
+          interval.push(sum)
+          break;
+        }
+      }
+
+      let x = []
+      let y = []
+      for (var i = 0; i < Algorithms_data[algIndex][0].length; i++) {
+        if (i >= interval[0] && i <= interval[1]){
+          opacityPoints.push(1)
+          borderColor.push('red')
+        }else{
+          opacityPoints.push(0.05)
+          borderColor.push(Algorithms_colors[algIndex])
+        }
+      }
+
+
+
+      var update = {
+        marker: {
+          opacity: opacityPoints,
+          line: {
+            color: borderColor,
+            width: 6
+          }
+        }
+      };
+
+      var updateAll = {
+      marker:{
+        opacity: 0.05
+      }
+      };
+
+      var updateResetAll = {
+        marker: {
+          opacity: 1,
+          line: {
+            width: 0
+          }
+        }
+      };
+
+
+
+      // let newData = div.data.splice(0,1)
       var point = data.points[0],
           newAnnotation = {
             x: point.xaxis.d2l(point.x),
@@ -548,20 +593,36 @@ function twoDimScatterPlot(div, dims, chosen_algs){
                   '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[1])
         },
         newIndex = (div.layout.annotations || []).length;
-    console.log(point.pointNumber)
+    //div.layout.annotations = []
      // delete instead if clicked twice
     if(newIndex) {
        var foundCopy = false;
        div.layout.annotations.forEach(function(ann, sameIndex) {
-         if(ann.text === newAnnotation.text ) {
-           Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
-           foundCopy = true;
-         }
+         //Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
+          if(ann.text === newAnnotation.text ) {
+            div.layout.annotations = []
+            Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
+         //   Plotly.restyle(div, updateResetAll);
+         //
+              foundCopy = true;
+        }
        });
-       if(foundCopy) return;
+       Plotly.restyle(div, updateResetAll);
+       if(foundCopy){
+         Plotly.restyle(div, updateResetAll);
+         return;
+       }
      }
+     div.layout.annotations = []
+     div.layout.annotations.push(newAnnotation)
      Plotly.relayout(div, 'annotations[' + newIndex + ']', newAnnotation);
+     Plotly.restyle(div, updateAll);
+     Plotly.restyle(div, update, elementIndex(chosen_algs, point.data.name));
+     // div.layout.annotations = [];
   })
+
+
+
 
 }
 
@@ -664,12 +725,10 @@ function threeDimScatterPlot(div, dims, chosen_algs){
 
 };
 
-  console.log(data[0].name);
   Plotly.newPlot(div, data, layout);
   div.addEventListener('click', e => {
     div.once('plotly_click',
       function(data){
-        // console.log(data);
         var point = data.points[0],
             newAnnotation = {
               x: point.x,
@@ -693,8 +752,6 @@ function threeDimScatterPlot(div, dims, chosen_algs){
                     '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointNumber)[1])
           },
           newIndex = (div.layout.scene.annotations || []).length;
-      console.log(point.pointNumber)
-      console.log(point.indexPoint);
        // delete instead if clicked twice
       if(newIndex > 0) {
          var foundCopy = false;
@@ -707,7 +764,6 @@ function threeDimScatterPlot(div, dims, chosen_algs){
          if(foundCopy) return;
        }
        Plotly.relayout(div, 'scene.annotations[' + newIndex + ']', newAnnotation);
-       console.log(div.layout.scene.annotations);
     })
   });
 
@@ -730,9 +786,6 @@ function hexToRgb(hex){
 function getValueByColor(point_color, original_color, dim){
   let point_color_rgb = point_color.split('(')[1].split(')')[0].split(',')
   let original_color_rgb = hexToRgb(original_color).split('(')[1].split(')')[0].split(',')
-  console.log(point_color_rgb);
-  console.log(original_color_rgb);
-  console.log(dim);
   for(var i = 0; i<3; i++){
     point_color_rgb[i] = parseFloat(point_color_rgb[i])
     original_color_rgb[i] = parseFloat(original_color_rgb[i])
@@ -811,7 +864,6 @@ function create_fourDim_dropDown(icon, plot_title){
 
   scatter4d.textContent = 'Scatter Plot 4D';
   dropdown.appendChild(scatter4d);
-  console.log(scatter4d);
 
   let paralelle = document.createElement('span');
   paralelle.setAttribute('class', 'graphOption');
@@ -830,9 +882,7 @@ function create_fourDim_dropDown(icon, plot_title){
 function createFourDimDropListner(icon,dropdown){
   console.clear();
   let options = dropdown.childNodes;
-  console.log(options);
   for(let i = 0; i<options.length; i++){
-    console.log(options[i].value)
     options[i].addEventListener('click', function(){
       let dim ='';
       let dimNames = dropdown.parentNode.getElementsByClassName('dim_title')[0].textContent.split(' vs ');
@@ -853,9 +903,6 @@ function createFourDimDropListner(icon,dropdown){
       plot_content.appendChild(new_graphs_content)
       new_graphs_content.appendChild(new_graph);
 
-
-      console.log(dimNames + '\n' + algs_chosen);
-      console.log(new_graph);
       plot4dim(new_graph, dimNames, algs_chosen, options[i].value)
     });
   }
@@ -904,7 +951,6 @@ function fourDimScatterPlot(div, dims, chosen_algs){
 
     };
     data.push(trace1);
-    console.log(trace1.name);
     create_colorbar(colorbar_list,algIndex,dim4,value_color_range);
   }
 
@@ -931,9 +977,6 @@ function fourDimScatterPlot(div, dims, chosen_algs){
         let point_color = pointList[7]
         let original_color = Algorithms_colors[elementIndex(Algorithms_names, data.points[0].data.name)]
         let dim = Algorithms_data[elementIndex(Algorithms_names, data.points[0].data.name)][dim4]
-        console.log(point_color);
-        console.log(hexToRgb(original_color));
-        console.log(dim);
         let fourDimPoint = getValueByColor(point_color, original_color, dim);
         var point = data.points[0],
             newAnnotation = {
@@ -989,13 +1032,11 @@ function elementIndex(list, element){
 function fourDimParallel(div, dims, chosen_alg){
 
   var dimensions_ = [];
-  console.clear();
-  console.log(dims);
+
 
   for (var i = 0; i < dims.length; i++) {
 
     let dim = dims[i]
-    console.log(dim);
 
     let index_dim = Dimensions_names.indexOf(dim);
     let alg_index = Algorithms_names.indexOf(chosen_alg)
@@ -1009,13 +1050,10 @@ function fourDimParallel(div, dims, chosen_alg){
       label: dim,
       values: dim_data
     }
-    console.log(dim_adder);
 
     dimensions_.push(dim_adder);
 
   }
-
-  console.log(dimensions_);
 
   var data = [{
     type: 'parcoords',
