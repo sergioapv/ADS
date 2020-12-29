@@ -5,7 +5,7 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
 
   canvas.width = 50;
   canvas.height = 600;
-  canvas.style = 'background-image: linear-gradient(' + colorList[0] +','+ colorList[colorList.length - 1] +'); margin:20px';
+  canvas.style = 'background-image: linear-gradient(' + colorList[colorList.length - 1] +','+ colorList[0] +'); margin:20px';
 
 
   colorbar_list_div.appendChild(canvas);
