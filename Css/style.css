@@ -126,7 +126,7 @@ body{
 }
 
 
-.Plot_title .choose_one_dim , .choose_four_dim{
+.Plot_title .choose_one_dim ,.choose_two_dim , .choose_four_dim{
   position: absolute;
   /* display: block; */
   top: 70px;
@@ -286,6 +286,20 @@ body{
   font-size: 20px;
   border-radius: 7px;
   padding: 5px;
+}
+
+.density_matrix{
+  display: grid;
+  column-gap: 10px;
+  row-gap: 10px;
+  margin-bottom: 40px;
+  justify-items: center;
+}
+.graphmatrix{
+  height: 360px;
+  width: 360px;
+  background: white;
+  margin : 10px
 }
 
 ::-webkit-scrollbar {

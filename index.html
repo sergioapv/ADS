@@ -50,31 +50,11 @@
 
 
 
-          <div class="dim4graph">
-            <div class="graph">
-
-            </div>
-            <script type="text/javascript" src="./JS/colorbar_handler.js"></script>
-            <div class="colorbar_list">
-              <canvas class="colorbar" id="canvas" width="50" height="500" style="background-color: white; margin:20px"></canvas>
-
-              <div id="status"></div>
-              <script>
-                var c = document.getElementById("canvas");
-                var ctx = c.getContext("2d");
-
-                // Create gradient
-                var grd = ctx.createLinearGradient(0, 0, 0, 255);
-                grd.addColorStop(0, "red");
-                grd.addColorStop(1, "white");
-
-                // Fill with gradient
-                ctx.fillStyle = grd;
-                ctx.fillRect(0, 0, 50, 500);
-                event_get_color(c,'hasdhasd')
-
-              </script>
-            </div>
+          <div class="density_matrix">
+            <div class="graphmatrix"></div>
+            <div class="graphmatrix"></div>
+            <div class="graphmatrix"></div>
+            <div class="graphmatrix"></div>
           </div>
 
 
@@ -139,6 +119,7 @@
 
   </div>
   <script type="text/javascript" src="./JS/colorbar_handler.js"></script>
+  <script type="text/javascript" src="./JS/density_matrix_handler.js"></script>
   <script type="text/javascript" src="./JS/sidemenu_creater.js"></script>
   <script type="text/javascript" src="./JS/sidemenu_handler.js"></script>
   <script type="text/javascript" src="./JS/settings_handler.js"></script>

@@ -518,14 +518,80 @@ function makeTwoDimPlot(div , dims , chosen_algs, plotType){
       twoDimScatterPlot(div, dims, chosen_algs)
       break;
     case 'density':
-      twoDimDensityPlot(div, dims, chosen_algs)
+      create_matrix_density(div, dims, chosen_algs)
       break;
 
   }
 }
 
 function create_twoDim_dropDown(info_icon, plot_title){
+  let dropdown = document.createElement('div');
+  dropdown.setAttribute('class', 'choose_two_dim');
+  dropdown.setAttribute('style', 'visibility: hidden; z-index:99');
 
+  let scatter2d = document.createElement('span');
+  scatter2d.setAttribute('class', 'graphOption');
+  scatter2d.setAttribute('id', 'scatter2d');
+  scatter2d.setAttribute('name', 'twoDim');
+  scatter2d.value = 'scatter2d';
+
+  scatter2d.textContent = 'Scatter Plot 2D';
+  dropdown.appendChild(scatter2d);
+
+  let density_matrix = document.createElement('span');
+  density_matrix.setAttribute('class', 'graphOption');
+  density_matrix.setAttribute('id', 'density');
+  density_matrix.setAttribute('name', 'twoDim');
+  density_matrix.value = 'density';
+
+  density_matrix.textContent = '2D Density';
+  dropdown.appendChild(density_matrix);
+
+  plot_title.appendChild(dropdown)
+
+  createTwoDimDropListner(info_icon, dropdown)
+}
+
+function createTwoDimDropListner(info_icon, dropdown){
+  console.clear();
+  let options = dropdown.childNodes;
+  for(let i = 0; i<options.length; i++){
+    options[i].addEventListener('click', function(){
+      let dim ='';
+      let dimNames = dropdown.parentNode.getElementsByClassName('dim_title')[0].textContent.split(' vs ');
+      let algs_chosen = dropdown.parentNode.getElementsByClassName('alg_title')[0].textContent.split(' vs ');
+      let div = (dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('graph')[0] || dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('density_matrix')[0]);
+
+      let plot_content = div.parentNode.parentNode;
+
+      let graphs_content = div.parentNode;
+      graphs_content.remove();
+
+      let new_graphs_content = document.createElement('div');
+      new_graphs_content.classList.add('graphs_content');
+
+      let new_graph = document.createElement('div');
+      new_graph.className = 'graph';
+
+      plot_content.appendChild(new_graphs_content)
+      new_graphs_content.appendChild(new_graph);
+
+      makeTwoDimPlot(new_graph, dimNames, algs_chosen, options[i].value)
+    });
+  }
+  info_icon.addEventListener('click', function(){
+    if(dropdown.style.visibility == 'hidden'){
+      dropdown.style.visibility = 'visible';
+      dropdown.style.height = '70px';
+      dropdown.style.width = '180px';
+      dropdown.style.padding = '.5em';
+    }else{
+      dropdown.style.visibility = 'hidden';
+      dropdown.style.height = '0';
+      dropdown.style.width = '0';
+      dropdown.style.padding = '0';
+    }
+  });
 }
 
 function getFilePath(algName, pointIndex){
@@ -720,29 +786,21 @@ function twoDimDensityPlot(div, dims, chosen_algs){
   var layout = {
     showlegend: false,
     autosize: true,
-    margin: {t: 50},
+    margin: {t: 0},
     hovermode: 'closest',
     bargap: 0,
     xaxis: {
+      title: dims[0],
       domain: [0, 0.85],
       showgrid: false,
       zeroline: false
     },
     yaxis: {
+      title: dims[1],
       domain: [0, 0.85],
       showgrid: false,
       zeroline: false
     },
-    xaxis2: {
-      domain: [0.85, 1],
-      showgrid: false,
-      zeroline: false
-    },
-    yaxis2: {
-      domain: [0.85, 1],
-      showgrid: false,
-      zeroline: false
-    }
   };
   Plotly.newPlot(div, data, layout);
 }
