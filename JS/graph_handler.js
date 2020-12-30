@@ -1047,7 +1047,7 @@ function create_fourDim_dropDown(icon, plot_title){
   paralelle.setAttribute('name', 'fourDim');
   paralelle.value = 'paralelle';
 
-  paralelle.textContent = 'Paralelle Coordenates';
+  paralelle.textContent = 'Paralelle Coordinates';
   dropdown.appendChild(paralelle);
 
   plot_title.appendChild(dropdown)
