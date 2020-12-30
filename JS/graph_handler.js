@@ -763,16 +763,11 @@ function threeDimScatterPlot(div, dims, chosen_algs){
     name: chosen_algs[i],
   	x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
   	mode: 'markers',
-    line: {
-      color: Algorithms_colors[algIndex]
-    },
   	marker: {
+      color: Algorithms_colors[algIndex],
   		size: 3,
       text: [Algorithms_names[dim1],Algorithms_names[dim2],Algorithms_names[dim3]],
-  		line: {
-  		color: Algorithms_colors[algIndex],
-  		width: 0.5},
-  		opacity: 0.8},
+  		},
   	type: 'scatter3d'
     }
     showlegend:true;
@@ -803,6 +798,39 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   div.addEventListener('click', e => {
     div.once('plotly_click',
       function(data){
+        console.log(data);
+        let file = getFilePath(data.points[0].data.name, data.points[0].pointNumber)[0]
+        let algIndex = elementIndex(chosen_algs, data.points[0].data.name)
+        let sum = 0
+        let interval = [];
+        let opacityPoints = [];
+        let borderColor = [];
+        let pointswidth = [];
+        console.log(algIndex);
+        for (var i = 0; i < INDEXRECORDER[algIndex].length; i++) {
+          sum += INDEXRECORDER[algIndex][i][0]
+          if(file.includes(INDEXRECORDER[algIndex][i][1])){
+            interval.push(sum - INDEXRECORDER[algIndex][i][0])
+            interval.push(sum)
+            break;
+          }
+        }
+
+        console.log(interval);
+
+        let x = []
+        let y = []
+        for (var i = 0; i < Algorithms_data[algIndex][0].length; i++) {
+          if (i >= interval[0] && i <= interval[1]){
+            opacityPoints.push(1)
+            borderColor.push('#ff0000')
+          }else{
+            opacityPoints.push(0.05)
+            borderColor.push(Algorithms_colors[algIndex])
+
+          }
+        }
+
         var point = data.points[0],
             newAnnotation = {
               x: point.x,
@@ -812,9 +840,9 @@ function threeDimScatterPlot(div, dims, chosen_algs){
               ax: 0,
               ay: -120,
               bgcolor: 'rgba(255, 255, 255, 0.9)',
-              arrowcolor: point.fullData.marker.color,
+              arrowcolor: Algorithms_colors[algIndex],
               font: {size:12},
-              bordercolor: point.fullData.marker.color,
+              bordercolor: Algorithms_colors[algIndex],
               borderwidth: 3,
               borderpad: 4,
               text:
@@ -827,17 +855,31 @@ function threeDimScatterPlot(div, dims, chosen_algs){
           },
           newIndex = (div.layout.scene.annotations || []).length;
        // delete instead if clicked twice
+      console.log(newIndex);
       if(newIndex > 0) {
          var foundCopy = false;
          div.layout.scene.annotations.forEach(function(ann, sameIndex) {
            if(ann.text === newAnnotation.text ) {
+             Plotly.restyle(div,  {"marker.color": Algorithms_colors[algIndex]}, elementIndex(chosen_algs, point.data.name) )
              Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
              foundCopy = true;
            }
          });
-         if(foundCopy) return;
+         if(foundCopy){
+           return;
+         }
        }
-       Plotly.relayout(div, 'scene.annotations[' + newIndex + ']', newAnnotation);
+       console.log(div.data);
+       Plotly.relayout(div, 'scene.annotations['+ 0 + ']', 'remove');
+       Plotly.relayout(div, 'scene.annotations[' + 0 + ']', newAnnotation);
+       for (var i1 = 0; i1 < div.data.length; i1++) {
+         console.log('painting ');
+         let index = elementIndex(Algorithms_names, div.data[i1].name)
+         Plotly.restyle(div,  {"marker.color": Algorithms_colors[index]}, i1)
+       }
+       Plotly.restyle(div,  {"marker.color": [borderColor]}, elementIndex(chosen_algs, point.data.name) )
+
+
     })
   });
 
@@ -1047,8 +1089,43 @@ function fourDimScatterPlot(div, dims, chosen_algs){
   div.addEventListener('click', e => {
     div.once('plotly_click',
       function(data){
+        console.log(data);
+        let file = getFilePath(data.points[0].data.name, data.points[0].pointNumber)[0]
+        let algIndex = elementIndex(chosen_algs, data.points[0].data.name)
+        let sum = 0
+        let interval = [];
+        let opacityPoints = [];
+        let borderColor = [];
+        let pointswidth = [];
+        console.log(algIndex);
+        for (var i = 0; i < INDEXRECORDER[algIndex].length; i++) {
+          sum += INDEXRECORDER[algIndex][i][0]
+          if(file.includes(INDEXRECORDER[algIndex][i][1])){
+            interval.push(sum - INDEXRECORDER[algIndex][i][0])
+            interval.push(sum)
+            break;
+          }
+        }
+
+        console.log(interval);
+
+        let x = []
+        let y = []
+        let color = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][elementIndex(Dimensions_names, dims[3])])
+        for (var i = 0; i < Algorithms_data[algIndex][0].length; i++) {
+          if (i >= interval[0] && i <= interval[1]){
+            opacityPoints.push(1)
+            borderColor.push('#ff0000')
+          }else{
+            opacityPoints.push(0.05)
+            borderColor.push(color[i])
+
+          }
+        }
+
         let pointList = Object.values(data.points[0]);
-        let point_color = pointList[7]
+        console.log(pointList);
+        let point_color = color[pointList[6]]
         let original_color = Algorithms_colors[elementIndex(Algorithms_names, data.points[0].data.name)]
         let dim = Algorithms_data[elementIndex(Algorithms_names, data.points[0].data.name)][dim4]
         let fourDimPoint = getValueByColor(point_color, original_color, dim);
@@ -1077,22 +1154,36 @@ function fourDimScatterPlot(div, dims, chosen_algs){
 
           },
           newIndex = (div.layout.scene.annotations || []).length;
-
-       // delete instead if clicked twice
-      if(newIndex > 0) {
-         var foundCopy = false;
-         div.layout.scene.annotations.forEach(function(ann, sameIndex) {
-           if(ann.text === newAnnotation.text ) {
-             Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
-             foundCopy = true;
+          console.log(newIndex);
+          if(newIndex > 0) {
+             var foundCopy = false;
+             div.layout.scene.annotations.forEach(function(ann, sameIndex) {
+               if(ann.text === newAnnotation.text ) {
+                 let color = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][elementIndex(Dimensions_names, dims[3])])
+                 Plotly.restyle(div,  {"marker.color": [color]}, elementIndex(chosen_algs, point.data.name) )
+                 Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
+                 foundCopy = true;
+               }
+             });
+             if(foundCopy){
+               return;
+             }
            }
-         });
-         if(foundCopy) return;
-       }
-       Plotly.relayout(div, 'scene.annotations[' + newIndex + ']', newAnnotation);
+           console.log(div.data);
+           Plotly.relayout(div, 'scene.annotations['+ 0 + ']', 'remove');
+           Plotly.relayout(div, 'scene.annotations[' + 0 + ']', newAnnotation);
+           for (var i1 = 0; i1 < div.data.length; i1++) {
+             let index = elementIndex(Algorithms_names, div.data[i1].name)
+             let color = colorRange(Algorithms_colors[index], Algorithms_data[index][elementIndex(Dimensions_names, dims[3])])
+             console.log('painting ');
+             Plotly.restyle(div,  {"marker.color": [color]}, i1)
+           }
+           Plotly.restyle(div,  {"marker.color": [borderColor]}, elementIndex(chosen_algs, point.data.name) )
 
-    })
-  });
+
+          })
+          });
+
 }
 
 function elementIndex(list, element){
