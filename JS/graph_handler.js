@@ -919,13 +919,15 @@ function threeDimScatterPlot(div, dims, chosen_algs){
          div.layout.scene.annotations.forEach(function(ann, sameIndex) {
            if(ann.text === newAnnotation.text ) {
              Plotly.restyle(div,  {"marker.color": Algorithms_colors[algIndex]}, elementIndex(chosen_algs, point.data.name) )
-             Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
              foundCopy = true;
            }
+           Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
+
          });
          if(foundCopy){
            return;
          }
+
        }
        console.log(div.data);
        Plotly.relayout(div, 'scene.annotations['+ 0 + ']', 'remove');
@@ -1219,9 +1221,9 @@ function fourDimScatterPlot(div, dims, chosen_algs){
                if(ann.text === newAnnotation.text ) {
                  let color = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][elementIndex(Dimensions_names, dims[3])])
                  Plotly.restyle(div,  {"marker.color": [color]}, elementIndex(chosen_algs, point.data.name) )
-                 Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
                  foundCopy = true;
                }
+               Plotly.relayout(div, 'scene.annotations[' + sameIndex + ']', 'remove');
              });
              if(foundCopy){
                return;
