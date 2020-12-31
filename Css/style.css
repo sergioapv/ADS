@@ -302,6 +302,15 @@ body{
   margin : 10px
 }
 
+#hypervolume{
+  font-family: 'Segoe UI';
+  background: white;
+  border-radius: 7px;
+  text-align: center;
+  margin: 20px;
+  padding: 5px;
+}
+
 ::-webkit-scrollbar {
     width: 5px;
 }

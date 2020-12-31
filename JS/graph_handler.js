@@ -535,6 +535,7 @@ function twoDimScatterPlot(div, dims, chosen_algs){
       dim_indexes[x] = dim_indexes.length - 1
     }
   }
+  create_hypervolume_list(div,chosen_algs)
   var data =[];
   for(let i = 0; i<chosen_algs.length; i++){
     let algIndex = Algorithms_names.indexOf(chosen_algs[i]);
@@ -551,12 +552,14 @@ function twoDimScatterPlot(div, dims, chosen_algs){
       name: chosen_algs[i],
       };
       data.push(trace);
+      update_hypervolume_value(div,chosen_algs[i],hyperVolume2D([alg[dim_indexes[0]], alg[dim_indexes[1]]]));
     }
   layout = {
      hovermode:'closest',
      xaxis:{zeroline:false, title: {text: dims[0]}},
      yaxis:{zeroline:false, title: {text: dims[1]}}
   };
+
 
   Plotly.newPlot(div, data, layout);
 
@@ -592,6 +595,7 @@ function twoDimScatterPlot(div, dims, chosen_algs){
         }
         // console.log(point_list);
         console.log(hyperVolume2D(point_list));
+        update_hypervolume_value(div,div.data[i].name,hyperVolume2D(point_list))
       }
 
   });
@@ -755,6 +759,7 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   dim1 = elementIndex(Dimensions_names, dims[0]);
   dim2 = elementIndex(Dimensions_names, dims[1]);
   dim3 = elementIndex(Dimensions_names, dims[2]);
+  create_hypervolume_list(div,chosen_algs)
   for(var i = 0; i < chosen_algs.length; i++){
     algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
     var trace1 = {
@@ -793,6 +798,8 @@ function threeDimScatterPlot(div, dims, chosen_algs){
 };
 
   Plotly.newPlot(div, data, layout);
+
+
   div.addEventListener('click', e => {
     div.once('plotly_click',
       function(data){

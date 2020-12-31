@@ -116,3 +116,48 @@ function hyperVolume2D(points){
   return area
 
 }
+
+function create_hypervolume_list(div,algs_chosen){
+  var hypervolume_list = document.createElement('div');
+  hypervolume_list.classList.add('hypervolumes_list');
+  hypervolume_list.style = 'display:flex;justify-content: center;';
+
+  algs_chosen.forEach((algorithm) => {
+    let hypervolume = document.createElement('div');
+    hypervolume.classList.add(algorithm);
+    hypervolume.id = 'hypervolume';
+
+    let value = document.createElement('span');
+    value.innerHTML = 'Hypervolume for ' + algorithm + ':'
+    hypervolume.appendChild(value);
+
+    hypervolume_list.appendChild(hypervolume);
+  });
+
+  div.parentNode.parentNode.appendChild(hypervolume_list);
+
+}
+
+function update_hypervolume_value(div,alg_name,new_value){
+  let hypervolume_span = div.parentNode.parentNode.getElementsByClassName('hypervolumes_list')[0].getElementsByClassName(alg_name)[0].getElementsByTagName('span')[0];
+
+  let comun_part = hypervolume_span.innerHTML.split(':')[0];
+
+  hypervolume_span.innerHTML = comun_part + ': ' + new_value.toFixed(5);
+}
+
+
+function hso(points){
+  var ordered_points = []
+
+  for(let i = 0; i<points[0].length; i++){
+    let pos = []
+
+    for (var j = 0; j < array.length; j++) {
+      pos.push(points[j][i])
+    }
+
+    ordered_points.push(pos)
+  }
+
+}
