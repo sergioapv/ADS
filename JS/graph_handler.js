@@ -544,6 +544,9 @@ function twoDimScatterPlot(div, dims, chosen_algs){
     var trace = {
       x: alg[dim_indexes[0]],
       y: alg[dim_indexes[1]],
+      hovertemplate: '<b>' + chosen_algs[i] + '</b><br>' +
+                     '<i>' + dims[0] +'</i>: %{x}'  +
+                     '<br><i>' + dims[1] + '</i>: %{y} <br>',
       mode: 'markers',
       type: 'line',
       line: {
@@ -711,6 +714,7 @@ function twoDimScatterPlot(div, dims, chosen_algs){
 }
 
 function twoDimDensityPlot(div, dims, chosen_algs){
+
   algIndex1 = Algorithms_names.indexOf(chosen_algs[0]);
   dim_index1 = Dimensions_names.indexOf(dims[0])
   dim_index2 = Dimensions_names.indexOf(dims[1])
@@ -759,13 +763,18 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   dim1 = elementIndex(Dimensions_names, dims[0]);
   dim2 = elementIndex(Dimensions_names, dims[1]);
   dim3 = elementIndex(Dimensions_names, dims[2]);
+
   create_hypervolume_list(div,chosen_algs)
+
   for(var i = 0; i < chosen_algs.length; i++){
     algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
     var trace1 = {
     name: chosen_algs[i],
   	x:Algorithms_data[algIndex][dim1], y: Algorithms_data[algIndex][dim2], z: Algorithms_data[algIndex][dim3],
   	mode: 'markers',
+    hovertemplate: '<i>' + dims[0] +'</i>: %{x}'  +
+                   '<br><i>' + dims[1] + '</i>: %{y}' +
+                   '<br><i>' + dims[2] + '</i>: %{z}',
   	marker: {
       color: Algorithms_colors[algIndex],
   		size: 3,
@@ -775,6 +784,7 @@ function threeDimScatterPlot(div, dims, chosen_algs){
     }
     showlegend:true;
 
+    update_hypervolume_value(div,chosen_algs[i],hyperVolume3D([Algorithms_data[algIndex][dim1], Algorithms_data[algIndex][dim2],Algorithms_data[algIndex][dim3]]));
     data.push(trace1);
   }
 
@@ -798,6 +808,11 @@ function threeDimScatterPlot(div, dims, chosen_algs){
 };
 
   Plotly.newPlot(div, data, layout);
+
+  div.on('plotly_relayout',
+    function(eventdata){
+      console.log(eventdata);
+  });
 
 
   div.addEventListener('click', e => {
@@ -958,6 +973,10 @@ function colorRange(color, dim){
 }
 
 function plot4dim(div, dims, chosen_algs, plotType){
+  if (div.parentNode.parentNode.querySelector('.hypervolumes_list')) {
+    div.parentNode.parentNode.querySelector('.hypervolumes_list').remove();
+  }
+
   switch (plotType) {
     case 'scatter4d':{
       fourDimScatterPlot(div, dims, chosen_algs);
@@ -1054,6 +1073,9 @@ function fourDimScatterPlot(div, dims, chosen_algs){
   dim2 = elementIndex(Dimensions_names, dims[1]);
   dim3 = elementIndex(Dimensions_names, dims[2]);
   dim4 = elementIndex(Dimensions_names, dims[3]);
+
+  create_hypervolume_list(div,chosen_algs)
+
   for(var i = 0; i < chosen_algs.length; i++){
     let algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
     let value_color_range = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][dim4]);
@@ -1066,6 +1088,10 @@ function fourDimScatterPlot(div, dims, chosen_algs){
       x: Algorithms_data[algIndex][dim1],
       y: Algorithms_data[algIndex][dim2],
       z: Algorithms_data[algIndex][dim3],
+      hovertemplate: '<i>' + dims[0] +'</i>: %{x}'  +
+                     '<br><i>' + dims[1] + '</i>: %{y}' +
+                     '<br><i>' + dims[2] + '</i>: %{z}',// +
+                     // '<br><i>' + dims[3] + '</i>: %{o} <br>',
 
     	marker: {
       	size: 3,
@@ -1074,6 +1100,7 @@ function fourDimScatterPlot(div, dims, chosen_algs){
 
     };
     data.push(trace1);
+    update_hypervolume_value(div,chosen_algs[i],hyperVolume4D([Algorithms_data[algIndex][dim1], Algorithms_data[algIndex][dim2],Algorithms_data[algIndex][dim3],Algorithms_data[algIndex][dim4]]));
     create_colorbar(colorbar_list,algIndex,dim4,value_color_range);
   }
 

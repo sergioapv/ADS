@@ -1,5 +1,6 @@
 function create_matrix_density(div, dims , chosen_algs){
 
+
   // var matrix_size = 1;
 
 
@@ -29,6 +30,9 @@ function create_matrix_density(div, dims , chosen_algs){
   console.log(chosen_algs.length);
 
   if (columns * rows != 1) {
+    if (div.parentNode.parentNode.querySelector('.hypervolumes_list')) {
+      div.parentNode.parentNode.querySelector('.hypervolumes_list').remove();
+    }
 
     var graphs_content = div.parentNode;
 
