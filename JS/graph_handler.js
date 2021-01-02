@@ -765,6 +765,7 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   dim3 = elementIndex(Dimensions_names, dims[2]);
 
   create_hypervolume_list(div,chosen_algs)
+  create_range_changer_buttons(div,chosen_algs,dims)
 
   for(var i = 0; i < chosen_algs.length; i++){
     algIndex = elementIndex(Algorithms_names, chosen_algs[i]);
@@ -977,6 +978,11 @@ function plot4dim(div, dims, chosen_algs, plotType){
     div.parentNode.parentNode.querySelector('.hypervolumes_list').remove();
   }
 
+  if (div.parentNode.parentNode.querySelector('.hypervolume_range_changer')) {
+    div.parentNode.parentNode.querySelector('.hypervolume_range_changer').remove();
+  }
+
+
   switch (plotType) {
     case 'scatter4d':{
       fourDimScatterPlot(div, dims, chosen_algs);
@@ -1075,6 +1081,7 @@ function fourDimScatterPlot(div, dims, chosen_algs){
   dim4 = elementIndex(Dimensions_names, dims[3]);
 
   create_hypervolume_list(div,chosen_algs)
+  create_range_changer_buttons(div,chosen_algs,dims)
 
   for(var i = 0; i < chosen_algs.length; i++){
     let algIndex = elementIndex(Algorithms_names, chosen_algs[i]);

@@ -5,11 +5,10 @@ body{
 }
 
 /* The Modal (background) */
-.modal {
+.modal ,  .modal_range_list{
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  padding-top: 150px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -20,17 +19,35 @@ body{
 }
 
 /* Modal Content */
-.modal-content {
-  background-color: #fefefe;
+.modal-content , .modal-content_range_list{
   margin: auto;
+  margin-top: 5%;
   padding: 20px;
   border: 1px solid #888;
-  width: 200px;
+  position: relative;
+  width: 600px;
+  background: white;
+  border-radius: 13px;
+  text-align: center;
   align-items: center;
 }
 
+.modal-content span{
+  font-family: 'Segoe UI';
+  font-size: 20px;
+}
+.modal-content input{
+  margin-left: 8px;
+}
+
+.modal_range_list span{
+  font-family: 'Segoe UI';
+  font-size: 18px;
+}
+
+
 /* The Close Button */
-.close {
+.close , .close_modal {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
@@ -38,10 +55,14 @@ body{
 }
 
 .close:hover,
-.close:focus {
+.close:focus , .close_modal:hover,.close_modal:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+.close_modal{
+  transform: rotate(45deg);
 }
 
 .sidemenu{
@@ -224,22 +245,6 @@ body{
   margin-bottom: 20px;
 }
 
-.modal-content{
-  position: relative;
-  width: 600px;
-  /* height: 400px; */
-  background: white;
-  border-radius: 13px;
-  text-align: center;
-  align-items: center;
-}
-.modal-content span{
-  font-family: 'Segoe UI';
-  font-size: 20px;
-}
-.modal-content input{
-  margin-left: 8px;
-}
 
 #settings_title{
   font-size: 30px;
@@ -256,7 +261,7 @@ body{
   font-size: 20px;
 }
 
-.submit_changes_button{
+.submit_changes_button , .range_change_button{
   position: absolute;
   right: 20px;
   bottom: 10px;
@@ -302,13 +307,24 @@ body{
   margin : 10px
 }
 
-#hypervolume{
+#hypervolume , .range_choice_min , .range_choice_max , .range_changer{
   font-family: 'Segoe UI';
   background: white;
   border-radius: 7px;
   text-align: center;
   margin: 20px;
   padding: 5px;
+}
+
+
+.range_changer{
+  background: gray;
+  color: white;
+  cursor: pointer;
+}
+
+.range_choice_min , .range_choice_max{
+  margin: 0px;;
 }
 
 ::-webkit-scrollbar {

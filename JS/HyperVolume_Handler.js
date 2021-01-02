@@ -12,7 +12,6 @@ function hyperVolume2D(points){
     let y = [ordered_points[i+1][1], ordered_points[i][1]]
     let min_y = Math.min.apply(Math, y)
     area += xDif*min_y
-    // console.log(xDif*min_y);
   }
 
   return area
@@ -40,11 +39,276 @@ function create_hypervolume_list(div,algs_chosen){
     hypervolume.appendChild(value);
 
     hypervolume_list.appendChild(hypervolume);
-
-
   });
 
   div.parentNode.parentNode.appendChild(hypervolume_list);
+
+}
+
+function create_min_max_modal(div,dims,alg_name){
+  var alg_index = Algorithms_names.indexOf(alg_name);
+
+  var modal_range_list = document.createElement('div');
+  modal_range_list.classList.add('modal_range_list');
+  modal_range_list.style = 'display:block;';
+
+  var modal_content_range_list = document.createElement('div');
+  modal_content_range_list.classList.add('modal-content_range_list');
+
+  modal_range_list.appendChild(modal_content_range_list);
+
+  var close = document.createElement('span');
+  close.classList.add('close_modal')
+  close.innerHTML = '+';
+  add_close_listener(close)
+
+  modal_content_range_list.appendChild(close);
+
+  var range_list = document.createElement('div');
+  range_list.classList.add('range_list');
+
+  modal_content_range_list.appendChild(range_list)
+
+  let alg_title = document.createElement('span');
+  alg_title.style = 'font-weight:bold; font-size: 20px; margin-bottom: 15px;';
+  alg_title.innerHTML = alg_name;
+
+  range_list.appendChild(alg_title)
+
+  dims.forEach((dimension) => {
+
+    let dim_index = Dimensions_names.indexOf(dimension);
+
+    let min = Math.min.apply(Math, Algorithms_data[alg_index][dim_index]);
+    let max = Math.max.apply(Math, Algorithms_data[alg_index][dim_index]);
+
+    let range_choice = document.createElement('div');
+    range_choice.classList.add('range_choice');
+    range_choice.style = 'margin:20px;'
+
+    let dim_title = document.createElement('span');
+    dim_title.innerHTML = dimension + ':';
+
+    range_choice.appendChild(dim_title);
+
+    let range_choice_min = document.createElement('div');
+    range_choice_min.classList.add('range_choice_min');
+
+    let min_title = document.createElement('span')
+    min_title.innerHTML = 'Minimum Value : ' + min.toFixed(6);
+
+    let min_slider = document.createElement('input');
+    min_slider.type = 'range';
+    min_slider.classList.add('min')
+
+    min_slider.min = min;
+    min_slider.max = max;
+    min_slider.value = min;
+
+    min_slider.step = '0.000001'
+
+    range_choice_min.appendChild(min_title);
+    range_choice_min.appendChild(min_slider);
+
+
+    let range_choice_max = document.createElement('div');
+    range_choice_max.classList.add('range_choice_max');
+
+    let max_title = document.createElement('span')
+    max_title.innerHTML = 'Maximum Value : ' + min.toFixed(6);
+
+    let max_slider = document.createElement('input');
+    max_slider.type = 'range';
+    max_slider.classList.add('max')
+
+    max_slider.min = min;
+    max_slider.max = max;
+    max_slider.value = min;
+
+    max_slider.step = '0.000001'
+
+    range_choice_max.appendChild(max_title);
+    range_choice_max.appendChild(max_slider);
+
+    range_choice.appendChild(range_choice_min);
+    range_choice.appendChild(range_choice_max);
+
+    range_list.appendChild(range_choice);
+
+    range_events_handler(min_slider,max_slider)
+  });
+
+let range_change_button = document.createElement('span');
+range_change_button.classList.add('range_change_button');
+range_change_button.innerHTML = 'Change'
+
+change_button_listener(range_change_button)
+
+modal_content_range_list.appendChild(range_change_button)
+
+div.parentNode.parentNode.appendChild(modal_range_list)
+}
+
+function change_button_listener(range_change_button){
+  range_change_button.addEventListener('click' , e => {
+
+
+    var points = []
+
+    var mins_maxs = []
+
+    let range_list = range_change_button.parentNode.getElementsByClassName('range_choice')
+
+    let algorithm = range_change_button.parentNode.getElementsByTagName('span')[1].innerHTML
+
+    let graph = range_change_button.parentNode.parentNode.parentNode.getElementsByClassName('graph')[0]
+
+    console.log(algorithm);
+    console.log(hypervolume);
+
+    var dims = 0
+
+    for (var i = 0; i < range_list.length; i++) {
+      let choice = range_list[i];
+
+      let dim = choice.getElementsByTagName('span')[0].innerHTML.split(':')[0];
+
+      dims++
+
+      let min = parseFloat(choice.getElementsByClassName('min')[0].value);
+      let max = parseFloat(choice.getElementsByClassName('max')[0].value);
+
+      if (min>max) {
+        alert('Please select a maximum value higher than a minimum value');
+        return;
+      }
+
+      let dim_points = Algorithms_data[Algorithms_names.indexOf(algorithm)][Dimensions_names.indexOf(dim)];
+
+      mins_maxs.push([min,max])
+      // dim_points = validate_points(dim_points,min,max);
+
+      points.push(dim_points);
+
+    }
+
+    console.log(points);
+
+
+    if (dims === 3) {
+      points = validate_3D_points(points,mins_maxs)
+      update_hypervolume_value(graph,algorithm,hyperVolume3D(points))
+    }
+    if (dims === 4) {
+      points = validate_4D_points(points,mins_maxs)
+      update_hypervolume_value(graph,algorithm,hyperVolume4D(points))
+    }
+
+
+
+
+
+
+    range_change_button.parentNode.parentNode.remove()
+  });
+}
+
+function valid_point(point,min,max){
+  return point >= min && point <= max
+}
+
+function validate_3D_points(points,mins_maxs){
+  let valid_points = [[],[],[]]
+  for (var i = 0; i < points[0].length; i++) {
+    let dim1_point = points[0][i]
+    let dim2_point = points[1][i]
+    let dim3_point = points[2][i]
+
+    if (valid_point(dim1_point,mins_maxs[0][0],mins_maxs[0][1]) &&
+        valid_point(dim2_point,mins_maxs[1][0],mins_maxs[1][1]) &&
+        valid_point(dim3_point,mins_maxs[2][0],mins_maxs[2][1])) {
+      valid_points[0].push(dim1_point)
+      valid_points[1].push(dim2_point)
+      valid_points[2].push(dim3_point)
+    }
+  }
+  console.log(valid_points);
+  return valid_points;
+}
+
+function validate_4D_points(points,mins_maxs){
+  let valid_points = [[],[],[],[]]
+  for (var i = 0; i < points[0].length; i++) {
+    let dim1_point = points[0][i]
+    let dim2_point = points[1][i]
+    let dim3_point = points[2][i]
+    let dim4_point = points[3][i]
+
+    if (valid_point(dim1_point,mins_maxs[0][0],mins_maxs[0][1]) &&
+        valid_point(dim2_point,mins_maxs[1][0],mins_maxs[1][1]) &&
+        valid_point(dim3_point,mins_maxs[2][0],mins_maxs[2][1]) &&
+        valid_point(dim3_point,mins_maxs[2][0],mins_maxs[3][1])) {
+      valid_points[0].push(dim1_point)
+      valid_points[1].push(dim2_point)
+      valid_points[2].push(dim3_point)
+      valid_points[3].push(dim4_point)
+    }
+  }
+  console.log(valid_points);
+  return valid_points;
+}
+
+
+
+
+function add_close_listener(close){
+  close.addEventListener('click' , e => {
+    close.parentNode.parentNode.remove();
+  });
+}
+
+function range_events_handler(min_slider,max_slider){
+  min_slider.addEventListener('change' , e => {
+    // console.log(min_slider.value);
+
+    let comun_part  = min_slider.parentNode.getElementsByTagName('span')[0].innerHTML.split(':')[0];
+
+    comun_part += ': ' + parseFloat(min_slider.value).toFixed(6)
+
+    min_slider.parentNode.getElementsByTagName('span')[0].innerHTML = comun_part
+  });
+  max_slider.addEventListener('change' , e => {
+    // console.log(max_slider.value);
+    let comun_part  = max_slider.parentNode.getElementsByTagName('span')[0].innerHTML.split(':')[0];
+
+    comun_part += ': ' + parseFloat(max_slider.value).toFixed(6)
+
+    max_slider.parentNode.getElementsByTagName('span')[0].innerHTML = comun_part
+  });
+
+}
+
+function create_range_changer_buttons(div,algs_chosen,dims){
+  var hypervolume_range_changer = document.createElement('div');
+  hypervolume_range_changer.classList.add('hypervolume_range_changer');
+  hypervolume_range_changer.style = 'display:flex; justify-content: center;'
+
+  algs_chosen.forEach((algorithm) => {
+    let range_changer = document.createElement('span');
+    range_changer.classList.add('range_changer');
+
+    range_changer.innerHTML = 'Change value ranges for ' + algorithm + "'s hypervolume"
+
+    range_changer.addEventListener('click' , e => {
+
+      create_min_max_modal(div,dims,algorithm)
+
+    });
+
+    hypervolume_range_changer.appendChild(range_changer);
+  });
+
+  div.parentNode.parentNode.appendChild(hypervolume_range_changer)
 
 }
 
@@ -102,7 +366,6 @@ function hyperVolume3D(points){
     }
 
   }
-  // console.log(hypervolume);
   return hypervolume;
 }
 
@@ -140,15 +403,12 @@ function hyperVolume4D(points){
 
     if (diferent_o_value == true) { //check if the slice has been already taken to account
       let points_at_level = get_points_at_level_4d(ordered_points,point[3]);
-      // console.log(points_at_level);
-      // console.log(hyperVolume3D(transform_points(points_at_level)));
-      // console.log(height);
-      // console.log('\n');
+
       hypervolume += hyperVolume3D(transform_points(points_at_level))*height
     }
 
   }
-  // console.log(hypervolume);
+
   return hypervolume;
 }
 
@@ -159,6 +419,6 @@ function get_points_at_level_4d(points,o){
     if (points[i][3] == o)
       points_at_level.push([points[i][0],points[i][1],points[i][2]]);
   }
-  // console.log(points_at_level);
+
   return points_at_level;
 }
