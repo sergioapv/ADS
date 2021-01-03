@@ -1,3 +1,4 @@
+//creates all colorbar components and appends them to the color bar list container
 function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
   let canvas = document.createElement('canvas');
 
@@ -10,6 +11,7 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
 
   colorbar_list_div.appendChild(canvas);
 
+  // if there is a colorbar status displayed then reorder it to be the last element
   if (colorbar_list_div.getElementsByClassName('status')[0]) {
     event_get_color(canvas,algorithm_index,dim4,colorbar_list_div.getElementsByClassName('status')[0]);
     colorbar_list_div.appendChild(colorbar_list_div.getElementsByClassName('status')[0]);
@@ -24,6 +26,7 @@ function create_colorbar(colorbar_list_div,algorithm_index,dim4,colorList){
   }
 }
 
+//retracts the value of a color by normalizing the length of the color bar and position of the mouse
 function event_get_color(colorbar,alg_index,dim4,status){
 
   let data = Algorithms_data[alg_index][dim4];
@@ -38,17 +41,14 @@ function event_get_color(colorbar,alg_index,dim4,status){
 
     let normalized_y = (y * max)/colorbar.height
 
-
-    var coord = Dimensions_names[dim4] + " = " + normalized_y.toFixed(2);
-    var c = colorbar.getContext('2d');
-    var p = c.getImageData(x, y, 1, 1).data;
+    var coord = Dimensions_names[dim4] + " = " + normalized_y.toFixed(4);
 
     status.innerHTML = coord;
 
   });
 }
 
-
+//finds position of the colorbar
 function findPos(obj) {
     var curleft = 0, curtop = 0;
     if (obj.offsetParent) {
@@ -60,12 +60,14 @@ function findPos(obj) {
     return { x: curleft, y: curtop };
 }
 
+//translates rgb colors for its' hexadecimal keyCode
 function rgbToHex(r, g, b) {
     if (r > 255 || g > 255 || b > 255)
         throw "Invalid color component";
     return ((r << 16) | (g << 8) | b).toString(16);
 }
 
+//creates list of colorbars container
 function create_bars(graph_div){
   var dim4graph = document.createElement('div');
   dim4graph.classList.add('dim4graph');

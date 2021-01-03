@@ -168,25 +168,6 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
            showticklabels: false,
            zeroline: false
          },
-         annotations: [{
-           showarrow: false,
-           text:	"<b>TESTING</b>",
-           font: {
-             family:	'Gravitas One',
-             size:	48,
-             color: 'white'
-           },
-           xref:	'paper',
-           yref:	'paper',
-           x: 0.5,
-           y: 0.5
-         }, {
-           showarrow: false,
-           xref:	'paper',
-           yref:	'paper',
-           x: 0.5,
-           y: 0.35
-         }]
        }
        data.push(trace)
        Plotly.newPlot(div, animation_type, data).then(function() {
@@ -205,6 +186,7 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
   }
 }
 
+//displays annotations for points file's path, file's line and values
 function display_annotations_listener(div,dim){
   div.on('plotly_click',
     function(data){

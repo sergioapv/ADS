@@ -1,5 +1,5 @@
 function handle_graphs(plotType){
-  console.log(INDEXRECORDER);
+
   var dims= getDimensions();
   let chosen_algs_names = getAlgorithms();
   let div = {};
@@ -78,6 +78,7 @@ function getAlgorithms(){
   return algorithms;
 }
 
+//creates the container for the plot content and titles etc
 function create_dimension_div(dimensions, algorithms){
   //keps track of which algorithms are being ploted
   let algorithms_title = '';
@@ -148,7 +149,7 @@ function create_dimension_div(dimensions, algorithms){
   plot_content.appendChild(plot_title);
 
   plot_content.appendChild(graphs_content);
-  //Only call function when there is one dimension
+
   switch (dimensions.length) {
     case 1:{
       create_oneDim_dropDown(info_icon, plot_title);
@@ -171,7 +172,7 @@ function create_dimension_div(dimensions, algorithms){
   return graph
 }
 
-
+//listener for delete button
 function create_delete_listener(trash_button){
   trash_button.addEventListener('click',function(){
     let plot_title = trash_button.parentNode.parentNode;
@@ -179,7 +180,7 @@ function create_delete_listener(trash_button){
   });
 }
 
-
+//retracts the file path using the index recorder
 function getFilePath(algName, pointIndex){
   let algIndex = elementIndex(Algorithms_names, algName);
   let folderName = document.getElementsByClassName('Algorithm_getter')[algIndex].getElementsByTagName('input')[0].placeholder
@@ -199,7 +200,7 @@ function getFilePath(algName, pointIndex){
     line = pointIndex;
   }else{
 
-    // 1+1 equals two and that's why I chose you
+    // reverse subtraction of INDEXRECORDER structure
     line = INDEXRECORDER[algIndex][fileIndex][0] - (sum - pointIndex) + 2
   }
   let fileName = folderName + '/' + INDEXRECORDER[algIndex][fileIndex][1]
@@ -207,6 +208,7 @@ function getFilePath(algName, pointIndex){
   return [fileName, line]
 }
 
+//some bug on array.indexOf so sometimes this function show be used
 function elementIndex(list, element){
   var index = list.indexOf(element);
   if(index == -1){

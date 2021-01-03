@@ -1,4 +1,4 @@
-
+//translates hexadecimal colors to it's rgb code
 function hexToRgb(hex){
   var c;
   if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
@@ -12,6 +12,7 @@ function hexToRgb(hex){
   throw new Error('Bad Hex');
 }
 
+//appends plots to given div
 function append_plots(div){
   let parent = div.parentNode;
 
@@ -23,6 +24,7 @@ function append_plots(div){
   return graph;
 }
 
+//reverse engineers the value of a dim by the given point color and original color
 function getValueByColor(point_color, original_color, dim){
   let point_color_rgb = point_color.split('(')[1].split(')')[0].split(',')
   let original_color_rgb = hexToRgb(original_color).split('(')[1].split(')')[0].split(',')
@@ -43,6 +45,7 @@ function getValueByColor(point_color, original_color, dim){
 
 }
 
+//returns an array of colors by given dim and algoritm's original color using a min-max normalization
 function colorRange(color, dim){
   let colorRangeList = [];
   var color = hexToRgb(color).split('(')[1].split(')')[0].split(',')
@@ -74,6 +77,7 @@ function colorRange(color, dim){
   return colorRangeList
 }
 
+//plots 4 dim plot by given plot type
 function plot4dim(div, dims, chosen_algs, plotType){
   if (div.parentNode.parentNode.querySelector('.hypervolumes_list')) {
     div.parentNode.parentNode.querySelector('.hypervolumes_list').remove();
@@ -100,6 +104,7 @@ function plot4dim(div, dims, chosen_algs, plotType){
   }
 }
 
+//creates the dropdown elements and listener for plots' options of visualization
 function create_fourDim_dropDown(icon, plot_title){
   let dropdown = document.createElement('div');
   dropdown.setAttribute('class', 'choose_four_dim');
@@ -128,8 +133,9 @@ function create_fourDim_dropDown(icon, plot_title){
   createFourDimDropListner(icon, dropdown)
 }
 
+//listener to plot the clicked plot type or retract the menu if the icon is clicked
 function createFourDimDropListner(icon,dropdown){
-  console.clear();
+
   let options = dropdown.childNodes;
   for(let i = 0; i<options.length; i++){
     options[i].addEventListener('click', function(){
@@ -170,6 +176,7 @@ function createFourDimDropListner(icon,dropdown){
   });
 }
 
+//plot for 4 dim scatter plot
 function fourDimScatterPlot(div, dims, chosen_algs){
   let data = [];
 
@@ -228,10 +235,11 @@ function fourDimScatterPlot(div, dims, chosen_algs){
   };
 
   Plotly.newPlot(div, data, layout);
+
+  //click listener for points from the same file heights
   div.addEventListener('click', e => {
     div.once('plotly_click',
       function(data){
-        console.log(data);
         let file = getFilePath(data.points[0].data.name, data.points[0].pointNumber)[0]
         let algIndex = elementIndex(chosen_algs, data.points[0].data.name)
         let sum = 0
@@ -239,7 +247,6 @@ function fourDimScatterPlot(div, dims, chosen_algs){
         let opacityPoints = [];
         let borderColor = [];
         let pointswidth = [];
-        console.log(algIndex);
         for (var i = 0; i < INDEXRECORDER[algIndex].length; i++) {
           sum += INDEXRECORDER[algIndex][i][0]
           if(file.includes(INDEXRECORDER[algIndex][i][1])){
@@ -248,9 +255,6 @@ function fourDimScatterPlot(div, dims, chosen_algs){
             break;
           }
         }
-
-        console.log(interval);
-
         let x = []
         let y = []
         let color = colorRange(Algorithms_colors[algIndex], Algorithms_data[algIndex][elementIndex(Dimensions_names, dims[3])])
@@ -266,7 +270,6 @@ function fourDimScatterPlot(div, dims, chosen_algs){
         }
 
         let pointList = Object.values(data.points[0]);
-        console.log(pointList);
         let point_color = color[pointList[6]]
         let original_color = Algorithms_colors[elementIndex(Algorithms_names, data.points[0].data.name)]
         let dim = Algorithms_data[elementIndex(Algorithms_names, data.points[0].data.name)][dim4]
@@ -296,7 +299,6 @@ function fourDimScatterPlot(div, dims, chosen_algs){
 
           },
           newIndex = (div.layout.scene.annotations || []).length;
-          console.log(newIndex);
           if(newIndex > 0) {
              var foundCopy = false;
              div.layout.scene.annotations.forEach(function(ann, sameIndex) {
@@ -311,7 +313,6 @@ function fourDimScatterPlot(div, dims, chosen_algs){
                return;
              }
            }
-           console.log(div.data);
            Plotly.relayout(div, 'scene.annotations['+ 0 + ']', 'remove');
            Plotly.relayout(div, 'scene.annotations[' + 0 + ']', newAnnotation);
            for (var i1 = 0; i1 < div.data.length; i1++) {
@@ -324,8 +325,9 @@ function fourDimScatterPlot(div, dims, chosen_algs){
 
           })
           });
-
 }
+
+//parallele plot function
 function fourDimParallel(div, dims, chosen_alg){
 
   var dimensions_ = [];
