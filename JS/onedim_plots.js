@@ -113,41 +113,99 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
     Plotly.newPlot(div, data, layout);
 
   }else{
-    let data = [];
-    for (var i = 0; i<chosen_algs_names.length; i++){
-      let algorithm_index = elementIndex(Algorithms_names, chosen_algs_names[i]);
-      let alg_data = Algorithms_data[algorithm_index][dimensionIndex];
-      let range = Array.from(Array(alg_data.length).keys())
+     let data = [];
+     let dimensionIndex = elementIndex(Dimensions_names, dim);
+     let trace = {}
 
-      var trace1 = {
-      x: range,
-      y: alg_data,
-      type: 'scatter',
-      mode: 'markers',
-      line: {
-        color: Algorithms_colors[algorithm_index]
-      },
-      name: chosen_algs_names[i],
-      transition: {
-        duration: 500,
-        easing: 'cubic-in-out'
-      },
-      frame: {
-        duration: 500
-        }
-      };
+     for (var i = 0; i<chosen_algs_names.length; i++){
+       let algorithm_index = elementIndex(Algorithms_names, chosen_algs_names[i]);
+       var x = Algorithms_data[algorithm_index][dimensionIndex]
+       let max = Math.max.apply(Math,x);
+       console.log(max);
+       var y = []
+       for (var i = 0; i < x.length; i++) {
+         y.push(i.toString())
+       }
 
-      data.push(trace1);
+       let animation_type = [{
+         //fill: 'tozeroy',
+         type: 'scatter',
+         mode: 'lines',
+         line: {color: Algorithms_colors[algorithm_index]}
+      }]
 
+       let frames = []
+       var n = x.length;
+       for (var i = 0; i < n; i++) {
+        frames[i] = {data: [{x: [], y: []}]}
+        frames[i].data[0].x =  y.slice(0, i+1);
+        frames[i].data[0].y =  x.slice(0, i+1);
       }
-
-      var layout = {
-         yaxis:{zeroline:false, title: {text: dim}},
-         xaxis:{zeroline:false, title: {text: 'x'}}
-      };
-
-      Plotly.newPlot(div, data, layout)
+      console.log(frames);
+       trace = {
+         xaxis: {
+          type: 'linear',
+          range: [
+            0, n-1
+           ],
+           showgrid: false,
+           showline: false,
+           showticklabels: false,
+           zeroline: false
+         },
+         yaxis: {
+           type: 'linear',
+           range: [
+             frames[n-1].data[0].x[0],
+             frames[n-1].data[0].x[n-1]
+           ],
+           showgrid: false,
+           showline: false,
+           showticklabels: false,
+           zeroline: false
+         },
+         annotations: [{
+           showarrow: false,
+           text:	"<b>TESTING</b>",
+           font: {
+             family:	'Gravitas One',
+             size:	48,
+             color: 'white'
+           },
+           xref:	'paper',
+           yref:	'paper',
+           x: 0.5,
+           y: 0.5
+         }, {
+           showarrow: false,
+           xref:	'paper',
+           yref:	'paper',
+           x: 0.5,
+           y: 0.35
+         }]
+       }
+       data.push(trace)
+       Plotly.newPlot(div, animation_type, data).then(function() {
+         Plotly.animate(div, frames, {
+           // transition: {
+           //   duration: 0,
+           // },
+         frame: {
+           duration: 0,
+           redraw: true
+         }
+       });
+     });
+     data = []
     }
+  }
+  // var layout = {
+  //    yaxis:{zeroline:false, title: {text: dim}},
+  //    xaxis:{zeroline:false, title: {text: 'x'}}
+  // };
+  //
+  // Plotly.newPlot(div, data, layout);
+
     div.on('plotly_click',
       function(data){
         console.log(data);
