@@ -3,12 +3,14 @@ var input_content = document.getElementById("input_content");
 var local_files_choice = document.getElementById('local_files_choice');
 var server_files_choice = document.getElementById('server_files_choice');
 
-var Algorithms_names = [];
-var Dimensions_names = [];
-var Algorithms_data = [];
-var Algorithms_colors = [];
-var INDEXRECORDER = [];
+//Data structures for all plots
+var Algorithms_names = []; //stores Algorithms names
+var Dimensions_names = []; //Stores Dimensions names
+var Algorithms_data = [];  //stores All algorithm data by algorithm by dimension
+var Algorithms_colors = [];//stores Algorithms colores
+var INDEXRECORDER = [];    //stores Algorithms Files length and name
 
+//return given type of data structures
 function get_data_from_start(what){
   switch (what) {
     case 'Algorithms_names':return Algorithms_names;
@@ -17,16 +19,18 @@ function get_data_from_start(what){
     case 'Algorithms_colors':return Algorithms_colors;
   }
 }
-
+//Event listener for local files input confirmation
 document.getElementById('done_button').addEventListener('click', e => {
 
-  console.log(Algorithms_data); //check
-  console.log(Algorithms_names); //check
-  console.log(Dimensions_names); //check
-  console.log(Algorithms_colors); //check
-
+  console.log(Algorithms_data);
+  console.log(Algorithms_names);
+  console.log(Dimensions_names);
+  console.log(Algorithms_colors);
+  console.log(INDEXRECORDER);
+  //removes current page with a fade out visual effect
   document.querySelector('.input_file_start').style.animation = "fadeOut 1s";
 
+  //After previous animation is done shows the main content and sidemenu with a fade in effect
   setTimeout(function(){
     document.querySelector('.input_file_start').remove();
 
@@ -42,13 +46,14 @@ document.getElementById('done_button').addEventListener('click', e => {
 
 
 });
-
+//animations for welcome page
 welcome_text.addEventListener('mouseover',function(){
   welcome_text.style = 'color:gray'
 })
 welcome_text.addEventListener('mouseleave',function(){
   welcome_text.style = 'color:white'
 })
+//Event when user clicks on the welcome button - shows the type of files to demonstrade
 welcome_text.addEventListener('click',function(){
   let welcome_content = document.getElementById('welcome');
   let type_file_chooser = document.getElementById('type_file_chooser');
@@ -60,6 +65,7 @@ welcome_text.addEventListener('click',function(){
   },1000)
 })
 
+//handler for if the user chooses to see local files
 document.getElementById('local_files_choice').addEventListener('click' , e => {
   let type_file_chooser = document.getElementById('type_file_chooser');
   let input_content = document.getElementById('input_content');
@@ -78,14 +84,16 @@ document.getElementById('local_files_choice').addEventListener('click' , e => {
   },1000)
 });
 
+//handler for if the user chooses to see files stored in the server
 document.getElementById('server_files_choice').addEventListener('click' , e => {
   let type_file_chooser = document.getElementById('type_file_chooser');
-  get_files_from_server()
+  //gets the files from the server
+  get_files_from_server();
+  //fades the page out
   type_file_chooser.style.animation = "fadeOut 1s";
-
-
 });
 
+//handler if local files are droped !! not fully working
 document.querySelectorAll('.drop-zone__input').forEach((inputElement) => {
   const dropZoneElement = inputElement.closest('.drop-zone');
 
@@ -152,7 +160,6 @@ document.querySelectorAll('.drop-zone__input').forEach((inputElement) => {
         display_file_data(inputElement.files[0])
       }
 
-//EDu
     }
     dropZoneElement.classList.remove('drop-zone--over');
   });
@@ -184,13 +191,16 @@ function loadFileEntry(_chosenEntry) {
 }
 //************************************************************************************************************************************************
 
+//Update thumbnail image when user loads a file
 function updateThumbnail(dropZoneElement,file){
   let thumbnailElement = dropZoneElement.querySelector('.drop-zone__thumb');
 
+  //if the dropzone is shown then hide
   if (dropZoneElement.querySelector('.drop-zone__prompt').style.display !== 'none') {
     dropZoneElement.querySelector('.drop-zone__prompt').style.display = 'none';
   }
 
+  //if there's no thumnbnail element then create it
   if (!thumbnailElement) {
     thumbnailElement = document.createElement('div');
     thumbnailElement.classList.add('drop-zone__thumb');
@@ -204,21 +214,24 @@ function updateThumbnail(dropZoneElement,file){
     thumbnailElement.dataset.label = file;
   }
 
-
+  //sets thumnbnail image with folder image
   thumbnailElement.style.backgroundImage = "url('./images/folder_icon.png')";
 }
 
+//display load file data to the user
 function display_file_data(file){
+  //in case there's already a folder being showned then remove it's information
   if (document.querySelector('.file_data')) {
     document.querySelector('.file_data').remove();
   }
+  //create all elements to show the folder information
   const file_data = document.createElement('div');
   file_data.classList.add('file_data');
 
   const filename_content = document.createElement('div');
   filename_content.classList.add('filename_content');
   var filename = document.createElement('span');
-  filename.innerHTML = 'Algoritmo:'
+  filename.innerHTML = 'Algorithm:'
   var input_name = document.createElement('input');
   input_name.type = 'text';
   input_name.size = '30';
@@ -235,7 +248,6 @@ function display_file_data(file){
     display_folder_data(file.name)
   }
 
-  //get_file_dimensions(file)
 }
 
 function display_folder_data(folder_name,files){
@@ -249,7 +261,7 @@ function display_folder_data(folder_name,files){
   filename_content.classList.add('filename_content');
 
   var filename = document.createElement('span');
-  filename.innerHTML = 'Algoritmo:'
+  filename.innerHTML = 'Algorithm:'
 
   var input_name = document.createElement('input');
   input_name.type = 'text';
@@ -272,7 +284,7 @@ function display_folder_data(folder_name,files){
   files_config_content.classList.add('files_config_content');
 
   var files_config_title = document.createElement('span');
-  files_config_title.innerHTML = 'Padrão de nome:'
+  files_config_title.innerHTML = 'Name pattern:'
 
   var files_config_input = document.createElement('input');
   files_config_input.type = 'text';
@@ -283,7 +295,7 @@ function display_folder_data(folder_name,files){
   file_separator_content.classList.add('file_separator_content');
 
   var file_separator_title = document.createElement('span');
-  file_separator_title.innerHTML = 'Separador:'
+  file_separator_title.innerHTML = 'Separator:'
 
   var file_separator_input = document.createElement('input');
   file_separator_input.type = 'text';
@@ -336,8 +348,9 @@ function get_folder_dimensions(files,file_data_div){
 
         let container = document.querySelector('.dimensions_content');
 
+        //create color color_chooser
         var cor = document.createElement('span');
-        cor.innerHTML = 'Cor:';
+        cor.innerHTML = 'Color:';
 
         var color_chooser = document.createElement('input');
         color_chooser.id = 'color_getter';
@@ -347,13 +360,14 @@ function get_folder_dimensions(files,file_data_div){
         container.appendChild(cor);
         container.appendChild(color_chooser);
 
-
+        //if there's not a add data button then create it
         if(!document.getElementById('add_button')){
 
           var add_button = document.createElement('span');
           add_button.id = 'add_button';
-          add_button.innerHTML = 'Adicionar';
+          add_button.innerHTML = 'Add Data';
 
+          //when cicked saves the files data on the data structures
           add_button.addEventListener('click' , e =>{
             add_file_data(files)
             add_button_action();
@@ -367,6 +381,7 @@ function get_folder_dimensions(files,file_data_div){
   }
 }
 
+//creates data visuals for user
 function create_data_visualizer(dimension,file_data_div,index,files){
   var input = document.createElement('input');
   input.classList.add('input_' + index);
@@ -380,7 +395,7 @@ function create_data_visualizer(dimension,file_data_div,index,files){
     container.classList.add('dimensions_content');
 
     var title = document.createElement('span');
-    title.innerHTML = 'Dimensões:';
+    title.innerHTML = 'Dimensions:';
     container.appendChild(title);
 
     container.appendChild(input)
@@ -390,7 +405,7 @@ function create_data_visualizer(dimension,file_data_div,index,files){
   else {
     document.querySelector('.dimensions_content').appendChild(input);
   }
-
+  //when the dimension name changer input get the enter key pressed changes it's name on the data structure
   input.addEventListener('keydown', e => {
     if (e.keyCode === 13) {
       e.preventDefault();
@@ -403,6 +418,7 @@ function create_data_visualizer(dimension,file_data_div,index,files){
 
 }
 
+//prepares page to get a new folder loaded by removing the previous folder's information
 function add_button_action(){
   updateAddedDimensions();
   let color = document.getElementById('color_getter').value;
@@ -430,8 +446,9 @@ function updateAddedDimensions(){
 }
 
 function add_file_data(files){
+  //creates a new slot to add the files' dimensions and names
   INDEXRECORDER.push([]);
-  // let algorithm_index = Algorithms_names.length;
+
   let num_dimensions = Dimensions_names.length;
 
   let data = [];
@@ -443,12 +460,11 @@ function add_file_data(files){
   files = Array.from(files);
   files.sort(function (a, b) {
     if( a.name.includes('run') && b.name.includes('run')){
-      // console.log(a.name.split('run')[0])
-      // console.log(b.name.split('run')[0])
       return (parseInt(a.name.split('run')[1]) - parseInt(b.name.split('run')[1]));
     }
     return;
   });
+  //runs throught the folder's files
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
     // console.log(file.name);
@@ -458,7 +474,7 @@ function add_file_data(files){
       var reader = new FileReader();
       reader.readAsText(file);
       reader.onload = function(e) {
-          //get the file.
+         //get the file.
          var csv = event.target.result;
          //split and get the rows in an array
          var rows = csv.split('\n');
@@ -477,13 +493,9 @@ function add_file_data(files){
 
    Algorithms_data.push(data);
    files = [];
-   // console.clear();
-   // console.log(Algorithms_data);
-   // console.log(Algorithms_names);
-   // console.log(Dimensions_names);
-   // console.log(Algorithms_colors);
- }
 
+ }
+ //checks if the file name is valid with the pattern given by the githubusercontent
  function valid_file_name(file_name){
    var patterns = document.getElementsByClassName('files_config_content')[0].getElementsByTagName('input')[0].value.split('*');
    console.log(patterns);
@@ -499,14 +511,15 @@ function add_file_data(files){
    return valid;
  }
 
+//simulates getting files from a server by using a public Github Repository
  function get_files_from_server(){
+   //link with file containning the files and folders distribution
    fetch("https://raw.githubusercontent.com/Eduardo-Filipe-Ferreira/ADS-Files-Repository/main/FilesLocation.json")
   .then(response => response.json())
   .then(json => handle_server_files(json[0]));
  }
-
+ //Handels the file that contains the distribution of the files in the Repository
  function handle_server_files(JsonFile){
-   // console.log(JsonFile.Algorithms);
    let partialPath = JsonFile.Algorithms.PartialPath;
 
    let has_dims = false;
@@ -518,12 +531,8 @@ function add_file_data(files){
         let num_files = JsonFile.Algorithms.Files[key].num_files;
         let folder_name = JsonFile.Algorithms.Files[key].folder_name;
 
-        // console.log(folder_name);
-
         let folder_data = []
-
-        // console.log(folder_data);
-
+        //if the new algorithm is not in the data structures then add it and create a slot for index recorder
         if (!Algorithms_names.includes(folder_name)) {
           Algorithms_names.push(folder_name);
           Algorithms_colors.push(getRandomColor())
@@ -533,17 +542,17 @@ function add_file_data(files){
           let lastIndex = INDEXRECORDER.length - 1;
 
           let file_name = partialPath + '/' + folder_name + '/' + common_name + (i+1) +'.csv';
-          // console.log(file_name)
+
           let name = common_name + (i+1) +'.csv';
+          //reads file
           Plotly.d3.csv(file_name, function(data){
-            // console.log(data.length);
+
             if(!has_dims){
               for (key in data[0]){
                   if (Dimensions_names.length === 0) {
 
                     for (var j = 0; j < key.split(';').length; j++) {
                       Dimensions_names.push(key.split(';')[j]);
-                      // folder_data.push([])
                     }
                   }
                   has_dims = true;
@@ -560,24 +569,20 @@ function add_file_data(files){
 
             for (var i = 0; i < folder_data.length; i++) {
               for (var k = 0; k < file_data[i].length; k++) {
-
                 folder_data[i].push(file_data[i][k]);
-
               }
-              // console.logi);
-              // folder_data[i].push(file_data[i]);
             }
-
           });
         }
-        // console.log(folder_data);
+
         Algorithms_data.push(folder_data);
       }
     }
 
     document.getElementById('done_button').click();
   }
-
+  
+  //adds the information of each file on the index recorder data structure
   function processData(rows, lastIndex, file_name) {
 
     let data = []
@@ -594,11 +599,10 @@ function add_file_data(files){
         }
       }
     }
-    // console.log(data);
     return data
-
   }
 
+  //creates random colors for the folders added from the server
   function getRandomColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';

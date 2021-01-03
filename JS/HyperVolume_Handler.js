@@ -1,3 +1,5 @@
+
+//calculates the hypervolume for 2d points given and array x and array y
 function hyperVolume2D(points){
   let area = 0;
   let ordered_points = [];
@@ -18,6 +20,7 @@ function hyperVolume2D(points){
 
 }
 
+//creates the hypervolume spans that show the hypervolumes' value for each given algoritm
 function create_hypervolume_list(div,algs_chosen){
 
   if (div.parentNode.parentNode.querySelector('.hypervolumes_list')) {
@@ -45,6 +48,7 @@ function create_hypervolume_list(div,algs_chosen){
 
 }
 
+//creates a pop up to change the min and max values for caculating the hypervolumes' values
 function create_min_max_modal(div,dims,alg_name){
   var alg_index = Algorithms_names.indexOf(alg_name);
 
@@ -149,9 +153,9 @@ modal_content_range_list.appendChild(range_change_button)
 div.parentNode.parentNode.appendChild(modal_range_list)
 }
 
+//creates listener for the button to confirm the changes for min and max values
 function change_button_listener(range_change_button){
   range_change_button.addEventListener('click' , e => {
-
 
     var points = []
 
@@ -162,9 +166,6 @@ function change_button_listener(range_change_button){
     let algorithm = range_change_button.parentNode.getElementsByTagName('span')[1].innerHTML
 
     let graph = range_change_button.parentNode.parentNode.parentNode.getElementsByClassName('graph')[0]
-
-    console.log(algorithm);
-    console.log(hypervolume);
 
     var dims = 0
 
@@ -192,9 +193,6 @@ function change_button_listener(range_change_button){
 
     }
 
-    console.log(points);
-
-
     if (dims === 3) {
       points = validate_3D_points(points,mins_maxs)
       update_hypervolume_value(graph,algorithm,hyperVolume3D(points))
@@ -204,19 +202,16 @@ function change_button_listener(range_change_button){
       update_hypervolume_value(graph,algorithm,hyperVolume4D(points))
     }
 
-
-
-
-
-
     range_change_button.parentNode.parentNode.remove()
   });
 }
 
+//checks if the given point is within the given min and max range
 function valid_point(point,min,max){
   return point >= min && point <= max
 }
 
+//validates 3D points for all dims ranges
 function validate_3D_points(points,mins_maxs){
   let valid_points = [[],[],[]]
   for (var i = 0; i < points[0].length; i++) {
@@ -232,10 +227,10 @@ function validate_3D_points(points,mins_maxs){
       valid_points[2].push(dim3_point)
     }
   }
-  console.log(valid_points);
   return valid_points;
 }
 
+//validates 4D points for all dims ranges
 function validate_4D_points(points,mins_maxs){
   let valid_points = [[],[],[],[]]
   for (var i = 0; i < points[0].length; i++) {
@@ -254,19 +249,19 @@ function validate_4D_points(points,mins_maxs){
       valid_points[3].push(dim4_point)
     }
   }
-  console.log(valid_points);
   return valid_points;
 }
 
 
 
-
+//listener for closing the pop up
 function add_close_listener(close){
   close.addEventListener('click' , e => {
     close.parentNode.parentNode.remove();
   });
 }
 
+//listener for showing the values on the sliders given by the user
 function range_events_handler(min_slider,max_slider){
   min_slider.addEventListener('change' , e => {
     // console.log(min_slider.value);
@@ -288,6 +283,7 @@ function range_events_handler(min_slider,max_slider){
 
 }
 
+//creates the buttons to change the range for hypervolume calculations for given algorithms and dims
 function create_range_changer_buttons(div,algs_chosen,dims){
   var hypervolume_range_changer = document.createElement('div');
   hypervolume_range_changer.classList.add('hypervolume_range_changer');
@@ -312,6 +308,7 @@ function create_range_changer_buttons(div,algs_chosen,dims){
 
 }
 
+//updates the value of the hypervolume calculated on given algoritm
 function update_hypervolume_value(div,alg_name,new_value){
   let hypervolume_span = div.parentNode.parentNode.getElementsByClassName('hypervolumes_list')[0].getElementsByClassName(alg_name)[0].getElementsByTagName('span')[0];
 
@@ -320,6 +317,7 @@ function update_hypervolume_value(div,alg_name,new_value){
   hypervolume_span.innerHTML = comun_part + ': ' + new_value.toFixed(5);
 }
 
+//transformation of a matrix function
 function transform_points(points){
   var ordered_points = []
 
@@ -336,10 +334,13 @@ function transform_points(points){
   return ordered_points
 }
 
+//sorts list by given index
 function sort_list(list,dim_index){
   return list.sort(function(a,b) {return a[dim_index] - b[dim_index];});
 }
 
+//calculates the hypervolume for 3D points
+//hypervolume is calculated by getting all points on the same z value and getting their area (using 2D hypervolume) and multipling by the height
 function hyperVolume3D(points){
   var ordered_points = sort_list(transform_points(points),2);
 
@@ -370,7 +371,7 @@ function hyperVolume3D(points){
 }
 
 
-
+//gets all the points in the same Z level
 function get_points_at_level(points,z){
   var points_at_level = []
 
@@ -382,6 +383,8 @@ function get_points_at_level(points,z){
   return points_at_level;
 }
 
+//calculates the hypervolume for 3D points
+//hypervolume is calculated by getting all points on the same level of the fourth dim and getting their valume (using 3D hypervolume) and multipling by the height
 function hyperVolume4D(points){
   var ordered_points = sort_list(transform_points(points),3);
 
@@ -412,6 +415,7 @@ function hyperVolume4D(points){
   return hypervolume;
 }
 
+//returns values on the same level for the 4th dim
 function get_points_at_level_4d(points,o){
   var points_at_level = []
 

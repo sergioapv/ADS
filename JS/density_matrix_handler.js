@@ -1,8 +1,5 @@
+//creates the matrix elements for 2D density plots
 function create_matrix_density(div, dims , chosen_algs){
-
-
-  // var matrix_size = 1;
-
 
   var rows = 1;
   var columns = 1;
@@ -21,13 +18,10 @@ function create_matrix_density(div, dims , chosen_algs){
     }
   }
 
-
-  // let columns_rows = ''
   let temp_rows = '';
   let temp_columns = '';
-  console.log(rows);
-  console.log(columns);
-  console.log(chosen_algs.length);
+
+  //if it has more than 1 algorithm needs to create the matrix else it's a normal density plot
 
   if (columns * rows != 1) {
     if (div.parentNode.parentNode.querySelector('.hypervolumes_list')) {
@@ -40,10 +34,6 @@ function create_matrix_density(div, dims , chosen_algs){
 
     let density_matrix = document.createElement('div');
     density_matrix.classList.add('density_matrix');
-
-    // for (var i = 0; i < matrix_size; i++) {
-    //   columns_rows += '360px '
-    // }
 
     for (var i = 0; i < rows; i++) {
       temp_rows += '360px '
@@ -74,6 +64,8 @@ function create_matrix_density(div, dims , chosen_algs){
   }
 
 }
+
+//Plotly bug that the graphs don't get created with the div's size unless it's told so
 function twoDimDensityPlot_4_matrix(div, dims, chosen_algs){
   algIndex1 = Algorithms_names.indexOf(chosen_algs[0]);
   dim_index1 = Dimensions_names.indexOf(dims[0])
@@ -92,7 +84,7 @@ function twoDimDensityPlot_4_matrix(div, dims, chosen_algs){
   };
   var data = [trace1];
   var layout = {
-    width:360,
+    width:360, // matrix div size
     height:360,
     showlegend: false,
     autosize: true,

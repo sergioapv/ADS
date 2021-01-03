@@ -10,6 +10,7 @@ var span = document.getElementsByClassName("close")[0];
 
 var plotbtn = document.getElementById("Plots");
 
+//listener for plot button
 plotbtn.addEventListener("click", function() {
   switch (getDimensions().length) {
     case 1:{
@@ -57,6 +58,7 @@ window.onclick = function(event) {
   }
 }
 
+//listener for minimizing the sidemenu
 document.querySelector('.sidemenu_minimizer').addEventListener('click',function(){
   let sidemenu = document.querySelector('.sidemenu');
   let main_content = document.querySelector('.main_content')
@@ -89,30 +91,13 @@ document.querySelector('.sidemenu_minimizer').addEventListener('click',function(
 
 })
 
-let dimension_type = document.querySelectorAll('.Dimension_selector');
-dimension_type.forEach((dimension) => {
-  dimension.addEventListener('click',function(){
-    let parent = dimension.parentNode;
-    let children = parent.childNodes;
-    children.forEach((child) => {
-      if(child.id === 'Algorithm_chooser'){
-        if (child.style.display === 'none') {
-          child.style.display = 'grid'
-        }
-        else {
-          child.style.display = 'none'
-        }
-      }
-    });
-  });
-});
-
+//updates the algorithms_chosen data structure when some algoritm is selected on the sidemenu
 function algs_chosen(){
   let select_all_list = document.querySelectorAll('.Dimension_selector');
   select_all_list.forEach((div) => {
     let selectors = div.parentNode.getElementsByTagName('input');
     for (var i = 0; i < selectors.length; i++) {
-      if (selectors[i].id === 'select_all') {
+      if (selectors[i].id === 'select_all') { // select all button for future work
         selectors[i].addEventListener('change',function(){
           console.log(selectors);
           console.clear()
