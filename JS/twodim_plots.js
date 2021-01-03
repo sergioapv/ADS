@@ -1,3 +1,5 @@
+
+//Makes a 2 Dimension plot according the chosen plotType
 function makeTwoDimPlot(div , dims , chosen_algs, plotType){
   switch (plotType) {
     case 'scatter2d':
@@ -6,10 +8,10 @@ function makeTwoDimPlot(div , dims , chosen_algs, plotType){
     case 'density':
       create_matrix_density(div, dims, chosen_algs)
       break;
-
   }
 }
 
+//Creates a dropdown to choose between plot types, for 2 dimensions
 function create_twoDim_dropDown(info_icon, plot_title){
   let dropdown = document.createElement('div');
   dropdown.setAttribute('class', 'choose_two_dim');
@@ -38,18 +40,18 @@ function create_twoDim_dropDown(info_icon, plot_title){
   createTwoDimDropListner(info_icon, dropdown)
 }
 
+//Creates a listner for the plots the user can choose from, in the dropdown
 function createTwoDimDropListner(info_icon, dropdown){
   console.clear();
   let options = dropdown.childNodes;
+
   for(let i = 0; i<options.length; i++){
     options[i].addEventListener('click', function(){
       let dim ='';
       let dimNames = dropdown.parentNode.getElementsByClassName('dim_title')[0].textContent.split(' vs ');
       let algs_chosen = dropdown.parentNode.getElementsByClassName('alg_title')[0].textContent.split(' vs ');
       let div = (dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('graph')[0] || dropdown.parentNode.parentNode.getElementsByClassName('graphs_content')[0].getElementsByClassName('density_matrix')[0]);
-
       let plot_content = div.parentNode.parentNode;
-
       let graphs_content = div.parentNode;
       graphs_content.remove();
 
@@ -65,6 +67,8 @@ function createTwoDimDropListner(info_icon, dropdown){
       makeTwoDimPlot(new_graph, dimNames, algs_chosen, options[i].value)
     });
   }
+
+  //When info_icon is clicked the dropdown becomes visible or hidden according to it previous state
   info_icon.addEventListener('click', function(){
     if(dropdown.style.visibility == 'hidden'){
       dropdown.style.visibility = 'visible';
@@ -81,81 +85,8 @@ function createTwoDimDropListner(info_icon, dropdown){
 }
 
 
-function twoDimScatterPlot(div, dims, chosen_algs){
-  dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
-  for(var x = 0; x<dim_indexes.length; x++){
-    if(dim_indexes[x] == -1){
-      dim_indexes[x] = dim_indexes.length - 1
-    }
-  }
-  create_hypervolume_list(div,chosen_algs)
-  var data =[];
-  for(let i = 0; i<chosen_algs.length; i++){
-    let algIndex = Algorithms_names.indexOf(chosen_algs[i]);
-    let alg = Algorithms_data[algIndex]
-    console.log(hyperVolume2D([alg[dim_indexes[0]], alg[dim_indexes[1]]]));
-    var trace = {
-      x: alg[dim_indexes[0]],
-      y: alg[dim_indexes[1]],
-      hovertemplate: '<b>' + chosen_algs[i] + '</b><br>' +
-                     '<i>' + dims[0] +'</i>: %{x}'  +
-                     '<br><i>' + dims[1] + '</i>: %{y} <br>',
-      mode: 'markers',
-      type: 'line',
-      line: {
-        color: Algorithms_colors[algIndex]
-      },
-      name: chosen_algs[i],
-      };
-      data.push(trace);
-      update_hypervolume_value(div,chosen_algs[i],hyperVolume2D([alg[dim_indexes[0]], alg[dim_indexes[1]]]));
-    }
-  layout = {
-     hovermode:'closest',
-     xaxis:{zeroline:false, title: {text: dims[0]}},
-     yaxis:{zeroline:false, title: {text: dims[1]}}
-  };
-
-
-  Plotly.newPlot(div, data, layout);
-
-  div.on('plotly_relayout',
-    function(eventdata){
-      console.log(eventdata);
-      let x_start = eventdata['xaxis.range[0]']
-      let x_end = eventdata['xaxis.range[1]']
-      console.log(x_start + ' ' + x_end);
-      let point_list = [[],[]]
-      // console.log(div.data);
-      for (var i = 0; i < div.data.length; i++) {
-        // console.log(div.data[i].x);
-        point_list = [[],[]];
-
-        x_start = (eventdata['xaxis.range[0]'] || Math.min.apply(Math, div.data[i].x))
-        x_end = (eventdata['xaxis.range[1]'] || Math.max.apply(Math, div.data[i].x))
-
-        // console.log(div.data[i].x);
-        // console.log(Math.max.apply(Math, div.data[i].x));
-
-        for (var j = 0; j < div.data[i].x.length; j++) {
-
-          let x = div.data[i].x[j];
-          let y = div.data[i].y[j];
-
-          if ((x >= x_start) && (x <= x_end)) {
-
-            point_list[0].push(x);
-            point_list[1].push(y);
-          }
-
-        }
-        // console.log(point_list);
-        console.log(hyperVolume2D(point_list));
-        update_hypervolume_value(div,div.data[i].name,hyperVolume2D(point_list))
-      }
-
-  });
-
+// Draws an annotation in the point clicked and highlights points that belong to the same file
+function display_annotations_listener(div, dims, chosen_algs){
   div.on('plotly_click',
     function(data){
       console.log(div.data);
@@ -209,7 +140,6 @@ function twoDimScatterPlot(div, dims, chosen_algs){
         }
       };
 
-      // let newData = div.data.splice(0,1)
       var point = data.points[0],
           newAnnotation = {
             x: point.xaxis.d2l(point.x),
@@ -218,9 +148,9 @@ function twoDimScatterPlot(div, dims, chosen_algs){
             ax: 0,
             ay: -120,
             bgcolor: 'rgba(255, 255, 255, 0.9)',
-            arrowcolor: point.fullData.marker.color,
+            arrowcolor: Algorithms_colors[algIndex],
             font: {size:12},
-            bordercolor: point.fullData.marker.color,
+            bordercolor: Algorithms_colors[algIndex],
             borderwidth: 3,
             borderpad: 4,
             text:
@@ -231,17 +161,15 @@ function twoDimScatterPlot(div, dims, chosen_algs){
                   '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[1])
         },
         newIndex = (div.layout.annotations || []).length;
-    //div.layout.annotations = []
-     // delete instead if clicked twice
+
     if(newIndex) {
        var foundCopy = false;
        div.layout.annotations.forEach(function(ann, sameIndex) {
-         //Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
+
           if(ann.text === newAnnotation.text ) {
             div.layout.annotations = []
             Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
-         //   Plotly.restyle(div, updateResetAll);
-         //
+
               foundCopy = true;
         }
        });
@@ -256,14 +184,91 @@ function twoDimScatterPlot(div, dims, chosen_algs){
      Plotly.relayout(div, 'annotations[' + newIndex + ']', newAnnotation);
      Plotly.restyle(div, updateAll);
      Plotly.restyle(div, update, elementIndex(chosen_algs, point.data.name));
-     // div.layout.annotations = [];
-  })
+    })
+  }
 
+// Listens to graphs being zoomed in : the hypervolume changes according to the points being visualized
+function update_hypervolume_on_relayout(div){
+  div.on('plotly_relayout',
+    function(eventdata){
+      console.log(eventdata);
+      let x_start = eventdata['xaxis.range[0]']
+      let x_end = eventdata['xaxis.range[1]']
+      console.log(x_start + ' ' + x_end);
+      let point_list = [[],[]]
 
+      for (var i = 0; i < div.data.length; i++) {
+        point_list = [[],[]];
 
+        x_start = (eventdata['xaxis.range[0]'] || Math.min.apply(Math, div.data[i].x))
+        x_end = (eventdata['xaxis.range[1]'] || Math.max.apply(Math, div.data[i].x))
 
+        for (var j = 0; j < div.data[i].x.length; j++) {
+
+          let x = div.data[i].x[j];
+          let y = div.data[i].y[j];
+
+          if ((x >= x_start) && (x <= x_end)) {
+            point_list[0].push(x);
+            point_list[1].push(y);
+          }
+        }
+        update_hypervolume_value(div,div.data[i].name,hyperVolume2D(point_list))
+      }
+  });
 }
 
+//Plots a scatter plot for 2 dimensions, given a div, the dimensions and algorithms to be plotted
+function twoDimScatterPlot(div, dims, chosen_algs){
+  dim_indexes = [Dimensions_names.indexOf(dims[0]), Dimensions_names.indexOf(dims[1])]
+
+  for(var x = 0; x<dim_indexes.length; x++){
+    if(dim_indexes[x] == -1){
+      dim_indexes[x] = dim_indexes.length - 1
+    }
+  }
+
+  create_hypervolume_list(div,chosen_algs)
+
+  var data =[];
+  for(let i = 0; i<chosen_algs.length; i++){
+    let algIndex = Algorithms_names.indexOf(chosen_algs[i]);
+    let alg = Algorithms_data[algIndex]
+    console.log(hyperVolume2D([alg[dim_indexes[0]], alg[dim_indexes[1]]]));
+    var trace = {
+      x: alg[dim_indexes[0]],
+      y: alg[dim_indexes[1]],
+      hovertemplate: '<b>' + chosen_algs[i] + '</b><br>' +
+                     '<i>' + dims[0] +'</i>: %{x}'  +
+                     '<br><i>' + dims[1] + '</i>: %{y} <br>',
+      mode: 'markers',
+      type: 'line',
+      line: {
+        color: Algorithms_colors[algIndex]
+      },
+      name: chosen_algs[i],
+      };
+    data.push(trace);
+    update_hypervolume_value(div,chosen_algs[i],hyperVolume2D([alg[dim_indexes[0]], alg[dim_indexes[1]]]));
+  }
+
+  layout = {
+     hovermode:'closest',
+     xaxis:{zeroline:false, title: {text: dims[0]}},
+     yaxis:{zeroline:false, title: {text: dims[1]}}
+  };
+
+  Plotly.newPlot(div, data, layout);
+
+  //checks if there has been a relayout
+  update_hypervolume_on_relayout(div)
+
+// Checks if points have been clicked
+  display_annotations_listener(div, dims, chosen_algs);
+}
+
+
+//Plots a density plot for 2 dimensions, given a div, the dimensions and algorithms to be plotted
 function twoDimDensityPlot(div, dims, chosen_algs){
 
   algIndex1 = Algorithms_names.indexOf(chosen_algs[0]);
