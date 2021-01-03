@@ -1,6 +1,6 @@
 
 // Draws an annotation in the point clicked and highlights points that belong to the same file
-function display_annotations_listener(div, dims, chosen_algs){
+function display_annotations_listener3D(div, dims, chosen_algs){
   div.addEventListener('click', e => {
     div.once('plotly_click',
       function(data){
@@ -140,5 +140,5 @@ function threeDimScatterPlot(div, dims, chosen_algs){
   Plotly.newPlot(div, data, layout);
 
   //Checks if points have been clicked
-  display_annotations_listener(div, dims, chosen_algs)
+  display_annotations_listener3D(div, dims, chosen_algs)
 }

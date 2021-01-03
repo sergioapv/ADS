@@ -86,7 +86,7 @@ function createTwoDimDropListner(info_icon, dropdown){
 
 
 // Draws an annotation in the point clicked and highlights points that belong to the same file
-function display_annotations_listener(div, dims, chosen_algs){
+function display_annotations_listener2D(div, dims, chosen_algs){
   div.on('plotly_click',
     function(data){
       console.log(div.data);
@@ -188,7 +188,7 @@ function display_annotations_listener(div, dims, chosen_algs){
   }
 
 // Listens to graphs being zoomed in : the hypervolume changes according to the points being visualized
-function update_hypervolume_on_relayout(div){
+function update_hypervolume_on_relayout2D(div){
   div.on('plotly_relayout',
     function(eventdata){
       console.log(eventdata);
@@ -261,10 +261,10 @@ function twoDimScatterPlot(div, dims, chosen_algs){
   Plotly.newPlot(div, data, layout);
 
   //checks if there has been a relayout
-  update_hypervolume_on_relayout(div)
+  update_hypervolume_on_relayout2D(div)
 
 // Checks if points have been clicked
-  display_annotations_listener(div, dims, chosen_algs);
+  display_annotations_listener2D(div, dims, chosen_algs);
 }
 
 
