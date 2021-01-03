@@ -67,6 +67,10 @@ function create_oneDim_dropDown(icon, plot_title){
 
 //Draws plot for 1 dimension, algs(list with the algs to be represented), plotType('box' or 'violin'), div to draw the plot
 function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
+  if (chosen_algs_names.length > 1 && plotType === 'progressive') {
+    alert('Progressive plot is only available for one algorithm')
+    return;
+  }
   let data = [];
   let trace ={};
 
@@ -123,8 +127,8 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
        let max = Math.max.apply(Math,x);
        console.log(max);
        var y = []
-       for (var i = 0; i < x.length; i++) {
-         y.push(i.toString())
+       for (var j = 0; j < x.length; j++) {
+         y.push(j.toString())
        }
 
        let animation_type = [{
@@ -136,10 +140,10 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
 
        let frames = []
        var n = x.length;
-       for (var i = 0; i < n; i++) {
-        frames[i] = {data: [{x: [], y: []}]}
-        frames[i].data[0].x =  y.slice(0, i+1);
-        frames[i].data[0].y =  x.slice(0, i+1);
+       for (var j = 0; j < n; j++) {
+        frames[j] = {data: [{x: [], y: []}]}
+        frames[j].data[0].x =  y.slice(0, j+1);
+        frames[j].data[0].y =  x.slice(0, j+1);
       }
       console.log(frames);
        trace = {
@@ -187,9 +191,6 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
        data.push(trace)
        Plotly.newPlot(div, animation_type, data).then(function() {
          Plotly.animate(div, frames, {
-           // transition: {
-           //   duration: 0,
-           // },
          frame: {
            duration: 0,
            redraw: true
@@ -199,87 +200,86 @@ function makeOneDimPlot(dim, chosen_algs_names, plotType, div){
      data = []
     }
   }
-  // var layout = {
-  //    yaxis:{zeroline:false, title: {text: dim}},
-  //    xaxis:{zeroline:false, title: {text: 'x'}}
-  // };
-  //
-  // Plotly.newPlot(div, data, layout);
-
-    div.on('plotly_click',
-      function(data){
-        console.log(data);
-        let file = getFilePath(data.points[0].data.name, data.points[0].pointIndex)[0]
-        let algIndex = elementIndex(Algorithms_names, data.points[0].data.name)
-        let sum = 0
-        let interval = [];
-        let opacityPoints = [];
-        let borderColor = [];
-        let size = [];
-        for (var i = 0; i < INDEXRECORDER[algIndex].length; i++) {
-          sum += INDEXRECORDER[algIndex][i][0]
-          if(file.includes(INDEXRECORDER[algIndex][i][1])){
-            interval.push(sum - INDEXRECORDER[algIndex][i][0])
-            interval.push(sum)
-            break;
-          }
-        }
-
-        let y = []
-        for (var i = 0; i < Algorithms_data[algIndex][0].length; i++) {
-          if (i >= interval[0] && i <= interval[1]){
-            opacityPoints.push(1)
-            borderColor.push('red')
-            size.push(10)
-          }else{
-            opacityPoints.push(0.05)
-            borderColor.push(Algorithms_colors[algIndex])
-            size.push(1)
-          }
-        }
-
-        var point = data.points[0],
-            newAnnotation = {
-              y: point.y,
-              x: point.x,
-              arrowhead: 6,
-              ax: -10,
-              ay: -90,
-              bgcolor: 'rgba(255, 255, 255, 1)',
-              arrowcolor: point.fullData.marker.color,
-              font: {size:12},
-              bordercolor: point.fullData.marker.color,
-              borderwidth: 3,
-              borderpad: 4,
-              text:
-                    '<b>Point Atributes</b><br><br>' +
-                    '<b>' + dim + '</b><br>'+(point.y) +
-                    '<br><b>File Path</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[0]) +
-                    '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[1])
-          },
-          newIndex = (div.layout.annotations || []).length;
-      if(data.points.length > 1){
-        for (var i = 0; i < div.layout.annotations.length; i++) {
-          div.layout.annotations = []
-          Plotly.relayout(div, 'annotations[' + i + ']', 'remove');
-        }
-        return
-      }
-      if(newIndex) {
-         var foundCopy = false;
-         div.layout.annotations.forEach(function(ann, sameIndex) {
-            if(ann.text === newAnnotation.text ) {
-              div.layout.annotations = []
-              Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
-              foundCopy = true;
-          }
-         });
-         if(foundCopy){
-           return;
-         }
-       }
-       div.layout.annotations = []
-       div.layout.annotations.push(newAnnotation)
-       Plotly.relayout(div, 'annotations[' + newIndex + ']', newAnnotation);
-    })
+  if (plotType !== 'box') {
+    display_annotations_listener(div,dim)
   }
+}
+
+function display_annotations_listener(div,dim){
+  div.on('plotly_click',
+    function(data){
+      console.log(data);
+      let file = getFilePath(data.points[0].data.name, data.points[0].pointIndex)[0]
+      let algIndex = elementIndex(Algorithms_names, data.points[0].data.name)
+      let sum = 0
+      let interval = [];
+      let opacityPoints = [];
+      let borderColor = [];
+      let size = [];
+      for (var i = 0; i < INDEXRECORDER[algIndex].length; i++) {
+        sum += INDEXRECORDER[algIndex][i][0]
+        if(file.includes(INDEXRECORDER[algIndex][i][1])){
+          interval.push(sum - INDEXRECORDER[algIndex][i][0])
+          interval.push(sum)
+          break;
+        }
+      }
+
+      let y = []
+      for (var i = 0; i < Algorithms_data[algIndex][0].length; i++) {
+        if (i >= interval[0] && i <= interval[1]){
+          opacityPoints.push(1)
+          borderColor.push('red')
+          size.push(10)
+        }else{
+          opacityPoints.push(0.05)
+          borderColor.push(Algorithms_colors[algIndex])
+          size.push(1)
+        }
+      }
+
+      var point = data.points[0],
+          newAnnotation = {
+            y: point.y,
+            x: point.x,
+            arrowhead: 6,
+            ax: -10,
+            ay: -90,
+            bgcolor: 'rgba(255, 255, 255, 1)',
+            arrowcolor: point.fullData.line.color,
+            font: {size:12},
+            bordercolor: point.fullData.line.color,
+            borderwidth: 3,
+            borderpad: 4,
+            text:
+                  '<b>Point Atributes</b><br><br>' +
+                  '<b>' + dim + '</b><br>'+(point.y) +
+                  '<br><b>File Path</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[0]) +
+                  '<br><b>Line</b>  <br>'+(getFilePath(point.data.name, point.pointIndex)[1])
+        },
+        newIndex = (div.layout.annotations || []).length;
+    if(data.points.length > 1){
+      for (var i = 0; i < div.layout.annotations.length; i++) {
+        div.layout.annotations = []
+        Plotly.relayout(div, 'annotations[' + i + ']', 'remove');
+      }
+      return
+    }
+    if(newIndex) {
+       var foundCopy = false;
+       div.layout.annotations.forEach(function(ann, sameIndex) {
+          if(ann.text === newAnnotation.text ) {
+            div.layout.annotations = []
+            Plotly.relayout(div, 'annotations[' + sameIndex + ']', 'remove');
+            foundCopy = true;
+        }
+       });
+       if(foundCopy){
+         return;
+       }
+     }
+     div.layout.annotations = []
+     div.layout.annotations.push(newAnnotation)
+     Plotly.relayout(div, 'annotations[' + newIndex + ']', newAnnotation);
+  })
+}
