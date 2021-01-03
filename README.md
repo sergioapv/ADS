@@ -3,6 +3,8 @@ ADS project
 
 Project made in HTML, Javascript and CSS
 
+No Framework is used 
+
 Main HTML File - index.html
 
 All the Javascript files are in the folder 'JS'
