@@ -15,7 +15,7 @@ function makeTwoDimPlot(div , dims , chosen_algs, plotType){
 function create_twoDim_dropDown(info_icon, plot_title){
   let dropdown = document.createElement('div');
   dropdown.setAttribute('class', 'choose_two_dim');
-  dropdown.setAttribute('style', 'visibility: hidden; z-index:99');
+  dropdown.setAttribute('style', 'visibility: hidden; z-index:98');
 
   let scatter2d = document.createElement('span');
   scatter2d.setAttribute('class', 'graphOption');

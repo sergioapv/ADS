@@ -108,7 +108,7 @@ function plot4dim(div, dims, chosen_algs, plotType){
 function create_fourDim_dropDown(icon, plot_title){
   let dropdown = document.createElement('div');
   dropdown.setAttribute('class', 'choose_four_dim');
-  dropdown.setAttribute('style', 'visibility: hidden; z-index:99');
+  dropdown.setAttribute('style', 'visibility: hidden; z-index:98');
 
   let scatter4d = document.createElement('span');
   scatter4d.setAttribute('class', 'graphOption');

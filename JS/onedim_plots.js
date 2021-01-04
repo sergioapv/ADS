@@ -30,7 +30,7 @@ function createOneDimDropListner(icon, dropdown){
 function create_oneDim_dropDown(icon, plot_title){
   let dropdown = document.createElement('div');
   dropdown.setAttribute('class', 'choose_one_dim');
-  dropdown.setAttribute('style', 'visibility: hidden; z-index:99');
+  dropdown.setAttribute('style', 'visibility: hidden; z-index:98');
 
   let box = document.createElement('span');
   box.setAttribute('class', 'graphOption');
