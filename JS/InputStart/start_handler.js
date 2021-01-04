@@ -468,8 +468,9 @@ function add_file_data(files){
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
     // console.log(file.name);
+    let filename = file.name;
     console.log(valid_file_name(file.name));
-    if (valid_file_name(file.name)) {
+    if (valid_file_name(file.name) == true) {
       var splitter = document.getElementsByClassName('file_separator_content')[0].getElementsByTagName('input')[0].value
       var reader = new FileReader();
       reader.readAsText(file);
@@ -479,7 +480,7 @@ function add_file_data(files){
          //split and get the rows in an array
          var rows = csv.split('\n');
          //-2 because csv.split('\n') adds one extra line.
-         INDEXRECORDER[INDEXRECORDER.length-1].push([rows.length - 2, file.name]);
+         INDEXRECORDER[INDEXRECORDER.length-1].push([rows.length - 2, filename]);
          for (var j=0; j<rows.length - 1; j++){ //runs throught lines
            for (var k = 0; k < data.length; k++) { //runs throught columns
              if(!isNaN(rows[j].split(splitter)[k])){
@@ -581,7 +582,7 @@ function add_file_data(files){
 
     document.getElementById('done_button').click();
   }
-  
+
   //adds the information of each file on the index recorder data structure
   function processData(rows, lastIndex, file_name) {
 
