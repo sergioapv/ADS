@@ -467,7 +467,6 @@ function add_file_data(files){
   //runs throught the folder's files
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
-    // console.log(file.name);
     let filename = file.name;
     console.log(valid_file_name(file.name));
     if (valid_file_name(file.name) == true) {

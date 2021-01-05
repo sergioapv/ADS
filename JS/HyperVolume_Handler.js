@@ -264,7 +264,6 @@ function add_close_listener(close){
 //listener for showing the values on the sliders given by the user
 function range_events_handler(min_slider,max_slider){
   min_slider.addEventListener('change' , e => {
-    // console.log(min_slider.value);
 
     let comun_part  = min_slider.parentNode.getElementsByTagName('span')[0].innerHTML.split(':')[0];
 
@@ -273,7 +272,6 @@ function range_events_handler(min_slider,max_slider){
     min_slider.parentNode.getElementsByTagName('span')[0].innerHTML = comun_part
   });
   max_slider.addEventListener('change' , e => {
-    // console.log(max_slider.value);
     let comun_part  = max_slider.parentNode.getElementsByTagName('span')[0].innerHTML.split(':')[0];
 
     comun_part += ': ' + parseFloat(max_slider.value).toFixed(6)

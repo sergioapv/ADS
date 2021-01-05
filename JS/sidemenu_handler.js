@@ -64,7 +64,7 @@ document.querySelector('.sidemenu_minimizer').addEventListener('click',function(
   let main_content = document.querySelector('.main_content')
   let displayerEditor = document.querySelector('.displayerEditor')
 
-  if (sidemenu.id === "clicked") {//quando ja esta clicado
+  if (sidemenu.id === "clicked") {//when its clicked
     sidemenu.id = "not_clicked"
     main_content.style.left = '300px'
     main_content.style.width = 'calc(100% - 300px)'
@@ -132,7 +132,6 @@ function algs_chosen(){
         let class_choice = selectors[i].parentNode;
         let algorithms = class_choice.getElementsByTagName('input');
         for (var j = 0; j < algorithms.length; j++) {
-          // console.log(algorithms[j]);
           algorithms[j].addEventListener('change',function(){
             console.clear()
             if (this.checked === true) {
