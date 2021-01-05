@@ -242,7 +242,7 @@ function validate_4D_points(points,mins_maxs){
     if (valid_point(dim1_point,mins_maxs[0][0],mins_maxs[0][1]) &&
         valid_point(dim2_point,mins_maxs[1][0],mins_maxs[1][1]) &&
         valid_point(dim3_point,mins_maxs[2][0],mins_maxs[2][1]) &&
-        valid_point(dim3_point,mins_maxs[2][0],mins_maxs[3][1])) {
+        valid_point(dim3_point,mins_maxs[3][0],mins_maxs[3][1])) {
       valid_points[0].push(dim1_point)
       valid_points[1].push(dim2_point)
       valid_points[2].push(dim3_point)
