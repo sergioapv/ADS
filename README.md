@@ -24,3 +24,7 @@ All Javascript files have to be reference in the main html file
 
 Link for docker with docker image of this web app:
 https://hub.docker.com/r/sergioapv/ads_project
+
+App Architecture:
+
+https://app.creately.com/diagram/8Q7cT8P4xaA/view
